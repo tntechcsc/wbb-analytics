@@ -1,0 +1,68 @@
+/* index.css or your custom CSS file */
+
+/* Style the dropdown */
+label {
+    margin-right: 10px;
+  }
+  
+  select {
+    padding: 8px;
+    font-size: 16px;
+  }
+
+/* Style the table */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  
+  th, td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: left;
+  }
+  
+  th {
+    background-color: #f2f2f2;
+  }
+
+  
+  .container {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .dropdown-and-tempo {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  #sessionSelect {
+    margin-right: 300px;
+  }
+  
+  .average-tempo {
+    display: flex;
+    align-items: center;
+    margin-right: 60px;
+  }
+  
+  .rounded-square {
+    width: 500px;
+    height: 120px;
+    border-radius: 10px;
+    background-color: #673e7a; /* Change the background color as desired */
+    color: #fff; /* Change the text color as desired */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    margin-right: 20px;
+  }
+  
+  .rounded-square span {
+    margin-bottom: 8px;
+  }
