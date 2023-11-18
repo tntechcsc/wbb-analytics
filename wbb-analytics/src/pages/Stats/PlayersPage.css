@@ -1,68 +1,58 @@
-/* index.css or your custom CSS file */
+/* PlayersPage.css */
 
-/* Style the dropdown */
+.players-page-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  text-align: center;
+  background: linear-gradient(to bottom, #3498db, #2980b9);
+  border-radius: 12px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  color: #fff;
+}
+
+h1 {
+  font-size: 2.5em;
+  margin-bottom: 20px;
+}
+
 label {
-    margin-right: 10px;
-  }
-  
-  select {
-    padding: 8px;
-    font-size: 16px;
-  }
+  display: block;
+  font-size: 1.2em;
+  margin-bottom: 10px;
+  color: #ccc;
+}
 
-/* Style the table */
+select {
+  font-size: 1em;
+  padding: 10px;
+  margin-bottom: 20px;
+  color: #555;
+  background-color: #fff;
+  border: 1px solid #3498db;
+  border-radius: 4px;
+}
+
 table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-  }
-  
-  th, td {
-    border: 1px solid #ddd;
-    padding: 12px;
-    text-align: left;
-  }
-  
-  th {
-    background-color: #f2f2f2;
-  }
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  background-color: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
 
-  
-  .container {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .dropdown-and-tempo {
-    display: flex;
-    align-items: center;
-    margin-bottom: 20px;
-  }
-  
-  #sessionSelect {
-    margin-right: 300px;
-  }
-  
-  .average-tempo {
-    display: flex;
-    align-items: center;
-    margin-right: 60px;
-  }
-  
-  .rounded-square {
-    width: 500px;
-    height: 120px;
-    border-radius: 10px;
-    background-color: #673e7a; /* Change the background color as desired */
-    color: #fff; /* Change the text color as desired */
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    font-size: 18px;
-    margin-right: 20px;
-  }
-  
-  .rounded-square span {
-    margin-bottom: 8px;
-  }
+th, td {
+  padding: 15px;
+  border: 1px solid #ddd;
+  text-align: center;
+}
+
+th {
+  background-color: #2980b9;
+}
+
+tbody tr:hover {
+  background-color: #f2f2f2;
+}
