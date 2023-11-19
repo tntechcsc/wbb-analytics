@@ -54,14 +54,14 @@ const CreateSessionsPage = () => {
   const handleSaveSession = () => {
     const currentDate = new Date();
     const formattedDate = currentDate.toLocaleString(); // You can customize the format as needed
-  
+
     const newSession = {
       sessionName: formattedDate,
       drills: [...drills],
       listA: [...listA],
       listB: [...listB],
     };
-  
+
     setSavedSessions([...savedSessions, newSession]);
     // Optionally, you can clear the current session after saving
     setSessionName('');
@@ -96,11 +96,11 @@ const CreateSessionsPage = () => {
 
       <div className="lists-column">
         <div className="list">
-          <h2>List A</h2>
+          <h2>Team A</h2>
           <ul>
             {listA.map((item, index) => (
               <li key={index}>
-                <select>
+                <select className='dropdown'>
                   {playerArray.map((player, playerIndex) => (
                     <option key={playerIndex} value={player}>
                       {player}
@@ -118,11 +118,11 @@ const CreateSessionsPage = () => {
         </div>
 
         <div className="list">
-          <h2>List B</h2>
+          <h2>Team B</h2>
           <ul>
             {listB.map((item, index) => (
               <li key={index}>
-                <select>
+                <select className='dropdown'>
                   {playerArray.map((player, playerIndex) => (
                     <option key={playerIndex} value={player}>
                       {player}

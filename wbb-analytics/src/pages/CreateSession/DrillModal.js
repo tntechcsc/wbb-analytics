@@ -19,7 +19,7 @@ const DrillModal = ({ isOpen, onClose, onAddDrill }) => {
     isOpen && (
       <div className="modal-overlay">
         <div className="modal-content">
-          <h2>Add Drill</h2>
+          <h2>Create New Drill</h2>
           <label htmlFor="drillName">Name:</label>
           <input
             type="text"
