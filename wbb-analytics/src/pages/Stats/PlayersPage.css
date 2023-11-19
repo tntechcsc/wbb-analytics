@@ -1,16 +1,5 @@
 /* PlayersPage.css */
 
-.players-page-container {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 20px;
-  text-align: center;
-  background: linear-gradient(to bottom, #3498db, #2980b9);
-  border-radius: 12px;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-  color: #fff;
-}
-
 h1 {
   font-size: 2.5em;
   margin-bottom: 20px;
@@ -51,8 +40,4 @@ th, td {
 
 th {
   background-color: #2980b9;
-}
-
-tbody tr:hover {
-  background-color: #f2f2f2;
 }

@@ -24,7 +24,7 @@ const HomePage = () => {
         <div className="feature">
           <h2>Team Analytics</h2>
           <p>Analyze team performance, track trends, and make informed decisions.</p>
-          <Link to="/teams" className="explore-link">
+          <Link to="/teamstats" className="explore-link">
             Explore Teams
           </Link>
         </div>

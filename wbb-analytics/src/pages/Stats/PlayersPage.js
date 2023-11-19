@@ -1,48 +1,11 @@
-// PlayersPage.js
-
 import React, { useState } from 'react';
 import './PlayersPage.css';
+import players from './../../data/playerData';
 
 const PlayersPage = () => {
   const [selectedSession, setSelectedSession] = useState('Session 1');
 
-  const players = [
-    {
-      id: 1,
-      name: 'Player 1',
-      sessions: [
-        {
-          name: 'Session 1',
-          stats: {
-            '2ptPercentage': 50,
-            '3ptPercentage': 40,
-            'freeThrowPercentage': 85,
-            rebounds: 10,
-            assists: 5,
-            steals: 2,
-            blocks: 1,
-            turnovers: 3,
-          },
-        },
-        {
-          name: 'Session 2',
-          stats: {
-            '2ptPercentage': 55,
-            '3ptPercentage': 38,
-            'freeThrowPercentage': 88,
-            rebounds: 8,
-            assists: 7,
-            steals: 3,
-            blocks: 2,
-            turnovers: 2,
-          },
-        },
-      ],
-    },
-    // Add more players as needed
-  ];
-
-  const sessions = ['Session 1', 'Session 2']; // Hardcoded list of sessions
+  const sessions = ['Session 1', 'Session 2'];
 
   const handleSessionChange = (event) => {
     setSelectedSession(event.target.value);
