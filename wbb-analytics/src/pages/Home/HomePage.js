@@ -33,7 +33,7 @@ const HomePage = () => {
       <section className="new-session">
         <h2>Create a New Practice Session</h2>
         <p>Start a new practice session to track player progress and team performance.</p>
-        <Link to="/new-session" className="explore-link">
+        <Link to="/createsession" className="explore-link">
           New Practice Session
         </Link>
       </section>
