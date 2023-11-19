@@ -1,0 +1,157 @@
+/* CreateSessionsPage.css */
+
+.create-sessions-container {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+}
+
+.drills-column {
+    width: 25%;
+    height: 100vh;
+    background-color: #f4f4f4;
+    padding: 20px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+}
+
+.drills-column h2 {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.drills-column ul {
+    list-style: none;
+    padding: 0;
+    flex-grow: 1;
+    overflow-y: auto;
+}
+
+.drill-button,
+.add-drill-button {
+    background-color: #3498db;
+    color: #fff;
+    width: calc(100% - 40px);
+    padding: 16px 20px;
+    margin-bottom: 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 1.2em;
+}
+
+.add-drill-button {
+    background-color: #27ae60;
+}
+
+.drill-button:hover {
+    background-color: #2980b9;
+}
+
+.add-drill-button:hover {
+    background-color: #219952;
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    width: 100%;
+}
+
+.modal-content h2 {
+    font-size: 1.8em;
+    margin-bottom: 20px;
+}
+
+.modal-content label {
+    display: block;
+    font-size: 1.2em;
+    margin-bottom: 10px;
+}
+
+.modal-content input {
+    width: calc(100% - 20px);
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.modal-content button {
+    padding: 10px 20px;
+    background-color: #3498db;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+.lists-column {
+    position: relative;
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-start; /* Align items at the top */
+    width: 75%;
+}
+
+.list {
+    position: sticky;
+    top: 0;
+    text-align: center;
+    width: 500px;
+    margin-right: 20px;
+    margin-bottom: 90%;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    margin-right: 20px;
+}
+
+.list h2 {
+    margin-bottom: 10px;
+}
+
+select {
+    width: 100%; /* Adjusted the width of the dropdown selections */
+}
+
+.add-dropdown-button {
+    background-color: #27ae60;
+    color: #fff;
+    width: calc(100% - 40px);
+    padding: 16px 20px;
+    margin-bottom: 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 1.2em;
+}
+
+.create-session-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+}
