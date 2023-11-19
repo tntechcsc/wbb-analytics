@@ -38,6 +38,14 @@ const HomePage = () => {
         </Link>
       </section>
 
+      <section className="open-session">
+        <h2>Open Existing Session</h2>
+        <p>Access and review details of a previously created practice session.</p>
+        <Link to="/opensession" className="explore-link">
+          Open Existing Session
+        </Link>
+      </section>
+
       <section className="about">
         <h2>About WBB Analytics</h2>
         <p>
