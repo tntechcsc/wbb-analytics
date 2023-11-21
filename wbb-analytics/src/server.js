@@ -8,9 +8,15 @@ const temposRoutes = require('./routes/temposRoutes');
 
 const app = express();
 
+const cors = require('cors');
+app.use(cors());
+
+// Enable CORS for a specific domain
+app.use(cors({ origin: 'http://localhost:3000' }));
+
 // Connect to MongoDB
-mongoose.connect('mongodb+srv://kyleh865:Password@nestcluster.xzqjz3i.mongodb.net/?retryWrites=true&w=majority')
-.then(() => console.log('Connected to MongoDB'))
+mongoose.connect('mongodb+srv://kyleh865:Password@nestcluster.xzqjz3i.mongodb.net/nestdb?retryWrites=true&w=majority')
+.then(() => console.log(mongoose.connection))
 .catch(err => console.error('Could not connect to MongoDB', err));
 
 // Middleware to parse JSON

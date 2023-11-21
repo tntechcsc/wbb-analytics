@@ -18,19 +18,19 @@ const PlayersPage = () => {
 
   useEffect(() => {
     // Fetch players
-    fetch('/api/players')
+    fetch('http://localhost:3001/api/players')
       .then(response => response.json())
       .then(data => setPlayers(data))
       .catch(error => console.error('Failed to fetch players:', error));
 
     // Fetch sessions
-    fetch('/api/sessions')
+    fetch('http://localhost:3001/api/sessions')
       .then(response => response.json())
       .then(data => setSessions(data))
       .catch(error => console.error('Failed to fetch sessions:', error));
 
     // Fetch drills
-    fetch('/api/drills')
+    fetch('http://localhost:3001/api/drills')
       .then(response => response.json())
       .then(data => setDrills(data))
       .catch(error => console.error('Failed to fetch drills:', error));
