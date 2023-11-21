@@ -10,12 +10,6 @@ const PlayersPage = () => {
   const [selectedDrill, setSelectedDrill] = useState('');
   const [filteredDrills, setFilteredDrills] = useState([]);
 
-  //const sessions = ['Session 1', 'Session 2'];
-
-  //const handleSessionChange = (event) => {
-  //  setSelectedSession(event.target.value);
-  //};
-
   useEffect(() => {
     // Fetch players
     fetch('http://localhost:3001/api/players')
@@ -46,16 +40,18 @@ const PlayersPage = () => {
     <div className="players-page-container">
       <h1>Players Page</h1>
       {/* Session Dropdown */}
-      <label htmlFor="sessionSelect">Select Session:</label>
+      <label htmlFor="sessionSelect">Select Session:</label>      
       <select id="sessionSelect" onChange={(e) => setSelectedSession(e.target.value)}>
+        <option value="">Select a Session</option>
         {sessions.map((session) => (
-          <option key={session._id} value={session._id}>{session.date}</option>
+          <option key={session._id} value={session._id}>{session.Date}</option>
         ))}
       </select>
 
       {/* Drill Dropdown (dependent on the selected session) */}
       <label htmlFor="drillSelect">Select Drill:</label>
       <select id="drillSelect" onChange={(e) => setSelectedDrill(e.target.value)}>
+        <option value="">Select a Drill</option>
         {filteredDrills.map((drill) => (
           <option key={drill._id} value={drill._id}>{drill.name}</option>
         ))}
