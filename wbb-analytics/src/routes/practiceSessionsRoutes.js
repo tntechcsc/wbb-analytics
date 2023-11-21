@@ -5,8 +5,9 @@ const PracticeSession = require('../models/practiceSession'); // Adjust the path
 // GET all practice sessions
 router.get('/', async (req, res) => {
   try {
-    const sessions = await PracticeSession.find().populate('drillID');
+    const sessions = await PracticeSession.find();
     res.json(sessions);
+    console.log(sessions);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
