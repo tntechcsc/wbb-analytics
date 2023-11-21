@@ -9,7 +9,7 @@ const temposRoutes = require('./routes/temposRoutes');
 const app = express();
 
 // Connect to MongoDB
-mongoose.connect('mongodb://localhost:27017/nestdb')
+mongoose.connect('mongodb+srv://kyleh865:Password@nestcluster.xzqjz3i.mongodb.net/?retryWrites=true&w=majority')
 .then(() => console.log('Connected to MongoDB'))
 .catch(err => console.error('Could not connect to MongoDB', err));
 
