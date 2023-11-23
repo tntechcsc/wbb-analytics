@@ -11,6 +11,8 @@ const DrillModal = ({ isOpen, onClose, onAddDrill }) => {
     // Check if the drillName is not empty
     if (drillName.trim() !== '') {
       onAddDrill(drillName.trim(), drillType.trim());
+      setDrillName('');
+      setDrillType('');
       onClose();
     }
   };
