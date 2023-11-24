@@ -1,7 +1,8 @@
 // HomePage.js
 
-import React from 'react';
+import React,{useState} from 'react';
 import { Link } from 'react-router-dom';
+import OpenSession from './OpenSession';
 import './HomePage.css';
 
 const HomePage = () => {
@@ -41,9 +42,9 @@ const HomePage = () => {
       <section className="open-session">
         <h2>Open Existing Session</h2>
         <p>Access and review details of a previously created practice session.</p>
-        <Link to="/opensession" className="explore-link">
+        <button onClick={() => setModelOpen(true)} className="Linkish-Button">
           Open Existing Session
-        </Link>
+        </button>
       </section>
 
       <section className="about">
@@ -57,6 +58,7 @@ const HomePage = () => {
       <footer>
         <p>© 2023 WBB Analytics. All rights reserved.</p>
       </footer>
+      <OpenSession isOpen={isModelOpen} onClose={() => setModelOpen(false)}/>
     </div>
   );
 };
