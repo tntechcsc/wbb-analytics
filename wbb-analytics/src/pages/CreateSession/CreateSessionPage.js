@@ -1,10 +1,22 @@
 // CreateSessionsPage.js
 
 import React, { useState, useEffect, useMemo } from 'react';
+import { useLocation } from 'react-router-dom';
+import StoredSessions from './../../data/sessionData';
 import DrillModal from './DrillModal';
+import './../Home/OpenSession'
 import './CreateSessionPage.css';
 
 const CreateSessionsPage = () => {
+  let id1 = -1; //Defualt value so CreateSession can run normally if not directed from OpenSession
+  const  location = useLocation();
+  if(location.pathname === '/CreateSession')
+  {
+  id1 = location.state.ID; // send the session ID to make paramenters for sessionData
+  
+  }
+  let y= 0;
+  let s = 0;
   const [drills, setDrills] = useState([]);
   const [isModalOpen, setModalOpen] = useState(false);
   const [sessionName, setSessionName] = useState('');
@@ -57,13 +69,26 @@ const CreateSessionsPage = () => {
     const defaultListA = Array.from({ length: 5 }, (_, index) => ({
       playerName: playerArray[index],
     }));
-    setListA(defaultListA);
-
     // Populate default selections for List B
     const defaultListB = Array.from({ length: 5 }, (_, index) => ({
-      playerName: playerArray[5 + index],
+      playerName: playerArray[5 + index],   
     }));
+    if(id1 !== -1)
+    {
+      //Add size of list into createSession
+      setListA(StoredSessions[id1].Team_A);
+      setListB(StoredSessions[id1].Team_B);
+    }
+    else
+    {
+    setListA(defaultListA);
     setListB(defaultListB);
+    };
+    if(id1 !== -1)
+    {
+      //Add Drills into createSession
+      setDrills(StoredSessions[id1].Drills);
+    }
   }, [playerArray]);
 
   const handleRemovePlayer = (team, index) => {
@@ -164,6 +189,7 @@ const CreateSessionsPage = () => {
             {listA.map((player, index) => (
               <li key={index}>
                 <select className='dropdown' value={player.playerName} onChange={(e) => handlePlayerChange('A', index, e)}>
+                  {(id1 !== -1) && (s < x[id1].Team_A.length) && <option key={s} value={x[id1].Team_A}>{x[id1].Team_A[s++]}</option>} 
                   {playerArray.map((playerName, playerIndex) => (
                     <option key={playerIndex} value={playerName}>
                       {playerName}
@@ -189,6 +215,7 @@ const CreateSessionsPage = () => {
             {listB.map((player, index) => (
               <li key={index}>
                 <select className='dropdown' value={player.playerName} onChange={(e) => handlePlayerChange('B', index, e)}>
+                 {(id1 !== -1) && (y < x[id1].Team_B.length) &&  <option key={y} value={x[id1].Team_B}>{x[id1].Team_B[y++]}</option>}
                   {playerArray.map((playerName, playerIndex) => (
                     <option key={playerIndex} value={playerName}>
                       {playerName}
