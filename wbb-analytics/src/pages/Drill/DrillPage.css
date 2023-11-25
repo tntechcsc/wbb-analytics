@@ -16,8 +16,6 @@
     height: 50%;
     background-color: #f4f4f4;
     padding: 20px;
-    border: solid;
-    border-radius: 8px;
     display: flex;
     flex-direction: column;
 }
@@ -26,6 +24,13 @@
     font-size: 1.5em;
     margin-bottom: 10px;
     color: #333;
+}
+
+.changeTeam {
+    position: inherit;
+    display: inline-block;
+    width: 40%;
+    margin-right: 10px;
 }
 
 .teams-column ul {
@@ -47,32 +52,6 @@
     display: inline-block;
     width: 40%;
     margin-right: 20px;
-}
-
-.drill-button,
-.add-drill-button {
-    background-color: #3498db;
-    color: #fff;
-    width: calc(100% - 40px);
-    padding: 16px 20px;
-    margin-bottom: 12px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    font-size: 1.2em;
-}
-
-.add-drill-button {
-    background-color: #27ae60;
-}
-
-.drill-button:hover {
-    background-color: #2980b9;
-}
-
-.add-drill-button:hover {
-    background-color: #219952;
 }
 
 .modal-overlay {
@@ -129,8 +108,6 @@
     width: 50%;
     height: 50%;
     padding: 10px;
-    border: solid;
-    /*border-radius: 8px;*/
     display: flex;
     flex-direction: column;
 }
@@ -139,10 +116,10 @@
     padding: 10px;
 }
 
-.buttons-container {
+.buttons-container-top,
+.buttons-container-bottom {
     width: 100%;
     height: 50%;
-    border: solid;
     display: flex;
     flex-direction: row;
 }
@@ -151,16 +128,20 @@
 .button-steal,
 .button-turnover,
 .button-assist,
-.button-block {
+.button-block,
+.button-startTempo,
+.button-stopTempo {
     padding: 40px 20px;
     width: 20%;
     height: 20%;
-    background-color: purple;
+    background-color: #3498db;
     color: white;
     border: none;
     border-radius: 4px;
     cursor: pointer;
     margin-right: 10px;
+    margin-top: 5px;
+    margin-bottom: 5px;
 }
 
 .greyed-out {
