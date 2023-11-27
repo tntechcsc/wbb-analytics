@@ -5,7 +5,11 @@ import { Link } from 'react-router-dom';
 import OpenSession from './OpenSession';
 import './HomePage.css';
 
+
+
 const HomePage = () => {
+  const [isModelOpen, setModelOpen] = useState(false);
+
   return (
     <div className="home-page-container">
       <header>
@@ -64,3 +68,4 @@ const HomePage = () => {
 };
 
 export default HomePage;
+=
