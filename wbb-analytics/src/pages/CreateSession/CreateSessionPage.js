@@ -47,7 +47,7 @@ const CreateSessionsPage = () => {
   const playerArray = useMemo(
     () => [
       'Player 1', 'Player 2', 'Player 3', 'Player 4', 'Player 5',
-      'Player A', 'Player B', 'Player C', 'Player D', 'Player E'
+      'Player B', 'Player A', 'Player C', 'Player D', 'Player E'
     ],
     []
   );
