@@ -8,6 +8,7 @@ import './../Home/OpenSession'
 import './CreateSessionPage.css';
 
 const CreateSessionsPage = () => {
+  const x=StoredSessions;
   let id1 = -1; //Defualt value so CreateSession can run normally if not directed from OpenSession
   const  location = useLocation();
   if(location.pathname === '/CreateSession')
