@@ -3,7 +3,8 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import ButtonExplanation from './ButtonExplanation';
 import './DrillPage.css';
-import Tabs from '../../components/Tabs';
+import TabButton from '../../components/TabButton';
+import Stack from '@mui/material/Stack';
 
 const CreateSessionsPage = () => {
   const [drills, setDrills] = useState([]);
@@ -134,18 +135,19 @@ const CreateSessionsPage = () => {
   }
 
   return (
-    
-    <div className="drills-container">
+    <div>
       <div>
-      <Tabs>
-        <div label="Create Session" >
-        </div>
-        
-    
-        <div label="Drill">
-        </div>
-      </Tabs>
-  </div>
+      <Stack spacing={2} direction="row">
+      <a href='/createsession'>
+        <TabButton text={"Create Session"} />
+      </a>
+      <a href='/drill'>
+        <TabButton text={"Drill"} />
+      </a>
+      </Stack>
+    </div>
+    <div className="drills-container">
+      
       <div className="teams-court-container">
         <div className="teams-column">
           <h2>Current Players</h2>
@@ -177,6 +179,7 @@ const CreateSessionsPage = () => {
         <button className="button-stopTempo" onClick={()=>{setModalOpen(true); setButtonPress("Stop Tempo")}}>Stop Tempo</button>
       </div>
       <ButtonExplanation isOpen={isModalOpen} onClose={() => {setModalOpen(false); setSelectedPlayer(null)}} whichButton={whichButtonPressed} whichPlayer={selectedPlayer}/>
+    </div>
     </div>
   );
 };
