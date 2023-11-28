@@ -33,7 +33,6 @@ const CreateSessionsPage = () => {
       setDrills(updatedDrills);
       setSelectedDrillIndex(null);
     } 
-
     else
       setDrills([...drills, { name, type }]);
   };
@@ -44,7 +43,6 @@ const CreateSessionsPage = () => {
       setSelectedDrillIndex(index);
       setModalOpen(true);
     } 
-
     else
       console.log(`Clicked on drill at index ${index}`);
   };
