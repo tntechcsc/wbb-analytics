@@ -3,6 +3,12 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import DrillModal from './DrillModal';
 import './CreateSessionPage.css';
+import { SafeAreaView, StatusBar, StyleSheet, View } from "react-native";
+import TabButton from '../../components/TabButton';
+import Stack from '@mui/material/Stack';
+
+
+
 
 const CreateSessionsPage = () => {
   const [drills, setDrills] = useState([]);
@@ -82,6 +88,7 @@ const CreateSessionsPage = () => {
     }
   };
 
+
   const handlePlayerChange = (team, index, event) => {
     const { value } = event.target;
     if (team === 'A') {
@@ -97,6 +104,17 @@ const CreateSessionsPage = () => {
     }
   };
 
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+    },
+    parent: {
+      flex: 1,
+      flexDirection: "row",
+      justifyContent: "space-around",
+    },
+  });
+
   const handleAddDropdownA = () => {
     const newPlayer = { playerName: `New Player ${listA.length + 1}` };
     setListA([...listA, newPlayer]);
@@ -106,6 +124,9 @@ const CreateSessionsPage = () => {
     const newPlayer = { playerName: `New Player ${listB.length + 1}` };
     setListB([...listB, newPlayer]);
   };
+
+
+
 
 
   const handleSaveSession = () => {
@@ -128,7 +149,19 @@ const CreateSessionsPage = () => {
   };
 
   return (
+    <div> 
+    <div>
+      <Stack spacing={2} direction="row">
+      <a href='/createsession'>
+        <TabButton text={"Create Session"} />
+      </a>
+      <a href='/drill'>
+        <TabButton text={"Drill"} />
+      </a>
+      </Stack>
+    </div>
     <div className="create-sessions-container">
+      
       <div className="drills-column">
         <h2>Drills</h2>
         <ul>
@@ -214,6 +247,7 @@ const CreateSessionsPage = () => {
       </button>
 
       <DrillModal isOpen={isModalOpen} onClose={() => setModalOpen(false)} onAddDrill={handleAddDrill} />
+    </div>
     </div>
   );
 };
