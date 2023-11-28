@@ -1,7 +1,10 @@
 // CreateSessionsPage.js
 
 import React, { useState, useEffect, useMemo } from 'react';
+import { useLocation } from 'react-router-dom';
+import StoredSessions from '../../data/sessionData';
 import DrillModal from './DrillModal';
+import '../Home/OpenSession'
 import './CreateSessionPage.css';
 import { SafeAreaView, StatusBar, StyleSheet, View } from "react-native";
 import TabButton from '../../components/TabButton';
@@ -10,22 +13,32 @@ import Stack from '@mui/material/Stack';
 
 
 
+
 const CreateSessionsPage = () => {
+  let id1 = -1; //Defualt value so CreateSession can run normally if not directed from OpenSession
+  const  location = useLocation();
+  if(location.pathname === '/CreateSession')
+  {
+  id1 = location.state.ID; // send the session ID to make paramenters for sessionData
+  
+  }
+  let y= 0;
+  let s = 0;
+
   const [drills, setDrills] = useState([]);
   const [isModalOpen, setModalOpen] = useState(false);
   const [sessionName, setSessionName] = useState('');
   const [savedSessions, setSavedSessions] = useState([]);
-
   const [selectedDrillIndex, setSelectedDrillIndex] = useState(null);
 
-  const handleAddDrill = (name, type) => {
+ const handleAddDrill = (name, type) => {
+    
     if (selectedDrillIndex !== null) {
       const updatedDrills = [...drills];
       updatedDrills[selectedDrillIndex] = { name, type };
       setDrills(updatedDrills);
       setSelectedDrillIndex(null);
     } 
-    
     else
       setDrills([...drills, { name, type }]);
   };
@@ -36,7 +49,6 @@ const CreateSessionsPage = () => {
       setSelectedDrillIndex(index);
       setModalOpen(true);
     } 
-
     else
       console.log(`Clicked on drill at index ${index}`);
   };
@@ -49,7 +61,7 @@ const CreateSessionsPage = () => {
 
   const [listA, setListA] = useState([]);
   const [listB, setListB] = useState([]);
-
+  const x=StoredSessions;
   const playerArray = useMemo(
     () => [
       'Player 1', 'Player 2', 'Player 3', 'Player 4', 'Player 5',
@@ -57,21 +69,6 @@ const CreateSessionsPage = () => {
     ],
     []
   );
-
-  useEffect(() => {
-    // Populate default selections for List A
-    const defaultListA = Array.from({ length: 5 }, (_, index) => ({
-      playerName: playerArray[index],
-    }));
-    setListA(defaultListA);
-
-    // Populate default selections for List B
-    const defaultListB = Array.from({ length: 5 }, (_, index) => ({
-      playerName: playerArray[5 + index],
-    }));
-    setListB(defaultListB);
-  }, [playerArray]);
-
   const handleRemovePlayer = (team, index) => {
     if (team === 'A') {
       const updatedListA = [...listA];
@@ -79,7 +76,7 @@ const CreateSessionsPage = () => {
       setListA(updatedListA);
       console.log(`Removed player from Team A at index ${index}`);
     }
-    
+
     else if (team === 'B') {
       const updatedListB = [...listB];
       updatedListB.splice(index, 1);
@@ -87,7 +84,32 @@ const CreateSessionsPage = () => {
       console.log(`Removed player from Team B at index ${index}`);
     }
   };
-
+  
+  useEffect(() => {
+    // Populate default selections for List A
+    
+    const defaultListA = Array.from({ length: 5 }, (_, index) => ({
+      playerName: playerArray[index],
+    }));
+    // Populate default selections for List B
+    const defaultListB = Array.from({ length: 5 }, (_, index) => ({
+      playerName: playerArray[5 + index],   
+    }));
+    if(id1 !== -1)
+    {
+      setListA(StoredSessions[id1].Team_A);
+      setListB(StoredSessions[id1].Team_B);
+    }
+    else
+    {
+    setListA(defaultListA);
+    setListB(defaultListB);
+    };
+    if(id1 !== -1)
+    {
+      setDrills(StoredSessions[id1].Drills);
+    }
+  },[playerArray]);
 
   const handlePlayerChange = (team, index, event) => {
     const { value } = event.target;
@@ -96,7 +118,6 @@ const CreateSessionsPage = () => {
       updatedListA[index].playerName = value;
       setListA(updatedListA);
     }
-    
     else if (team === 'B') {
       const updatedListB = [...listB];
       updatedListB[index].playerName = value;
@@ -116,23 +137,19 @@ const CreateSessionsPage = () => {
   });
 
   const handleAddDropdownA = () => {
-    const newPlayer = { playerName: `New Player ${listA.length + 1}` };
-    setListA([...listA, newPlayer]);
+    setListA([...listA, { playerName: `New Player ${listA.length + 1}` }]);
   };
 
   const handleAddDropdownB = () => {
-    const newPlayer = { playerName: `New Player ${listB.length + 1}` };
-    setListB([...listB, newPlayer]);
+    setListB([...listB, { playerName: `New Player ${listB.length + 1}` }]);
   };
 
-
-
-
-
   const handleSaveSession = () => {
+    
     const currentDate = new Date();
     const formattedDate = currentDate.toLocaleString(); // You can customize the format as needed
-
+    
+    
     const newSession = {
       sessionName: formattedDate,
       drills: [...drills],
@@ -146,6 +163,8 @@ const CreateSessionsPage = () => {
     setDrills([]);
     setListA([]);
     setListB([]);
+    
+    
   };
 
   return (
@@ -197,6 +216,7 @@ const CreateSessionsPage = () => {
             {listA.map((player, index) => (
               <li key={index}>
                 <select className='dropdown' value={player.playerName} onChange={(e) => handlePlayerChange('A', index, e)}>
+                  {(id1 !== -1) && (s < x[id1].Team_A.length) && <option key={s} value={x[id1].Team_A}>{x[id1].Team_A[s++]}</option>} 
                   {playerArray.map((playerName, playerIndex) => (
                     <option key={playerIndex} value={playerName}>
                       {playerName}
@@ -210,7 +230,7 @@ const CreateSessionsPage = () => {
             ))}
             <li>
               <button className="add-dropdown-button" onClick={handleAddDropdownA}>
-                Add Player
+                Add Player  
               </button>
             </li>
           </ul>
@@ -222,6 +242,7 @@ const CreateSessionsPage = () => {
             {listB.map((player, index) => (
               <li key={index}>
                 <select className='dropdown' value={player.playerName} onChange={(e) => handlePlayerChange('B', index, e)}>
+                {(id1 !== -1) && (y < x[id1].Team_B.length) &&  <option key={y} value={x[id1].Team_B}>{x[id1].Team_B[y++]}</option>}
                   {playerArray.map((playerName, playerIndex) => (
                     <option key={playerIndex} value={playerName}>
                       {playerName}
