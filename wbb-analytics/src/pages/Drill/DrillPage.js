@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import ButtonExplanation from './ButtonExplanation';
 import './DrillPage.css';
+import Tabs from '../../components/Tabs';
 
 const CreateSessionsPage = () => {
   const [drills, setDrills] = useState([]);
@@ -133,7 +134,18 @@ const CreateSessionsPage = () => {
   }
 
   return (
+    
     <div className="drills-container">
+      <div>
+      <Tabs>
+        <div label="Create Session" >
+        </div>
+        
+    
+        <div label="Drill">
+        </div>
+      </Tabs>
+  </div>
       <div className="teams-court-container">
         <div className="teams-column">
           <h2>Current Players</h2>

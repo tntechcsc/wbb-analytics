@@ -3,6 +3,10 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import DrillModal from './DrillModal';
 import './CreateSessionPage.css';
+import Tabs from '../../components/Tabs';
+import { Link } from 'react-router-dom';
+
+
 
 const CreateSessionsPage = () => {
   const [drills, setDrills] = useState([]);
@@ -97,6 +101,8 @@ const CreateSessionsPage = () => {
     }
   };
 
+  
+
   const handleAddDropdownA = () => {
     const newPlayer = { playerName: `New Player ${listA.length + 1}` };
     setListA([...listA, newPlayer]);
@@ -106,6 +112,7 @@ const CreateSessionsPage = () => {
     const newPlayer = { playerName: `New Player ${listB.length + 1}` };
     setListB([...listB, newPlayer]);
   };
+
 
 
   const handleSaveSession = () => {
@@ -128,7 +135,19 @@ const CreateSessionsPage = () => {
   };
 
   return (
+    <div> 
+    <div>
+      <Tabs>
+        <div label="Create Session" >
+        </div>
+        
+    
+        <div label="Drill">
+        </div>
+      </Tabs>
+  </div>
     <div className="create-sessions-container">
+      
       <div className="drills-column">
         <h2>Drills</h2>
         <ul>
@@ -214,6 +233,7 @@ const CreateSessionsPage = () => {
       </button>
 
       <DrillModal isOpen={isModalOpen} onClose={() => setModalOpen(false)} onAddDrill={handleAddDrill} />
+    </div>
     </div>
   );
 };
