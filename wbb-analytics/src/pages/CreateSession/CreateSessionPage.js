@@ -6,6 +6,12 @@ import StoredSessions from '../../data/sessionData';
 import DrillModal from './DrillModal';
 import '../Home/OpenSession'
 import './CreateSessionPage.css';
+import { SafeAreaView, StatusBar, StyleSheet, View } from "react-native";
+import TabButton from '../../components/TabButton';
+import Stack from '@mui/material/Stack';
+
+
+
 
 
 const CreateSessionsPage = () => {
@@ -59,7 +65,7 @@ const CreateSessionsPage = () => {
   const playerArray = useMemo(
     () => [
       'Player 1', 'Player 2', 'Player 3', 'Player 4', 'Player 5',
-      'Player A', 'Player B', 'Player C', 'Player D', 'Player E'
+      'Player B', 'Player A', 'Player C', 'Player D', 'Player E'
     ],
     []
   );
@@ -78,7 +84,6 @@ const CreateSessionsPage = () => {
       console.log(`Removed player from Team B at index ${index}`);
     }
   };
-
   
   useEffect(() => {
     // Populate default selections for List A
@@ -120,6 +125,17 @@ const CreateSessionsPage = () => {
     }
   };
 
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+    },
+    parent: {
+      flex: 1,
+      flexDirection: "row",
+      justifyContent: "space-around",
+    },
+  });
+
   const handleAddDropdownA = () => {
     setListA([...listA, { playerName: `New Player ${listA.length + 1}` }]);
   };
@@ -152,7 +168,19 @@ const CreateSessionsPage = () => {
   };
 
   return (
+    <div> 
+    <div>
+      <Stack spacing={2} direction="row">
+      <a href='/createsession'>
+        <TabButton text={"Create Session"} />
+      </a>
+      <a href='/drill'>
+        <TabButton text={"Drill"} />
+      </a>
+      </Stack>
+    </div>
     <div className="create-sessions-container">
+      
       <div className="drills-column">
         <h2>Drills</h2>
         <ul>
@@ -240,6 +268,7 @@ const CreateSessionsPage = () => {
       </button>
 
       <DrillModal isOpen={isModalOpen} onClose={() => setModalOpen(false)} onAddDrill={handleAddDrill} />
+    </div>
     </div>
   );
 };
