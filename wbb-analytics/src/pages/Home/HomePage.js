@@ -58,10 +58,6 @@ const HomePage = () => {
           empowering coaches and enthusiasts with valuable statistical information.
         </p>
       </section>
-
-      <footer>
-        <p>© 2023 WBB Analytics. All rights reserved.</p>
-      </footer>
       <OpenSession isOpen={isModelOpen} onClose={() => setModelOpen(false)}/>
     </div>
   );
