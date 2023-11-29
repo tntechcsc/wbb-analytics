@@ -8,8 +8,9 @@ const HomePage = () => {
   return (
     <div className="home-page-container">
       <header>
-        <h1>WBB Analytics</h1>
-        <p>Your Hub for Women's Basketball Statistics</p>
+      <div className="logo-container">
+      <img src={`${process.env.PUBLIC_URL}/nESTlogo.png`} alt="nEST Logo" className="logo" />
+      </div>
       </header>
 
       <section className="features">

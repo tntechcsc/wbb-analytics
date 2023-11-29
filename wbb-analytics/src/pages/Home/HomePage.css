@@ -1,110 +1,137 @@
 /* HomePage.css */
 
 .home-page-container {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
-    text-align: center;
-  }
-  
-  header {
-    margin-bottom: 30px;
-  }
-  
-  header h1 {
-    font-size: 3em;
-    color: #3498db;
-    margin-bottom: 10px;
-  }
-  
-  header p {
-    color: #555;
-  }
-  
-  .features {
-    display: flex;
-    justify-content: space-around;
-    flex-wrap: wrap;
-    margin-bottom: 30px;
-  }
-  
-  .feature {
-    flex: 0 1 30%;
-    margin: 10px;
-    padding: 20px;
-    background-color: #f2f2f2;
-    border-radius: 10px;
-    transition: transform 0.3s ease-in-out;
-  }
-  
-  .feature:hover {
-    transform: scale(1.05);
-  }
-  
-  .feature h2 {
-    font-size: 1.5em;
-  }
-  
-  .explore-link {
-    display: block;
-    margin-top: 15px;
-    padding: 10px 20px;
-    background-color: #3498db;
-    color: #fff;
-    text-decoration: none;
-    border-radius: 5px;
-    font-weight: bold;
-  }
+  background-color: #4F2984;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  text-align: center;
+}
 
-  .explore-link:hover {
-    background-color: #2675ad;
-  }
-  
-  .about {
-    margin-bottom: 30px;
-  }
-  
-  .about h2 {
-    font-size: 2em;
-  }
-  
-  footer {
-    text-align: center;
-    color: #888;
-  }
-  
-  .new-session, .open-session {
-    margin-top: 30px;
-    padding: 20px;
-    background-color: #f2f2f2;
-    border-radius: 10px;
-    transition: transform 0.3s ease-in-out;
-  }
-  
-  .new-session:hover, .open-session:hover {
-    transform: scale(1.05);
-  }
-  
-  .new-session h2 {
-    font-size: 1.5em;
-  }
-  
-  .new-session p {
-    color: #555;
-    margin-bottom: 20px;
-  }
-  
-  .new-session .explore-link, .open-session .explore-link {
-    display: block;
-    margin-top: 15px;
-    padding: 10px 20px;
-    background-color: #3498db;
-    color: #fff;
-    text-decoration: none;
-    border-radius: 5px;
-    font-weight: bold;
-  }
-  
-  .new-session .explore-link:hover, .open-session .explore-link:hover {
-    background-color: #2675ad;
-  }
+header {
+  margin-bottom: 30px;
+}
+
+header h1 {
+  font-size: 3em;
+  color: #FFDD00;
+  margin-bottom: 10px;
+}
+
+header p {
+  color: #FFDD00;
+}
+
+.logo-container {
+  display: flex;
+  justify-content: center; /* Center horizontally */
+  margin-bottom: 5px;
+}
+
+.logo {
+  width: 400px; /* Adjust the width as needed to make the logo smaller */
+  height: auto; /* This will maintain the aspect ratio */
+}
+
+.features {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  margin-bottom: 30px;
+}
+
+.feature {
+  flex: 0 1 30%;
+  margin: 10px;
+  padding: 20px;
+  background-color: #A390D1;
+  border-radius: 10px;
+  transition: transform 0.3s ease-in-out;
+}
+
+.feature:hover {
+  transform: scale(1.05);
+}
+
+.feature h2 {
+  font-size: 1.5em;
+}
+
+.explore-link {
+  display: block;
+  margin-top: 15px;
+  padding: 10px 20px;
+  background-color: #FFDD00;
+  color: #A390D1;
+  text-decoration: none;
+  border-radius: 5px;
+  font-weight: bold;
+}
+
+.explore-link:hover {
+  background-color: #2675ad;
+}
+
+.about {
+  margin-bottom: 30px;
+}
+
+.about h2 {
+  font-size: 2em;
+}
+
+footer {
+  text-align: center;
+  color: #888;
+}
+
+.new-session, .open-session {
+  margin-top: 30px;
+  padding: 20px;
+  background-color: #A390D1;
+  border-radius: 10px;
+  transition: transform 0.3s ease-in-out;
+}
+
+.new-session:hover, .open-session:hover {
+  transform: scale(1.05);
+}
+
+.new-session h2 {
+  font-size: 1.5em;
+}
+
+.new-session p {
+  color: #FFDD00;
+  margin-bottom: 20px;
+}
+
+.new-session .explore-link, .open-session .explore-link {
+  display: block;
+  margin-top: 15px;
+  padding: 10px 20px;
+  background-color: #FFDD00;
+  color: #A390D1;
+  text-decoration: none;
+  border-radius: 5px;
+  font-weight: bold;
+}
+
+.new-session .explore-link:hover, .open-session .explore-link:hover {
+  background-color: #2675ad;
+}
+a, button {
+  background-color: #FFDD00;
+  color: #4F2984;
+  border: 2px solid #4F2984;
+  padding: 10px 20px;
+  text-decoration: none;
+  display: inline-block;
+  margin: 10px 0;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+a:hover, button:hover {
+  background-color: #4F2984;
+  color: #FFDD00;
+}
