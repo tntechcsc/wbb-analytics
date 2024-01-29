@@ -1,15 +1,13 @@
 import React from 'react';
-import './PlayerList.css';
+import './PlayerList.css'; // Ensure you have the correct path to your CSS file
 
-function PlayerList() {
-  // Placeholder for player data, you would probably fetch this data or pass it as props
-  const players = ['Player 1', 'Player 2', 'Player 3', 'Player 4', 'Player 5'];
-
+function PlayerList({ players, onPlayerClick }) {
   return (
     <div className="PlayerList">
-      {players.map((player, index) => (
-        <div key={index} className="Player">
-          {player}
+      {players.map(player => (
+        <div key={player.number} className="PlayerContainer" onClick={() => onPlayerClick(player)}>
+          <div className="PlayerCircle">{player.number}</div>
+          <div className="PlayerName">{player.name}</div>
         </div>
       ))}
     </div>

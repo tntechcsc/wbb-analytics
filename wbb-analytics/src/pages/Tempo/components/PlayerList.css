@@ -1,29 +1,28 @@
 .PlayerList {
   display: flex;
-  justify-content: space-around; /* Evenly space the circles */
+  justify-content: space-around;
   align-items: center;
-  height: 50%; /* Take up half of the height of the parent container */
-  padding: 10px; /* Add padding inside the container */
-  box-sizing: border-box; /* Include padding in the height calculation */
 }
 
-.Player {
-  flex-grow: 1; /* Grow to fill the available space */
-  flex-shrink: 1; /* Allow shrinking if necessary */
-  flex-basis: 0; /* Start with 0 width, grow and shrink from there */
-  margin: 10px; /* Space between circles */
-  aspect-ratio: 1; /* Make the circles perfectly circular */
-  max-width: calc(100% / 5 - 20px); /* Adjust based on the number of players, 5 in this example */
-  background-color: #ccc; /* Example color, adjust as needed */
-  border-radius: 50%; /* Make it round */
+.PlayerContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer; /* Optional, if you want to change the cursor on hover */
+}
+
+.PlayerCircle {
+  width: 200px; /* Adjust as needed */
+  height: 200px;
+  border-radius: 50%;
+  background-color: #ccc; /* Adjust color as needed */
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 0.8em; /* Adjust text size as needed */
+  font-size: 3em; /* Adjust as needed */
 }
 
-/* If there's a specific maximum size you want to enforce, add a max-width */
-.Player {
-  max-width: 120px; /* Or whatever maximum size you want */
-  height: auto; /* Keep the height automatic to maintain aspect ratio */
+.PlayerName {
+  font-size: 2em; /* Adjust as needed */
+  margin-top: 10px;
 }
