@@ -4,14 +4,19 @@ import CancelButton from './components/CancelButton';
 import LastTempoDisplay from './components/LastTempoDisplay';
 import PlayerList from './components/PlayerList';
 import TempoTimer from './components/TempoTimer';
+import TempoButton from './components/TempoButton'
+import SubstitutionPopup from './components/SubstitutionPopup'
 
 function TempoPage() {
+    // State for timing control
     const [isTiming, setIsTiming] = useState(false);
     const [resetTimer, setResetTimer] = useState(false);
     const [currentTempo, setCurrentTempo] = useState(0);
     const [recordedTempo, setRecordedTempo] = useState(null);
     const [lastTempo, setLastTempo] = useState(null);
     const [tempoType, setTempoType] = useState(null);
+
+    // Players' state
     const [playersOnCourt, setPlayersOnCourt] = useState([
         { number: 1, name: "Player 1" },
         { number: 2, name: "Player 2" },
@@ -33,10 +38,14 @@ function TempoPage() {
         { number: 11, name: "Player 11" },
         { number: 12, name: "Player 12" }
     ]);
+
+    // State for substitution popup
     const [isPopupOpen, setIsPopupOpen] = useState(false);
     const [selectedPlayerForSub, setSelectedPlayerForSub] = useState(null);
 
+    // Start timing for tempo (offensive or defensive)
     const startTempo = (type) => {
+        console.log(`Starting ${type} tempo`);
         if (recordedTempo) {
             setLastTempo(recordedTempo.toFixed(2));
         }
@@ -46,24 +55,32 @@ function TempoPage() {
         setIsTiming(true);
     };
 
+    // Stop the current tempo
     const handleStopTempo = () => {
+        console.log(`Stopping ${tempoType} tempo`);
         setIsTiming(false);
         setRecordedTempo(currentTempo);
     };
 
+    // Cancel the current timing
     const cancelTempo = () => {
+        console.log('Cancelling tempo');
         setIsTiming(false);
         setCurrentTempo(0);
         setResetTimer(true);
         setTempoType(null);
     };
 
+    // Handle player click for substitution
     const handlePlayerClick = (player) => {
+        console.log(`Player ${player.number} clicked for substitution`);
         setSelectedPlayerForSub(player);
         setIsPopupOpen(true);
     };
 
+    // Handle substitution with a new player
     const handleSubstitute = (newPlayer) => {
+        console.log(`Substituting player ${selectedPlayerForSub.number} with ${newPlayer.number}`);
         setPlayersOnCourt(playersOnCourt.map(p =>
             p.number === selectedPlayerForSub.number ? newPlayer : p
         ));
@@ -86,8 +103,10 @@ function TempoPage() {
                 </>
             )}
             <div className="TempoControls">
-                <button
-                    className={`TempoButton ${isTiming && tempoType === 'defensive' ? 'stop' : 'start'} ${isTiming && tempoType !== 'defensive' ? 'disabled' : ''}`}
+                <TempoButton
+                    tempoType="Defensive"
+                    className={`TempoButton ${isTiming && tempoType === 'defensive' ? 'stop' : 'start'}`}
+                    isTiming={isTiming && tempoType === 'defensive'}
                     onClick={() => {
                         if (isTiming && tempoType === 'defensive') {
                             handleStopTempo('defensive');
@@ -95,10 +114,7 @@ function TempoPage() {
                             startTempo('defensive');
                         }
                     }}
-                    disabled={isTiming && tempoType !== 'defensive'}
-                >
-                    {isTiming && tempoType === 'defensive' ? 'Stop Defensive Tempo' : 'Start Defensive Tempo'}
-                </button>
+                />
 
                 <div className="TimerAndLastTempo">
                     <TempoTimer
@@ -116,8 +132,10 @@ function TempoPage() {
                     />
                 </div>
 
-                <button
-                    className={`TempoButton ${isTiming && tempoType === 'offensive' ? 'stop' : 'start'} ${isTiming && tempoType !== 'offensive' ? 'disabled' : ''}`}
+                <TempoButton
+                    tempoType="Offensive"
+                    className={`TempoButton ${isTiming && tempoType === 'offensive' ? 'stop' : 'start'}`}
+                    isTiming={isTiming && tempoType === 'offensive'}
                     onClick={() => {
                         if (isTiming && tempoType === 'offensive') {
                             handleStopTempo('offensive');
@@ -125,33 +143,11 @@ function TempoPage() {
                             startTempo('offensive');
                         }
                     }}
-                    disabled={isTiming && tempoType !== 'offensive'}
-                >
-                    {isTiming && tempoType === 'offensive' ? 'Stop Offensive Tempo' : 'Start Offensive Tempo'}
-                </button>
+                />
             </div>
         </div>
     );
 }
 
-function SubstitutionPopup({ isOpen, onClose, onSubstitute, playersOnCourt, allPlayers }) {
-    const playersNotOnCourt = allPlayers.filter(p =>
-        !playersOnCourt.some(onCourt => onCourt.number === p.number)
-    );
-
-    return (
-        <div className="Popup">
-            {playersNotOnCourt.map(player => (
-                <div key={player.number} className="PopupPlayerContainer" onClick={() => onSubstitute(player)}>
-                    <div className="PopupPlayerCircle">{player.number}</div>
-                    <div className="PopupPlayerName">{player.name}</div>
-                </div>
-            ))}
-            <div className="PopupCloseButtonContainer">
-                <button onClick={onClose}>Close</button>
-            </div>
-        </div>
-    );
-}
 
 export default TempoPage;

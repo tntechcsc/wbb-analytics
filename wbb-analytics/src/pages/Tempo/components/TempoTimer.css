@@ -10,4 +10,11 @@
     width: 150px; /* Fixed width for the timer */
     text-align: center; /* Center the text inside the timer */
   }
+
+  .TempoTimer {
+    flex-basis: 400px; /* Assign a fixed width to the timer */
+    text-align: center;
+    font-size: 2em;
+    margin: 10px;
+  }
   
