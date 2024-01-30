@@ -1,0 +1,15 @@
+.TempoPage {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.TempoControls {
+  display: flex;
+  justify-content: space-around; /* Adjust as necessary for spacing */
+  align-items: center;
+  flex: 1; /* Takes up remaining space */
+  padding: 10px;
+}
+
+
