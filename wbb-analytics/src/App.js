@@ -1,7 +1,7 @@
 // App.js
 import React from 'react';
 
-import Tempo from './pages/tempo/Tempo'
+import Tempo from './pages/Tempo/Tempo'
 
 function App() {
   return (
