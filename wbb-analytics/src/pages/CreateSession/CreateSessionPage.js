@@ -9,9 +9,32 @@ const CreateSessionsPage = () => {
   const [isModalOpen, setModalOpen] = useState(false);
   const [sessionName, setSessionName] = useState('');
   const [savedSessions, setSavedSessions] = useState([]);
+  const [players, setPlayers] = useState([]);
+  const [listA, setListA] = useState(Array(5).fill({ playerName: 'Select Player' }));
+  const [listB, setListB] = useState(Array(5).fill({ playerName: 'Select Player' }));
+  const [availablePlayers, setAvailablePlayers] = useState([]);
 
   const [selectedDrillIndex, setSelectedDrillIndex] = useState(null);
 
+
+ // Function to handle player selection
+ const handleSelectPlayer = (team, index, playerName) => {
+  const updatedList = team === 'A' ? [...listA] : [...listB];
+  updatedList[index] = { playerName };
+  if (team === 'A') {
+    setListA(updatedList);
+  } else {
+    setListB(updatedList);
+  }
+  const newAvailablePlayers = players.filter(p => !listA.concat(listB).find(sp => sp.playerName === p));
+  setAvailablePlayers(newAvailablePlayers);
+};
+
+  // Filter out selected players from the available list
+  const getAvailablePlayersForDropdown = (selectedPlayer) => {
+    return ['Select Player', ...availablePlayers].filter(p => p !== selectedPlayer.playerName);
+  };
+  
   const handleAddDrill = (name, type) => {
     if (selectedDrillIndex !== null) {
       const updatedDrills = [...drills];
@@ -41,30 +64,34 @@ const CreateSessionsPage = () => {
     setDrills(updatedDrills);
   };
 
-  const [listA, setListA] = useState([]);
-  const [listB, setListB] = useState([]);
-
-  const playerArray = useMemo(
-    () => [
-      'Player 1', 'Player 2', 'Player 3', 'Player 4', 'Player 5',
-      'Player A', 'Player B', 'Player C', 'Player D', 'Player E'
-    ],
-    []
-  );
-
   useEffect(() => {
-    // Populate default selections for List A
-    const defaultListA = Array.from({ length: 5 }, (_, index) => ({
-      playerName: playerArray[index],
-    }));
-    setListA(defaultListA);
+    // Fetch players from the database when the component mounts
+    fetch('http://localhost:3001/api/players')
+      .then(response => response.json())
+      .then(data => {
+        const playerNames = data.map(player => player.name);
+        setPlayers(playerNames);
+        setAvailablePlayers(playerNames); // Initialize available players
+      })
+      .catch(error => {
+        console.error('Error fetching players', error);
+      });
+  }, []);
 
-    // Populate default selections for List B
-    const defaultListB = Array.from({ length: 5 }, (_, index) => ({
-      playerName: playerArray[5 + index],
-    }));
-    setListB(defaultListB);
-  }, [playerArray]);
+    // Replace hardcoded player names with fetched player data for List A and List B
+    useEffect(() => {
+      // Populate default selections for List A
+      const defaultListA = players.slice(0, 5).map(playerName => ({
+        playerName,
+      }));
+      setListA(defaultListA);
+  
+      // Populate default selections for List B
+      const defaultListB = players.slice(5, 10).map(playerName => ({
+        playerName,
+      }));
+      setListB(defaultListB);
+    }, [players]); // Depend on the fetched players data
 
   const handleRemovePlayer = (team, index) => {
     if (team === 'A') {
@@ -127,44 +154,70 @@ const CreateSessionsPage = () => {
     setListB([]);
   };
 
-  return (
-    <div className="create-sessions-container">
-      <div className="drills-column">
-        <h2>Drills</h2>
-        <ul>
-          {drills.map((drill, index) => (
-            <li key={index}>
-              <button className="drill-button" onClick={() => handleDrillClick(index, false)}>
-                {drill.name}
-              </button>
-              <button className="delete-drill-button" onClick={() => handleDeleteDrill(index)}>
-                Delete
-              </button>
-              <button className="modify-drill-button" onClick={() => handleDrillClick(index, true)}>
-                Modify
+    // Render function for List A and List B dropdowns
+    const renderDropdown = (team, list) => {
+      return list.map((item, index) => (
+        <li key={index}>
+          <select
+            className='dropdown'
+            value={item.playerName}
+            onChange={(e) => handleSelectPlayer(team, index, e.target.value)}
+          >
+            {getAvailablePlayersForDropdown(item).map((playerName, playerIndex) => (
+              <option key={playerIndex} value={playerName}>
+                {playerName}
+              </option>
+            ))}
+          </select>
+          <button className="remove-player-button" onClick={() => handleRemovePlayer(team, index)}>
+            Remove Player
+          </button>
+        </li>
+      ));
+    };
+
+    return (
+      <div className="create-sessions-container">
+        <div className="drills-column">
+          <h2>Drills</h2>
+          <ul>
+            {drills.map((drill, index) => (
+              <li key={index}>
+                <button className="drill-button" onClick={() => handleDrillClick(index, false)}>
+                  {drill.name}
+                </button>
+                <button className="delete-drill-button" onClick={() => handleDeleteDrill(index)}>
+                  Delete
+                </button>
+                <button className="modify-drill-button" onClick={() => handleDrillClick(index, true)}>
+                  Modify
+                </button>
+              </li>
+            ))}
+            <li>
+              <button className="add-drill-button" onClick={() => setModalOpen(true)}>
+                Add Drill
               </button>
             </li>
-          ))}
-          <li>
-            <button className="add-drill-button" onClick={() => setModalOpen(true)}>
-              Add Drill
-            </button>
-          </li>
-        </ul>
-      </div>
-
-      <div className="main-content">
-        {/* Add your session details form or components here */}
-      </div>
-
-      <div className="lists-column">
-        <div className="list">
-          <h2>Team A</h2>
-          <ul>
-            {listA.map((player, index) => (
+          </ul>
+        </div>
+    
+        <div className="main-content">
+          {/* Add your session details form or components here */}
+        </div>
+    
+        <div className="lists-column">
+          <div className="list">
+            <h2>Purple</h2>
+            <ul>
+            {listA.map((item, index) => (
               <li key={index}>
-                <select className='dropdown' value={player.playerName} onChange={(e) => handlePlayerChange('A', index, e)}>
-                  {playerArray.map((playerName, playerIndex) => (
+                <select
+                  className='dropdown'
+                  value={item.playerName}
+                  onChange={(e) => handleSelectPlayer('A', index, e.target.value)}
+                >
+                  {getAvailablePlayersForDropdown(item).map((playerName, playerIndex) => (
                     <option key={playerIndex} value={playerName}>
                       {playerName}
                     </option>
@@ -182,40 +235,43 @@ const CreateSessionsPage = () => {
             </li>
           </ul>
         </div>
-
+    
         <div className="list">
-          <h2>Team B</h2>
+          <h2>Gray</h2>
           <ul>
-            {listB.map((player, index) => (
-              <li key={index}>
-                <select className='dropdown' value={player.playerName} onChange={(e) => handlePlayerChange('B', index, e)}>
-                  {playerArray.map((playerName, playerIndex) => (
-                    <option key={playerIndex} value={playerName}>
-                      {playerName}
-                    </option>
-                  ))}
-                </select>
-                <button className="remove-player-button" onClick={() => handleRemovePlayer('B', index)}>
-                  Remove Player
-                </button>
-              </li>
-            ))}
-            <li>
-              <button className="add-dropdown-button" onClick={handleAddDropdownB}>
-                Add Player
+          {listB.map((item, index) => (
+            <li key={index}>
+              <select
+                className='dropdown'
+                value={item.playerName}
+                onChange={(e) => handleSelectPlayer('B', index, e.target.value)}
+              >
+                {getAvailablePlayersForDropdown(item).map((playerName, playerIndex) => (
+                  <option key={playerIndex} value={playerName}>
+                    {playerName}
+                  </option>
+                ))}
+              </select>
+              <button className="remove-player-button" onClick={() => handleRemovePlayer('B', index)}>
+                Remove Player
               </button>
             </li>
-          </ul>
-        </div>
+          ))}
+          <li>
+            <button className="add-dropdown-button" onClick={handleAddDropdownB}>
+              Add Player
+            </button>
+          </li>
+        </ul>
       </div>
-
-      <button className="create-session-button" onClick={handleSaveSession}>
-        Create Session
-      </button>
-
-      <DrillModal isOpen={isModalOpen} onClose={() => setModalOpen(false)} onAddDrill={handleAddDrill} />
     </div>
-  );
-};
-
+    
+    <button className="create-session-button" onClick={handleSaveSession}>
+      Create Session
+    </button>
+    
+    <DrillModal isOpen={isModalOpen} onClose={() => setModalOpen(false)} onAddDrill={handleAddDrill} />
+    </div>
+    );
+  }
 export default CreateSessionsPage;
