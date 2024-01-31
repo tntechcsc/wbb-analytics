@@ -87,12 +87,16 @@ function TempoPage() {
         setIsPopupOpen(false);
     };
 
+    const handleOverlayClick = () => {
+        setIsPopupOpen(false);
+    };
+
     return (
         <div className="TempoPage">
             <PlayerList players={playersOnCourt} onPlayerClick={handlePlayerClick} />
             {isPopupOpen && (
                 <>
-                    <div className="Overlay"></div>
+                    <div className="Overlay" onClick={handleOverlayClick}></div>
                     <SubstitutionPopup
                         isOpen={isPopupOpen}
                         onClose={() => setIsPopupOpen(false)}
