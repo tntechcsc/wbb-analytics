@@ -21,8 +21,9 @@
   color: white;
 }
 
-.TempoButton.disabled {
-  background-color: grey;
-  cursor: not-allowed;
-  pointer-events: none;
+/* Increased specificity for the disabled state */
+.TempoButton.disabled, .TempoButton:disabled {
+  background-color: grey; /* Gray color for disabled appearance */
+  cursor: not-allowed; /* Change cursor to indicate disabled state */
+  pointer-events: none; /* Prevent any interaction */
 }
