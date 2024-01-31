@@ -14,9 +14,6 @@ function SubstitutionPopup({ isOpen, onClose, onSubstitute, playersOnCourt, allP
                     <div className="PopupPlayerName">{player.name}</div>
                 </div>
             ))}
-            <div className="PopupCloseButtonContainer">
-                <button onClick={onClose}>Close</button>
-            </div>
         </div>
     );
 }

@@ -87,12 +87,16 @@ function TempoPage() {
         setIsPopupOpen(false);
     };
 
+    const handleOverlayClick = () => {
+        setIsPopupOpen(false);
+    };
+
     return (
         <div className="TempoPage">
             <PlayerList players={playersOnCourt} onPlayerClick={handlePlayerClick} />
             {isPopupOpen && (
                 <>
-                    <div className="Overlay"></div>
+                    <div className="Overlay" onClick={handleOverlayClick}></div>
                     <SubstitutionPopup
                         isOpen={isPopupOpen}
                         onClose={() => setIsPopupOpen(false)}
@@ -103,9 +107,9 @@ function TempoPage() {
                 </>
             )}
             <div className="TempoControls">
-                <TempoButton
+            <TempoButton
                     tempoType="Defensive"
-                    className={`TempoButton ${isTiming && tempoType === 'defensive' ? 'stop' : 'start'}`}
+                    className={`TempoButton ${isTiming && tempoType !== 'defensive' ? 'disabled' : ''} ${isTiming && tempoType === 'defensive' ? 'stop' : 'start'}`}
                     isTiming={isTiming && tempoType === 'defensive'}
                     onClick={() => {
                         if (isTiming && tempoType === 'defensive') {
@@ -114,6 +118,7 @@ function TempoPage() {
                             startTempo('defensive');
                         }
                     }}
+                    disabled={isTiming && tempoType !== 'defensive'}
                 />
 
                 <div className="TimerAndLastTempo">
@@ -134,7 +139,7 @@ function TempoPage() {
 
                 <TempoButton
                     tempoType="Offensive"
-                    className={`TempoButton ${isTiming && tempoType === 'offensive' ? 'stop' : 'start'}`}
+                    className={`TempoButton ${isTiming && tempoType === 'offensive' ? 'stop' : 'start'} ${isTiming && tempoType !== 'offensive' ? 'disabled' : ''}`}
                     isTiming={isTiming && tempoType === 'offensive'}
                     onClick={() => {
                         if (isTiming && tempoType === 'offensive') {
@@ -143,6 +148,7 @@ function TempoPage() {
                             startTempo('offensive');
                         }
                     }}
+                    disabled={isTiming && tempoType !== 'offensive'}
                 />
             </div>
         </div>
