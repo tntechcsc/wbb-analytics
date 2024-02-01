@@ -1,0 +1,29 @@
+.PlayerList {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.PlayerContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer; /* Optional, if you want to change the cursor on hover */
+}
+
+.PlayerCircle {
+  width: 200px; /* Adjust as needed */
+  height: 200px;
+  border-radius: 50%;
+  background-color: #ccc; /* Adjust color as needed */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 3em; /* Adjust as needed */
+  margin: 30px;
+}
+
+.PlayerName {
+  font-size: 2em; /* Adjust as needed */
+  margin-top: 10px;
+}

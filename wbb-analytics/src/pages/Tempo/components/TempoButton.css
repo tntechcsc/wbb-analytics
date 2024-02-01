@@ -1,0 +1,29 @@
+.TempoButton {
+  flex-grow: 1; /* Grow to fill the space for width */
+  flex-shrink: 0; /* Prevent shrinking */
+  align-self: stretch; /* Stretch to fill the container's height */
+  font-size: 1.5em; /* Increase font size */
+  padding: 20px; /* Adjust padding */
+  margin: 10px; /* Add margin around the buttons */
+  border: none;
+  border-radius: 10px; /* Slightly rounded corners */
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.TempoButton.start {
+  background-color: green;
+  color: white;
+}
+
+.TempoButton.stop {
+  background-color: red;
+  color: white;
+}
+
+/* Increased specificity for the disabled state */
+.TempoButton.disabled, .TempoButton:disabled {
+  background-color: grey; /* Gray color for disabled appearance */
+  cursor: not-allowed; /* Change cursor to indicate disabled state */
+  pointer-events: none; /* Prevent any interaction */
+}
