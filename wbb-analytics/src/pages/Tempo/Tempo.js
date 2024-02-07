@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Tempo.css';
 import CancelButton from './components/CancelButton';
 import LastTempoDisplay from './components/LastTempoDisplay';
@@ -16,28 +16,45 @@ function TempoPage() {
     const [lastTempo, setLastTempo] = useState(null);
     const [tempoType, setTempoType] = useState(null);
 
-    // Players' state
-    const [playersOnCourt, setPlayersOnCourt] = useState([
-        { number: 1, name: "Player 1" },
-        { number: 2, name: "Player 2" },
-        { number: 3, name: "Player 3" },
-        { number: 4, name: "Player 4" },
-        { number: 5, name: "Player 5" }
-    ]);
-    const [allPlayers, setAllPlayers] = useState([
-        { number: 1, name: "Player 1" },
-        { number: 2, name: "Player 2" },
-        { number: 3, name: "Player 3" },
-        { number: 4, name: "Player 4" },
-        { number: 5, name: "Player 5" },
-        { number: 6, name: "Player 6" },
-        { number: 7, name: "Player 7" },
-        { number: 8, name: "Player 8" },
-        { number: 9, name: "Player 9" },
-        { number: 10, name: "Player 10" },
-        { number: 11, name: "Player 11" },
-        { number: 12, name: "Player 12" }
-    ]);
+    const [playersOnCourt, setPlayersOnCourt] = useState([]);
+    const [allPlayers, setAllPlayers] = useState([]);
+
+    useEffect(() => {
+        fetch('http://localhost:3001/api/players')
+          .then(response => response.json())
+          .then(data => {
+            const playersData = data.map(player => ({
+                id: player._id,
+                name: player.name,
+                number: player.jersey_number
+            }));
+            setAllPlayers(playersData);
+            // Set players on court based on your logic, e.g., first five players
+            setPlayersOnCourt(playersData.slice(0, 5));
+          })
+          .catch(error => console.error('Failed to fetch players:', error));
+      }, []);  
+
+      // Function to submit tempo
+    const submitTempo = (isOffensive, playersOnCourtIds, timeValue) => {
+        const tempoData = {
+            DrillID: null, // Since DrillID is not used yet
+            PlayersOnCourt: playersOnCourtIds,
+            TimeToHalfCourt: isOffensive ? timeValue : null,
+            PressDefenseTime: isOffensive ? null : timeValue
+        };
+  
+        fetch('http://localhost:3001/api/tempos', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(tempoData)
+        })
+        .then(response => response.json())
+        .then(data => console.log('Tempo submitted:', data))
+        .catch(error => console.error('Error submitting tempo:', error));
+    };
 
     // State for substitution popup
     const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -56,10 +73,19 @@ function TempoPage() {
     };
 
     // Stop the current tempo
-    const handleStopTempo = () => {
+    const handleStopTempo = (type) => {
         console.log(`Stopping ${tempoType} tempo`);
         setIsTiming(false);
         setRecordedTempo(currentTempo);
+
+        // Determine if tempo is offensive or defensive
+        const isOffensive = type === 'offensive';
+
+        // Get the IDs of the players on the court
+        const playersOnCourtIds = playersOnCourt.map(player => player.id);
+
+        // Call submitTempo with the correct arguments
+        submitTempo(isOffensive, playersOnCourtIds, currentTempo);
     };
 
     // Cancel the current timing
@@ -154,6 +180,5 @@ function TempoPage() {
         </div>
     );
 }
-
 
 export default TempoPage;
