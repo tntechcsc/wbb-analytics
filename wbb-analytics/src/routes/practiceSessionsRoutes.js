@@ -31,6 +31,19 @@ router.get('/:sessionId/drills', async (req, res) => {
   }
 });
 
+router.post('/', async (req, res) => {
+  const session = new PracticeSession({
+    _id: new mongoose.Types.ObjectId(),
+    Date: req.body.Date,
+  });
+
+  try {
+    const newSession = await session.save();
+    res.status(201).json(newSession);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+});
 // Additional CRUD routes...
 
 module.exports = router;
