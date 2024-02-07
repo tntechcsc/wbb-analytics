@@ -42,6 +42,10 @@ const PlayersPage = () => {
       setFilteredDrills([]); // Reset if no session is selected
     }
   }, [selectedSession]);
+    // Filter drills based on the selected session
+    const filtered = drills.filter(drill => drill.sessionID === selectedSession);
+    setFilteredDrills(filtered);
+  }, [selectedSession, drills]);
 
   return (
     <div className="players-page-container">
@@ -62,6 +66,10 @@ const PlayersPage = () => {
        {filteredDrills.map((drill) => (
       <option key={drill.id} value={drill.id}>{drill.name}</option>
       ))}
+        <option value="">Select a Drill</option>
+        {filteredDrills.map((drill) => (
+          <option key={drill._id} value={drill._id}>{drill.name}</option>
+        ))}
       </select>
       <table>
         <thead>

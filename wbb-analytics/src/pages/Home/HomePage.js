@@ -16,6 +16,8 @@ const HomePage = () => {
       <div className="logo-container">
       <img src={`${process.env.PUBLIC_URL}/nESTlogo.png`} alt="nEST Logo" className="logo" />
       </div>
+        <h1>WBB Analytics</h1>
+        <p>Your Hub for Women's Basketball Statistics</p>
       </header>
 
       <section className="features">

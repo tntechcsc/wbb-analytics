@@ -11,12 +11,10 @@ import TabButton from '../../components/TabButton';
 import Stack from '@mui/material/Stack';
 import { useNavigate } from 'react-router-dom';
 
-
-
+const CreateSessionsPage = () => {
+  const navigate = useNavigate();
 
 const CreateSessionsPage = () => {
-
-  const navigate = useNavigate();
   let id1 = -1; //Defualt value so CreateSession can run normally if not directed from OpenSession
   const  location = useLocation();
   if(location.pathname === '/CreateSession')
@@ -173,6 +171,27 @@ const CreateSessionsPage = () => {
     } catch(error){
       console.error('Failed to save session data', error);
     }
+  const handleSaveSession = () => {
+    
+    const currentDate = new Date();
+    const formattedDate = currentDate.toLocaleString(); // You can customize the format as needed
+    
+    
+    const newSession = {
+      sessionName: formattedDate,
+      drills: [...drills],
+      listA: [...listA],
+      listB: [...listB],
+    };
+
+    setSavedSessions([...savedSessions, newSession]);
+    // Optionally, you can clear the current session after saving
+    setSessionName('');
+    setDrills([]);
+    setListA([]);
+    setListB([]);
+    
+    
   };
 
   return (
