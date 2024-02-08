@@ -31,17 +31,10 @@ const PlayersPage = () => {
   }, []);
 
   useEffect(() => {
-    if (selectedSession) {
-      // Fetch drills for the selected session
-      fetch(`http://localhost:3001/api/sessions/${selectedSession}/drills`)
-        .then(response => response.json())
-        .then(data =>{ setFilteredDrills(data);
-         console.log(data); }) // This will be the array of drills
-        .catch(error => console.error('Failed to fetch drills:', error));
-      } else {
-      setFilteredDrills([]); // Reset if no session is selected
-    }
-  }, [selectedSession]);
+    // Filter drills based on the selected session
+    const filtered = drills.filter(drill => drill.sessionID === selectedSession);
+    setFilteredDrills(filtered);
+  }, [selectedSession, drills]);
 
   return (
     <div className="players-page-container">
@@ -58,10 +51,10 @@ const PlayersPage = () => {
       {/* Drill Dropdown (dependent on the selected session) */}
       <label htmlFor="drillSelect">Select Drill:</label>
       <select id="drillSelect" onChange={(e) => setSelectedDrill(e.target.value)}>
-      <option value="">Select a Drill</option>
-       {filteredDrills.map((drill) => (
-      <option key={drill.id} value={drill.id}>{drill.name}</option>
-      ))}
+        <option value="">Select a Drill</option>
+        {filteredDrills.map((drill) => (
+          <option key={drill._id} value={drill._id}>{drill.name}</option>
+        ))}
       </select>
       <table>
         <thead>
