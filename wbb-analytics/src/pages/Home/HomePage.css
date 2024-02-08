@@ -108,39 +108,3 @@
   .new-session .explore-link:hover, .open-session .explore-link:hover {
     background-color: #2675ad;
   }
-  /*makes button look similar to home page .explore-link*/
-  .Linkish-Button{ 
-
-    background-color: #3498db;
-    color: #fff;
-    text-decoration: none;
-    border-radius: 5px;
-    font-weight: bold;
-    padding: 10px 20px;
-    margin-top: 15px;
-    border: none;
-    width: 100%;
-  
-  }
-  /*OpenSession.js*/
-
-  .modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.modal-content {
-  background: #fff;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  max-width: 400px;
-  width: 100%;
-}

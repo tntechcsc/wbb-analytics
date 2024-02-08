@@ -1,5 +1,6 @@
 import React from 'react';
 import './SubstitutionPopup.css';
+import ClickAwayListener from 'react-click-away-listener';
 import { IoCloseSharp } from "react-icons/io5";
 
 function SubstitutionPopup({ isOpen, onClose, onSubstitute, playersOnCourt, allPlayers }) {
@@ -8,6 +9,8 @@ function SubstitutionPopup({ isOpen, onClose, onSubstitute, playersOnCourt, allP
     );
 
     return (
+        <div>
+        <ClickAwayListener onClickAway={onClose}>
         <div className="Popup">
             <div class="relative h-32 w-32 ...">
                 <div class="absolute top-0 right-0 h-16 w-16 ..."><IoCloseSharp onClick={onClose}></IoCloseSharp></div>
@@ -18,6 +21,8 @@ function SubstitutionPopup({ isOpen, onClose, onSubstitute, playersOnCourt, allP
                     <div className="PopupPlayerName">{player.name}</div>
                 </div>
             ))}
+        </div>
+        </ClickAwayListener>
         </div>
     );
 }
