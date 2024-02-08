@@ -9,12 +9,14 @@ import './CreateSessionPage.css';
 import { SafeAreaView, StatusBar, StyleSheet, View } from "react-native";
 import TabButton from '../../components/TabButton';
 import Stack from '@mui/material/Stack';
-
+import { useNavigate } from 'react-router-dom';
 
 
 
 
 const CreateSessionsPage = () => {
+
+  const navigate = useNavigate();
   let id1 = -1; //Defualt value so CreateSession can run normally if not directed from OpenSession
   const  location = useLocation();
   if(location.pathname === '/CreateSession')
@@ -144,27 +146,33 @@ const CreateSessionsPage = () => {
     setListB([...listB, { playerName: `New Player ${listB.length + 1}` }]);
   };
 
-  const handleSaveSession = () => {
-    
+  const handleSaveSession = async () => {
     const currentDate = new Date();
     const formattedDate = currentDate.toLocaleString(); // You can customize the format as needed
-    
-    
-    const newSession = {
-      sessionName: formattedDate,
-      drills: [...drills],
-      listA: [...listA],
-      listB: [...listB],
+    const sessionData = {
+      //Include all necessary data here
+      Date: new Date().toLocaleDateString()
     };
 
-    setSavedSessions([...savedSessions, newSession]);
-    // Optionally, you can clear the current session after saving
-    setSessionName('');
-    setDrills([]);
-    setListA([]);
-    setListB([]);
-    
-    
+    try{
+      // Send POST request to save session data
+      const response = await fetch('/api/sessions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(sessionData),
+      });
+
+    if(!response.ok){
+      throw new Error('Failed to save session data');
+    }
+
+    // Handle successful response
+    navigate('/tempo');
+    } catch(error){
+      console.error('Failed to save session data', error);
+    }
   };
 
   return (
