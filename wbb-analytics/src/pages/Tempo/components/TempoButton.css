@@ -1,14 +1,21 @@
 .TempoButton {
-  flex-grow: 1; /* Grow to fill the space for width */
-  flex-shrink: 0; /* Prevent shrinking */
-  align-self: stretch; /* Stretch to fill the container's height */
-  font-size: 1.5em; /* Increase font size */
-  padding: 20px; /* Adjust padding */
-  margin: 10px; /* Add margin around the buttons */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: calc(45% - 40px); /* 50% for two buttons, minus double the padding */
+  height: calc(100% - 40px); /* 100% of the container's height, minus double the padding */
+  font-size: 2em;
+  text-align: center;
   border: none;
-  border-radius: 10px; /* Slightly rounded corners */
+  border-radius: 10px;
+  background-color: green;
+  color: white;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.TempoButton:active {
+  transform: scale(0.95);
 }
 
 .TempoButton.start {
