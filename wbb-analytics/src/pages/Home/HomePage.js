@@ -2,7 +2,7 @@
 
 import React,{useState} from 'react';
 import { Link } from 'react-router-dom';
-import OpenSession from './OpenSession';
+import SessionOption from './SessionOption.js';
 import './HomePage.css';
 
 
@@ -17,37 +17,21 @@ const HomePage = () => {
         <p>Your Hub for Women's Basketball Statistics</p>
       </header>
 
-      <section className="features">
-        <div className="feature">
-          <h2>Explore Player Stats</h2>
-          <p>View detailed statistics for women's basketball players from different sessions.</p>
-          <Link to="/players" className="explore-link">
-            Explore Players
-          </Link>
-        </div>
-
-        <div className="feature">
-          <h2>Team Analytics</h2>
-          <p>Analyze team performance, track trends, and make informed decisions.</p>
-          <Link to="/teamstats" className="explore-link">
-            Explore Teams
-          </Link>
-        </div>
-      </section>
+      
 
       <section className="new-session">
         <h2>Create a New Practice Session</h2>
         <p>Start a new practice session to track player progress and team performance.</p>
-        <Link to="/createsession" className="explore-link">
-          New Practice Session
-        </Link>
+        <button onClick={() => setModelOpen(true)} className="Linkish-Button">
+          New Session
+        </button>
       </section>
 
       <section className="open-session">
-        <h2>Open Existing Session</h2>
-        <p>Access and review details of a previously created practice session.</p>
-        <button onClick={() => setModelOpen(true)} className="Linkish-Button">
-          Open Existing Session
+        <h2>Explore Stats</h2>
+        <p>View details of women's basketball team</p>
+        <button className="Linkish-Button">
+          Stats
         </button>
       </section>
 
@@ -58,7 +42,7 @@ const HomePage = () => {
           empowering coaches and enthusiasts with valuable statistical information.
         </p>
       </section>
-      <OpenSession isOpen={isModelOpen} onClose={() => setModelOpen(false)}/>
+      <SessionOption isOpen={isModelOpen} onClose={() => setModelOpen(false)}/>
     </div>
   );
 };

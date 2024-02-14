@@ -4,10 +4,10 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
 import StoredSessions from '../../data/sessionData';
 import DrillModal from './DrillModal';
-import '../Home/OpenSession'
+import '../Home/SessionOption'
 import './CreateSessionPage.css';
 import { SafeAreaView, StatusBar, StyleSheet, View } from "react-native";
-import TabButton from '../../components/TabButton';
+//import TabButton from '../../components/TabButton';
 import Stack from '@mui/material/Stack';
 
 
@@ -172,10 +172,8 @@ const CreateSessionsPage = () => {
     <div>
       <Stack spacing={2} direction="row">
       <a href='/createsession'>
-        <TabButton text={"Create Session"} />
       </a>
       <a href='/drill'>
-        <TabButton text={"Drill"} />
       </a>
       </Stack>
     </div>
