@@ -6,7 +6,6 @@ import PlayerList from './components/PlayerList';
 import TempoTimer from './components/TempoTimer';
 import TempoButton from './components/TempoButton'
 import SubstitutionPopup from './components/SubstitutionPopup'
-import Court from './components/Court'
 
 function TempoPage() {
     // State for timing control
@@ -137,10 +136,7 @@ function TempoPage() {
                     )}
                 </div>
                 <div className="RightComponent">
-                    <div className="GreyBox">
-                        <Court/>
-                    </div>
-                    
+                    <div className="GrayBox"></div>
                 </div>
             </div>
             <div className="BottomContainer">
