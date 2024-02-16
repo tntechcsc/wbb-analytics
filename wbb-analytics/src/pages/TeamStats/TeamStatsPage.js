@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import players from './../../data/playerData'; // Updated import path
+import { useLocation } from 'react-router-dom';
 import './TeamStatsPage.css'; // Import CSS for styling
 
 const TeamStatsPage = () => {
