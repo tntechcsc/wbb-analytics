@@ -43,7 +43,6 @@ function TempoPage() {
             TimeToHalfCourt: isOffensive ? timeValue : null,
             PressDefenseTime: isOffensive ? null : timeValue
         };
-  
         fetch('http://localhost:3001/api/tempos', {
             method: 'POST',
             headers: {

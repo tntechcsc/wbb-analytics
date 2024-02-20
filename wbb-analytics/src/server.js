@@ -19,7 +19,7 @@ app.use(cors({ origin: 'http://localhost:3000' }));
 mongoose.connect('mongodb://mongoadmin:c%40pSt0n3Sp24!@csclnx01.tntech.edu:27017/nestdb?authMechanism=DEFAULT&authSource=admin')
 
 // Connection string for Kyle's MongoDB
-// mongoose.connect('mongodb+srv://kyleh865:Password@nestcluster.xzqjz3i.mongodb.net/nestdb?retryWrites=true&w=majority')
+//mongoose.connect('mongodb+srv://kyleh865:Password@nestcluster.xzqjz3i.mongodb.net/nestdb?retryWrites=true&w=majority')
 
 .then(() => console.log(mongoose.connection))
 .catch(err => console.error('Could not connect to MongoDB', err));
