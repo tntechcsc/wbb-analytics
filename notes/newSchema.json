@@ -1,0 +1,67 @@
+//Season Collection
+{
+    "_id": "<unique_season_id>",
+    "year": "2023/2024",
+    "players": ["<unique_player_id1>", "<unique_player_id2>", "..."], // List of all player IDs participating in the season
+    "games": ["<unique_game_session_id1>", "<unique_game_session_id2>", "..."], // References to GameSessions documents
+    "practices": ["<unique_practice_session_id1>", "<unique_practice_session_id2>", "..."] // References to PracticeSessions documents
+}
+
+// Games Collection
+{
+  "_id": "<unique_game_session_id>",
+  "season_id": "<unique_team_id>",
+  "date": "2023-10-05",
+  "opponent": "The Hawks",
+  "location": "Home",
+  "tempo_events": ["<unique_tempo_id1>", "<unique_tempo_id2>"],
+  "shot_events": ["<unique_shot_id1>", "<unique_shot_id2>"]
+}
+
+// Practices Collection
+{
+  "_id": "<unique_practice_session_id>",
+  "season_id": "<unique_team_id>",
+  "date": "2023-11-02",
+  "drills": ["<unique_drill_id1>", "<unique_drill_id2>"] // References to drills
+}
+
+// Drills Collection
+{
+  "_id": "<unique_drill_id>",
+  "practice_id": "<unique_team_id>",
+  "name": "3-Point Shooting Drill",
+  "tempo_events": ["<unique_tempo_id5>", "<unique_tempo_id6>"],
+  "shot_events": ["<unique_shot_id5>", "<unique_shot_id6>"]
+}
+
+// Tempo Collection
+{
+  "_id": "<unique_tempo_id>",
+  "game_id": "<unique_game_or_practice_id>",
+  "player_ids": ["<unique_player_id1>", "<unique_player_id2>"], // Players involved in the transition
+  "tempo_type": "offensive" // or "defensive"
+  "transition_time": 5.2, // Time in seconds
+  "timestamp": "2023-10-05T20:15:30Z"
+}
+
+// Shots Collection
+{
+  "_id": "<unique_shot_id>",
+  "game_id": "<unique_game_or_practice_id>",
+  "player_id": "<unique_player_id>",
+  "made": true, // or false
+  "zone": "3_point_line_left_wing",
+  "shot_clock_time": "first_third", // second_third, final_third
+  "timestamp": "2023-10-05T20:15:30Z"
+}
+
+// Players Collection
+{
+  "_id": "<unique_player_id",
+  "name": "String",
+  "position": "String",
+  "jersey_number": "Number",
+  "seasons":["<unique_season_id1>", "<unique_season_id2>", "..."]  // References to Season documents for each season the player has participated in
+  "image": "String"
+}

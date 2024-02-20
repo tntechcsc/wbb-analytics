@@ -20,7 +20,7 @@ function TempoPage() {
     const [allPlayers, setAllPlayers] = useState([]);
 
     useEffect(() => {
-        fetch('http://localhost:3001/api/players')
+        fetch('http://172.22.224.1:3001/api/players')
           .then(response => response.json())
           .then(data => {
             const playersData = data.map(player => ({
@@ -35,26 +35,29 @@ function TempoPage() {
           .catch(error => console.error('Failed to fetch players:', error));
       }, []);  
 
-      // Function to submit tempo
-    const submitTempo = (isOffensive, playersOnCourtIds, timeValue) => {
-        const tempoData = {
-            DrillID: null, // Since DrillID is not used yet
-            PlayersOnCourt: playersOnCourtIds,
-            TimeToHalfCourt: isOffensive ? timeValue : null,
-            PressDefenseTime: isOffensive ? null : timeValue
-        };
-  
-        fetch('http://localhost:3001/api/tempos', {
-            method: 'POST',
+    // Function to submit tempo
+    const submitTempo = (isOffensive, playersOnCourtIds, timeValue, gameOrPracticeId, isGame) => {
+      const tempoData = {
+          gameOrPractice_id: gameOrPracticeId,
+          onModel: isGame ? 'Game' : 'Practice', // Determine if this tempo is for a game or practice
+          player_ids: playersOnCourtIds,
+          tempo_type: isOffensive ? 'offensive' : 'defensive',
+          transition_time: timeValue,
+          timestamp: new Date() // Current timestamp
+      };
+    
+      fetch('http://192.168.0.177:3001/api/tempos', {
+          method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(tempoData)
-        })
-        .then(response => response.json())
-        .then(data => console.log('Tempo submitted:', data))
-        .catch(error => console.error('Error submitting tempo:', error));
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(tempoData)
+      })
+      .then(response => response.json())
+      .then(data => console.log('Tempo submitted:', data))
+      .catch(error => console.error('Error submitting tempo:', error));
     };
+    
 
     // State for substitution popup
     const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -73,7 +76,7 @@ function TempoPage() {
     };
 
     // Stop the current tempo
-    const handleStopTempo = (type) => {
+    const handleStopTempo = (type, gameOrPracticeId, isGame) => {
         console.log(`Stopping ${tempoType} tempo`);
         setIsTiming(false);
         setRecordedTempo(currentTempo);
@@ -85,7 +88,9 @@ function TempoPage() {
         const playersOnCourtIds = playersOnCourt.map(player => player.id);
 
         // Call submitTempo with the correct arguments
-        submitTempo(isOffensive, playersOnCourtIds, currentTempo);
+        submitTempo(isOffensive, playersOnCourtIds, currentTempo, gameOrPracticeId, isGame);
+
+        //submitTempo(isOffensive, playersOnCourtIds, currentTempo);
     };
 
     // Cancel the current timing
@@ -139,7 +144,7 @@ function TempoPage() {
                     isTiming={isTiming && tempoType === 'defensive'}
                     onClick={() => {
                         if (isTiming && tempoType === 'defensive') {
-                            handleStopTempo('defensive');
+                            handleStopTempo('defensive', null, false);
                         } else {
                             startTempo('defensive');
                         }
@@ -169,7 +174,7 @@ function TempoPage() {
                     isTiming={isTiming && tempoType === 'offensive'}
                     onClick={() => {
                         if (isTiming && tempoType === 'offensive') {
-                            handleStopTempo('offensive');
+                            handleStopTempo('offensive', null, false);
                         } else {
                             startTempo('offensive');
                         }
