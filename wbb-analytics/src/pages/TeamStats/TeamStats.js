@@ -54,8 +54,15 @@ function TeamStats() {
   }, [selectedSession, allDrills]);
 
   const handleSessionChange = (event) => {
-    setSelectedSession(event.target.value);
-  };
+    const newSessionId = event.target.value;
+    setSelectedSession(newSessionId);
+
+    // Update the URL with the new session ID
+    const urlParams = new URLSearchParams(window.location.search);
+    urlParams.set('sessionId', newSessionId);
+    window.history.pushState(null, '', `${window.location.pathname}?${urlParams}`);
+};
+
 
   return (
     <div className="team-stats-container">
