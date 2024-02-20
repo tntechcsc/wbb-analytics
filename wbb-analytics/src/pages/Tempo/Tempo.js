@@ -6,6 +6,7 @@ import PlayerList from './components/PlayerList';
 import TempoTimer from './components/TempoTimer';
 import TempoButton from './components/TempoButton'
 import SubstitutionPopup from './components/SubstitutionPopup'
+import Court from './components/Court'
 
 function TempoPage() {
     // State for timing control
@@ -20,7 +21,7 @@ function TempoPage() {
     const [allPlayers, setAllPlayers] = useState([]);
 
     useEffect(() => {
-        fetch('http://172.22.224.1:3001/api/players')
+        fetch('http://localhost:3001/api/players')
           .then(response => response.json())
           .then(data => {
             const playersData = data.map(player => ({
@@ -35,27 +36,25 @@ function TempoPage() {
           .catch(error => console.error('Failed to fetch players:', error));
       }, []);  
 
-    // Function to submit tempo
-    const submitTempo = (isOffensive, playersOnCourtIds, timeValue, gameOrPracticeId, isGame) => {
-      const tempoData = {
-          gameOrPractice_id: gameOrPracticeId,
-          onModel: isGame ? 'Game' : 'Practice', // Determine if this tempo is for a game or practice
-          player_ids: playersOnCourtIds,
-          tempo_type: isOffensive ? 'offensive' : 'defensive',
-          transition_time: timeValue,
-          timestamp: new Date() // Current timestamp
-      };
-    
-      fetch('http://192.168.0.177:3001/api/tempos', {
-          method: 'POST',
+      // Function to submit tempo
+    const submitTempo = (isOffensive, playersOnCourtIds, timeValue) => {
+        const tempoData = {
+            DrillID: null, // Since DrillID is not used yet
+            PlayersOnCourt: playersOnCourtIds,
+            TimeToHalfCourt: isOffensive ? timeValue : null,
+            PressDefenseTime: isOffensive ? null : timeValue
+        };
+  
+        fetch('http://localhost:3001/api/tempos', {
+            method: 'POST',
             headers: {
-              'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(tempoData)
-      })
-      .then(response => response.json())
-      .then(data => console.log('Tempo submitted:', data))
-      .catch(error => console.error('Error submitting tempo:', error));
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(tempoData)
+        })
+        .then(response => response.json())
+        .then(data => console.log('Tempo submitted:', data))
+        .catch(error => console.error('Error submitting tempo:', error));
     };
     
 
@@ -144,7 +143,7 @@ function TempoPage() {
                     isTiming={isTiming && tempoType === 'defensive'}
                     onClick={() => {
                         if (isTiming && tempoType === 'defensive') {
-                            handleStopTempo('defensive', null, false);
+                            handleStopTempo('defensive');
                         } else {
                             startTempo('defensive');
                         }
@@ -152,21 +151,21 @@ function TempoPage() {
                     disabled={isTiming && tempoType !== 'defensive'}
                 />
 
-                <div className="TimerAndLastTempo">
-                    <TempoTimer
-                        isTiming={isTiming}
-                        resetTimer={resetTimer}
-                        setResetTimer={setResetTimer}
-                        currentTime={currentTempo}
-                        setCurrentTime={setCurrentTempo}
-                    />
-                    <LastTempoDisplay lastTempo={lastTempo} />
-                    <CancelButton
-                        onCancel={cancelTempo}
-                        className={!isTiming ? 'disabled' : ''}
-                        disabled={!isTiming}
-                    />
-                </div>
+                    <div className="TimerAndLastTempo">
+                        <TempoTimer
+                            isTiming={isTiming}
+                            resetTimer={resetTimer}
+                            setResetTimer={setResetTimer}
+                            currentTime={currentTempo}
+                            setCurrentTime={setCurrentTempo}
+                        />
+                        <LastTempoDisplay lastTempo={lastTempo} />
+                        <CancelButton
+                            onCancel={cancelTempo}
+                            className={!isTiming ? 'disabled' : ''}
+                            disabled={!isTiming}
+                        />
+                    </div>
 
                 <TempoButton
                     tempoType="Offensive"
@@ -174,7 +173,7 @@ function TempoPage() {
                     isTiming={isTiming && tempoType === 'offensive'}
                     onClick={() => {
                         if (isTiming && tempoType === 'offensive') {
-                            handleStopTempo('offensive', null, false);
+                            handleStopTempo('offensive');
                         } else {
                             startTempo('offensive');
                         }

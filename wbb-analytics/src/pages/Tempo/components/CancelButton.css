@@ -6,7 +6,8 @@
     border: none;
     border-radius: 20px; /* Rounded corners */
     cursor: pointer;
-    width: auto; /* Adjust width to content */
+    width: 200px; /* Adjust width to content */
+    height: 100px;
     margin: 0 auto; /* Center the button horizontally */
     display: block; /* Block display to apply margin auto */
   }
