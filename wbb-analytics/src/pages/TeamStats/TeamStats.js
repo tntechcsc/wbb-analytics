@@ -47,7 +47,7 @@ function TeamStats() {
   useEffect(() => {
     const filtered = allDrills.filter(drill => drill.SessionID === selectedSession);
     const formattedDrills = filtered.map(drill => ({
-      label: `${drill.StartTime} - ${drill.EndTime}`,
+      label: drill.DrillName,
       value: drill._id,
     }));
     setFilteredDrills(formattedDrills);
