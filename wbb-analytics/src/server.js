@@ -1,6 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const playersRoutes = require('./routes/playersRoutes');
+const playerRoutes = require('./routes/playerRoutes');
 const drillsRoutes = require('./routes/drillsRoutes');
 const practiceSessionsRoutes = require('./routes/practiceSessionsRoutes');
 const shotsRoutes = require('./routes/shotsRoutes');
@@ -12,7 +12,7 @@ const cors = require('cors');
 app.use(cors());
 
 // Enable CORS for a specific domain
-app.use(cors({ origin: 'http://localhost:3000' }));
+app.use(cors({ origin: 'http://192.168.0.177:3000' }));
 
 // Connect to MongoDB
 //  Connection string for Gannod's MongoDB
@@ -27,7 +27,7 @@ mongoose.connect('mongodb://mongoadmin:c%40pSt0n3Sp24!@csclnx01.tntech.edu:27017
 // Middleware to parse JSON
 app.use(express.json());
 
-app.use('/api/players', playersRoutes);
+app.use('/api/players', playerRoutes);
 app.use('/api/drills', drillsRoutes);
 app.use('/api/sessions', practiceSessionsRoutes);
 app.use('/api/shots', shotsRoutes);
@@ -36,5 +36,5 @@ app.use('/api/tempos', temposRoutes);
 const port = 3001; // Port where the server will listen
 // Start the server
 app.listen(port, () => {
-  console.log(`Server listening at http://localhost:${port}`);
+  console.log(`Server listening at 192.168.0.177:${port}`);
 });

@@ -15,14 +15,16 @@ router.get('/', async (req, res) => {
 
 // POST route to create a new tempo
 router.post('/', async (req, res) => {
-  const { DrillID, PlayersOnCourt, TimeToHalfCourt, PressDefenseTime } = req.body;
+  // Assuming req.body includes all necessary fields: gameOrPractice_id, onModel, player_ids, tempo_type, transition_time
+  const { gameOrPractice_id, onModel, player_ids, tempo_type, transition_time } = req.body;
   
   const newTempo = new Tempo({
-    _id: new mongoose.Types.ObjectId(),
-    DrillID, 
-    PlayersOnCourt, 
-    TimeToHalfCourt, 
-    PressDefenseTime
+    gameOrPractice_id, // References either a Game or Practice
+    onModel, // 'Game' or 'Practice'
+    player_ids, // Array of player ObjectIds involved in the tempo
+    tempo_type, // 'offensive' or 'defensive'
+    transition_time, // Time it took for the transition
+    timestamp: new Date() // Current timestamp
   });
 
   try {
@@ -32,6 +34,7 @@ router.post('/', async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
+
 
 
 // Additional CRUD routes...
