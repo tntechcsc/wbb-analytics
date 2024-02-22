@@ -11,12 +11,16 @@ const HomePage = () => {
   let navigate = useNavigate();
   const [isModelOpen, setModelOpen] = useState(false);
   const gotoStats = () => {
-    const path = '/Players';
+    const path = '/teamstats';
+    navigate(path);
+  };
+  const gotoSession = () => {
+    const path = '/createsession';
     navigate(path);
   };
   return (
     <div className="home-page-container">
-        <button onClick={() => setModelOpen(true)} className="Linkish-Button1">
+        <button onClick={() => gotoSession()} className="Linkish-Button1">
           New Session
         </button>
         <button onClick={() => gotoStats()} className="Linkish-Button2">
