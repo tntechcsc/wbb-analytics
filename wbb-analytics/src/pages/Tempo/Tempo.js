@@ -6,7 +6,6 @@ import PlayerList from './components/PlayerList';
 import TempoTimer from './components/TempoTimer';
 import TempoButton from './components/TempoButton'
 import SubstitutionPopup from './components/SubstitutionPopup'
-import Court from './components/Court'
 
 function TempoPage() {
     // State for timing control
@@ -123,16 +122,40 @@ function TempoPage() {
 
     return (
         <div className="TempoPage">
-            <PlayerList players={playersOnCourt} onPlayerClick={handlePlayerClick} />
-            {isPopupOpen && (
-                <>
-                    <div className="Overlay" onClick={handleOverlayClick}></div>
-                    <SubstitutionPopup
-                        isOpen={isPopupOpen}
-                        onClose={() => setIsPopupOpen(false)}
-                        onSubstitute={handleSubstitute}
-                        playersOnCourt={playersOnCourt}
-                        allPlayers={allPlayers}
+            <div className="TopContainer">
+                <div className="PlayerListContainer">
+                    <PlayerList players={playersOnCourt} onPlayerClick={handlePlayerClick} />
+                    {isPopupOpen && (
+                        <>
+                            <div className="Overlay" onClick={handleOverlayClick}></div>
+                            <SubstitutionPopup
+                                isOpen={isPopupOpen}
+                                onClose={() => setIsPopupOpen(false)}
+                                onSubstitute={handleSubstitute}
+                                playersOnCourt={playersOnCourt}
+                                allPlayers={allPlayers}
+                            />
+                        </>
+                    )}
+                </div>
+                <div className="RightComponent">
+                    <div className="GrayBox"></div>
+                </div>
+            </div>
+            <div className="BottomContainer">
+                <div className="TempoControls">
+                    <TempoButton
+                        tempoType="Defensive"
+                        className={`TempoButton ${isTiming && tempoType !== 'defensive' ? 'disabled' : ''} ${isTiming && tempoType === 'defensive' ? 'stop' : 'start'}`}
+                        isTiming={isTiming && tempoType === 'defensive'}
+                        onClick={() => {
+                            if (isTiming && tempoType === 'defensive') {
+                                handleStopTempo('defensive');
+                            } else {
+                                startTempo('defensive');
+                            }
+                        }}
+                        disabled={isTiming && tempoType !== 'defensive'}
                     />
                 </>
             )}
