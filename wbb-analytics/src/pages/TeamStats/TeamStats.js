@@ -38,6 +38,7 @@ function TeamStats() {
       .then(response => response.json())
       .then(data => {
         setAllDrills(data); // Assuming drills do not need to be formatted
+        console.log(data);
       })
       .catch(error => {
         console.error('Failed to fetch drills:', error);
@@ -47,7 +48,7 @@ function TeamStats() {
   useEffect(() => {
     const filtered = allDrills.filter(drill => drill.SessionID === selectedSession);
     const formattedDrills = filtered.map(drill => ({
-      label: drill.DrillName,
+      label: `${drill.DrillName}: ${drill.StartTime} - ${drill.EndTime}`,
       value: drill._id,
     }));
     setFilteredDrills(formattedDrills);
