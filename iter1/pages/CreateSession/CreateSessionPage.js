@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
-import StoredSessions from '../../data/sessionData';
+import StoredSessions from '../../../wbb-analytics/src/data/sessionData';
 import DrillModal from './DrillModal';
 import '../Home/OpenSession'
 import './CreateSessionPage.css';

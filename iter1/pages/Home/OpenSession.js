@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import CreateSession from './../CreateSession/CreateSessionPage';
-import StoredSessions from './../../data/sessionData';
+import StoredSessions from '../../../wbb-analytics/src/data/sessionData';
 import { useNavigate } from "react-router-dom";
 import './HomePage.css'
 const OpenSession = ({isOpen,onClose}) => {
