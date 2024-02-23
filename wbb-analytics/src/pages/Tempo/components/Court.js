@@ -4,8 +4,7 @@ import ImageMapper from "react-img-mapper";
 import basketballCourtVector from "./basketball-court-vector.jpg";
 import ShotPopup from "./ShotPopup";
 
-//export zone variable to be used in ShotPopup.js
-export let zone = null;
+
 
 //ES6 way
 const Court = (props) => {
@@ -34,16 +33,14 @@ const Court = (props) => {
       { name: "8", shape: "poly", coords: [160,280, 0,550, 600,550, 445,275, 410,295, 360,315, 300,320, 245,315, 195,299], fillColor: "#4f2984"  },
       { name: "7", shape: "poly", coords: [0,3, 45,3, 53,83, 70,155, 80,180, 90,200, 100,220 , 110,235, 120,245, 130,255, 140,265, 160,280, 0,550], fillColor: "#4f2984"},
       { name: "6", shape: "poly", coords: [600,3, 553,3, 545,83, 534,130, 520,170, 490,220, 445,275, 600,550], fillColor: "#4f2984"},
+
       ]
   };
 
   const clicked = (area) => {
     console.log(area);
     handleCourtClick(area.name);
-    //set popup to open
-    //setIsPopupOpen(true);
-    zone = area.name;
-    //alert(zone);
+
   };
 
   return (
