@@ -1,17 +1,16 @@
 // CreateSessionsPage.js
 
 import React, { useState, useEffect, useMemo } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
 import StoredSessions from '../../data/sessionData';
 import DrillModal from './DrillModal';
+import SessionInfoModal from './SessionInfoModal';
 import '../Home/OpenSession'
 import './CreateSessionPage.css';
 import { SafeAreaView, StatusBar, StyleSheet, View } from "react-native";
 import TabButton from '../../components/TabButton';
 import Stack from '@mui/material/Stack';
 import { useNavigate } from 'react-router-dom';
-
-
 
 
 const CreateSessionsPage = () => {
@@ -32,6 +31,10 @@ const CreateSessionsPage = () => {
   const [sessionName, setSessionName] = useState('');
   const [savedSessions, setSavedSessions] = useState([]);
   const [selectedDrillIndex, setSelectedDrillIndex] = useState(null);
+  const [activeTab, setActiveTab] = useState('Drills');
+  const [team, setOpponentTeam] = useState('');
+  const [time, setTime] = useState('');
+  const [isSessionInfoModalOpen, setSessionInfoModalOpen] = useState(false); // State for SessionInfoModal
 
  const handleAddDrill = (name, type) => {
     
@@ -40,7 +43,8 @@ const CreateSessionsPage = () => {
       updatedDrills[selectedDrillIndex] = { name, type };
       setDrills(updatedDrills);
       setSelectedDrillIndex(null);
-    } 
+    }
+
     else
       setDrills([...drills, { name, type }]);
   };
@@ -59,6 +63,7 @@ const CreateSessionsPage = () => {
     const updatedDrills = [...drills];
     updatedDrills.splice(index, 1);
     setDrills(updatedDrills);
+    console.log(`Deleted drill at index ${index}`);
   };
 
   const [listA, setListA] = useState([]);
@@ -101,17 +106,14 @@ const CreateSessionsPage = () => {
     {
       setListA(StoredSessions[id1].Team_A);
       setListB(StoredSessions[id1].Team_B);
+      setDrills(StoredSessions[id1].Drills);
     }
     else
     {
     setListA(defaultListA);
     setListB(defaultListB);
     };
-    if(id1 !== -1)
-    {
-      setDrills(StoredSessions[id1].Drills);
-    }
-  },[playerArray]);
+  }, [playerArray]);
 
   const handlePlayerChange = (team, index, event) => {
     const { value } = event.target;
@@ -175,46 +177,82 @@ const CreateSessionsPage = () => {
     }
   };
 
+  const handleTabClick = (tab) => {
+    setActiveTab(tab);
+    console.log(`Switched to ${tab} tab`);
+  };
+  
+  const handleAddSessionInfo = (opponentTeam, startTime, endTime) => {
+    if (opponentTeam.trim() !== '' && startTime.trim() !== '' && endTime.trim() !== '') {
+      let sessionInfoData = [];
+      sessionInfoData.push({ opponentTeam, startTime, endTime });
+      console.log('Adding Session Information: ', '\nOpponent Team: ', sessionInfoData[0].opponentTeam,
+                  '\nStart Time: ',sessionInfoData[0].startTime, '\nEnd Time: ', sessionInfoData[0].endTime); // can be used to grab individual elements
+    }
+  };
+  
+  const handleAddOpponentTeam = (team) => {
+    setOpponentTeam(team);
+    setSessionInfoModalOpen(true);
+    console.log(`Clicked on Add Opponent Team`);
+  };
+  
+  const handleAddTime = (startTime, endTime) => {
+    setTime({ startTime, endTime });
+    setSessionInfoModalOpen(true);
+    console.log(`Clicked on Add Time`);
+  };
+  
+
   return (
     <div> 
-    <div>
-      <Stack spacing={2} direction="row">
-      <a href='/createsession'>
-        <TabButton text={"Create Session"} />
-      </a>
-      <a href='/drill'>
-        <TabButton text={"Drill"} />
-      </a>
-      </Stack>
-    </div>
     <div className="create-sessions-container">
-      
       <div className="drills-column">
-        <h2>Drills</h2>
-        <ul>
-          {drills.map((drill, index) => (
-            <li key={index}>
-              <button className="drill-button" onClick={() => handleDrillClick(index, false)}>
-                {drill.name}
-              </button>
-              <button className="delete-drill-button" onClick={() => handleDeleteDrill(index)}>
-                Delete
-              </button>
-              <button className="modify-drill-button" onClick={() => handleDrillClick(index, true)}>
-                Modify
+        <div>
+          <View style={{ flexDirection: 'row' }}>
+            <TabButton text={"Drills"} onPress={() => handleTabClick('Drills')} active={activeTab === 'Drills'} />
+            <TabButton text={"Session Information"} onPress={() => handleTabClick('Session Information')} active={activeTab === "Session Information"} />
+          </View>
+        </div>
+        {activeTab === 'Drills' && (
+          <>
+          <h2>{activeTab === 'Drills' ? 'Drills' : 'Session Information'}</h2>
+          <ul>
+            {drills.map((drill, index) => (
+              <li key={index}>
+                <button className="drill-button" onClick={() => handleDrillClick(index, false)}>
+                  {drill.name}
+                </button>
+                <button className="delete-drill-button" onClick={() => handleDeleteDrill(index)}>
+                  Delete
+                </button>
+                <button className="modify-drill-button" onClick={() => handleDrillClick(index, true)}>
+                  Modify
+                </button>
+              </li>
+            ))}
+            <li>
+              <button className="add-drill-button" onClick={() => setModalOpen(true)}>
+                Add Drill
               </button>
             </li>
-          ))}
-          <li>
-            <button className="add-drill-button" onClick={() => setModalOpen(true)}>
-              Add Drill
-            </button>
-          </li>
-        </ul>
-      </div>
-
-      <div className="main-content">
-        {/* Add your session details form or components here */}
+          </ul>
+        </>
+        )}
+        <div className="session-information">
+          {activeTab === 'Session Information' && (
+            <>
+              <h2>Session Information</h2>
+              <button className="add-opponent-team" onClick={() => handleAddOpponentTeam(team)}> Add Session Information </button>
+              {/* <button className="add-time" onClick={() => handleAddTime(time)}> Add Time </button> */}
+              <SessionInfoModal isOpen={isSessionInfoModalOpen}
+               onClose={() => setSessionInfoModalOpen(false)}
+               onAddSessionInfo={handleAddSessionInfo}
+               startTime={time.startTime}
+               endTime={time.endTime} />
+            </>
+          )}
+        </div>
       </div>
 
       <div className="lists-column">
