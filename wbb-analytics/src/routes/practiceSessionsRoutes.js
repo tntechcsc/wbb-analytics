@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const mongoose = require('mongoose');
 const PracticeSession = require('../models/practiceSession'); // Adjust the path
 
 // GET all practice sessions
@@ -11,6 +12,7 @@ router.get('/', async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 });
+
 
 // GET drills for a specific practice session
 router.get('/:sessionId/drills', async (req, res) => {
@@ -32,15 +34,18 @@ router.get('/:sessionId/drills', async (req, res) => {
 });
 
 router.post('/', async (req, res) => {
+  const { _id,relationID,Date,DrillIDs } = req.body;
+
   const session = new PracticeSession({
-    _id: new mongoose.Types.ObjectId(),
+    _id,
     Date: req.body.Date,
+    DrillIDs,
   });
 
   try {
-    const newSession = await session.save();
-    res.status(201).json(newSession);
-  } catch (err) {
+    await session.save();
+    res.status(201).json(session);
+  } catch (error) {
     res.status(400).json({ message: err.message });
   }
 });

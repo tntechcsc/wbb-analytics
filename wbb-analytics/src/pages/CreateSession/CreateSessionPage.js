@@ -27,6 +27,7 @@ const CreateSessionsPage = () => {
   let s = 0;
 
   const [drills, setDrills] = useState([]);
+  const [drill_data, setDrillData] = useState([]);
   const [isModalOpen, setModalOpen] = useState(false);
   const [sessionName, setSessionName] = useState('');
   const [savedSessions, setSavedSessions] = useState([]);
@@ -94,7 +95,7 @@ const CreateSessionsPage = () => {
   
   useEffect(() => {
     // Populate default selections for List A
-    
+    FetchDrillData();
     const defaultListA = Array.from({ length: 5 }, (_, index) => ({
       playerName: playerArray[index],
     }));
@@ -147,34 +148,87 @@ const CreateSessionsPage = () => {
   const handleAddDropdownB = () => {
     setListB([...listB, { playerName: `New Player ${listB.length + 1}` }]);
   };
+  const handleSaveDrill = (customId) => {
+    console.log(drills);
+    console.log(customId);
+    for (let i = 0; i < drills.length; i++) {
+      const drillData = {
+        SessionID: customId,
+        StartTime: "11:00am",
+        EndTime: "11:00am",
+        DrillName: drills[i].name,
+      };
+      console.log(drillData);
+      fetch('http://localhost:3001/api/drills', {
+        method: 'POST',
+          headers: {
+              'Content-Type': 'application/json'
+          },
+        body: JSON.stringify(drillData),
+      })
+      .then(response => response.json())
+      .then(data => console.log('Drill submitted:', data))
+      .catch(error => console.error('Error submitting drill:', error));
+    }
+  };
+  
+  const generateMongoID = () => {
+    // Generate a UUID (version 4)
+    const timestamp = Math.floor(new Date().getTime() / 1000).toString(16); // Timestamp in hexadecimal
+    const machineId = generateRandomHexString(6); // 6-character random hexadecimal string
+    const processId = generateRandomHexString(4); // 4-character random hexadecimal string
+    const counter = generateRandomHexString(6); // 6-character random hexadecimal string
 
+    // Concatenate all parts to form the MongoDB ObjectID
+    const mongoId = timestamp + machineId + processId + counter;
+
+    return mongoId;
+  }
+  const generateRandomHexString = (length) => {
+    const characters = 'abcdef0123456789';
+    let result = '';
+
+    for (let i = 0; i < length; i++) {
+      result += characters.charAt(Math.floor(Math.random() * characters.length));
+    }
+
+    return result;
+  }
+  const FetchDrillData = async () => {
+    const response = await fetch('/api/drills');
+    const jsonData = await response.json();
+    setDrillData(jsonData);
+  };
   const handleSaveSession = async () => {
     const currentDate = new Date();
     const formattedDate = currentDate.toLocaleString(); // You can customize the format as needed
+    const customId = generateMongoID();
+  
+    FetchDrillData();
+    
     const sessionData = {
       //Include all necessary data here
-      Date: new Date().toLocaleDateString()
+      _id: customId,
+      Date: new Date().toLocaleDateString(),
     };
-
-    try{
       // Send POST request to save session data
-      const response = await fetch('/api/sessions', {
+      const respons = fetch('http://localhost:3001/api/sessions', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(sessionData),
-      });
 
-    if(!response.ok){
-      throw new Error('Failed to save session data');
-    }
+        body: JSON.stringify(sessionData),
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log('Session submitted:', data);
+        handleSaveDrill(data._id);
+      })
+      .catch(error => console.error('Error submitting Session:', error));
 
     // Handle successful response
     navigate('/tempo');
-    } catch(error){
-      console.error('Failed to save session data', error);
-    }
   };
 
   const handleTabClick = (tab) => {

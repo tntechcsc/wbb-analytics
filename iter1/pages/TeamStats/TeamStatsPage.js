@@ -1,7 +1,7 @@
 // TeamStatsPage.js
 
 import React, { useState } from 'react';
-import players from './../../data/playerData'; // Updated import path
+import players from '../../../wbb-analytics/src/data/playerData'; // Updated import path
 import './TeamStatsPage.css'; // Import CSS for styling
 
 const TeamStatsPage = () => {

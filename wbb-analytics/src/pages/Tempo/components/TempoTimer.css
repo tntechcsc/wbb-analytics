@@ -7,7 +7,7 @@
     display: inline-block; /* Make the timer inline-block to fit content */
     background-color: #fff; /* White background color */
     color: #333; /* Dark text color for contrast */
-    width: 150px; /* Fixed width for the timer */
+    width: 200px; /* Fixed width for the timer */
     text-align: center; /* Center the text inside the timer */
   }
 
