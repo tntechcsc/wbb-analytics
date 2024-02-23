@@ -5,7 +5,6 @@ import { useLocation, Link } from 'react-router-dom';
 import StoredSessions from '../../data/sessionData';
 import DrillModal from './DrillModal';
 import SessionInfoModal from './SessionInfoModal';
-import '../Home/OpenSession'
 import './CreateSessionPage.css';
 import { SafeAreaView, StatusBar, StyleSheet, View } from "react-native";
 import TabButton from '../../components/TabButton';
