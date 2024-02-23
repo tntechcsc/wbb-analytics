@@ -43,22 +43,6 @@
     font-size: 1.2em;
 }
 
-/*
-Delete button to the side of the drill instead of below
-
-.delete-drill-button {
-    background-color: #e74c3c;
-    margin-left: 15px;
-    width: calc(100% - 400px);
-    height: 30px;
-    border: none;
-    border-radius: 4px;
-    font-size: 0.9em;
-    position: relative;
-    top: -75px; left: 380px;
-}
-*/
-
 .delete-drill-button {
     background-color: #e74c3c;
     margin-left: 15px;
@@ -71,22 +55,6 @@ Delete button to the side of the drill instead of below
     position: relative;
     left: -15px;
 }
-
-/*
-Modify button to the side of the drill instead of below
-
-.modify-drill-button {
-    background-color: #34dbca;
-    margin-left: 15px;
-    width: calc(100% - 400px);
-    height: 30px;
-    border: none;
-    border-radius: 4px;
-    font-size: 0.9em;
-    position: relative;
-    top: -40px; left: 280px;
-}
-*/
 
 .modify-drill-button {
     background-color: #34dbca;
@@ -120,7 +88,74 @@ Modify button to the side of the drill instead of below
     background-color: #219952;
 }
 
-.modal-overlay {
+.add-time {
+    background-color: #27ae60;
+    color: #fff;
+    width: calc(100% - 95px);
+    padding: 20px 20px;
+    margin-bottom: 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 1.2em;
+}
+
+.add-opponent-team {
+    background-color: #27ae60;
+    color: #fff;
+    width: calc(100% - 95px);
+    padding: 20px 20px;
+    margin-bottom: 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 1.2em;
+}
+
+.add-opponent-team:hover {
+    background-color: #219952;
+}
+
+.add-time:hover {
+    background-color: #219952;
+}
+
+.add-button,
+.cancel-button {
+    padding: 10px 20px; 
+    font-size: 16px; 
+    margin-right: 10px; 
+}
+
+.add-button {
+    background-color: #007bff; 
+    color: white; 
+    font-size: 0.9em;
+    border-radius: 9px;
+    padding: 14px;
+    width: calc(30% - 50px);
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-left: 20px;
+    margin-bottom: 20px;
+}
+
+.cancel-button {
+    background-color: #dc3545; 
+    color: white; 
+    font-size: 0.9em;
+    border-radius: 9px;
+    padding: 14px;
+    width: calc(25% - 50px);
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.drill-modal-overlay {
     position: fixed;
     top: 0;
     left: 0;
@@ -132,7 +167,7 @@ Modify button to the side of the drill instead of below
     align-items: center;
 }
 
-.modal-content {
+.drill-modal-content {
     background: #fff;
     padding: 20px;
     border-radius: 8px;
@@ -141,18 +176,18 @@ Modify button to the side of the drill instead of below
     width: 100%;
 }
 
-.modal-content h2 {
+.drill-modal-content h2 {
     font-size: 1.8em;
     margin-bottom: 20px;
 }
 
-.modal-content label {
+.drill-modal-content label {
     display: block;
     font-size: 1.2em;
     margin-bottom: 10px;
 }
 
-.modal-content input {
+.drill-modal-content input {
     width: calc(100% - 20px);
     padding: 10px;
     margin-bottom: 20px;
@@ -160,7 +195,59 @@ Modify button to the side of the drill instead of below
     border-radius: 4px;
 }
 
-.modal-content button {
+.drill-modal-content button {
+    padding: 10px 20px;
+    background-color: #3498db;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+
+.session-info-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Set a high z-index value */
+}
+
+.session-info-modal-content {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    width: 100%;
+}
+
+.session-info-modal-content h2 {
+    font-size: 1.8em;
+    margin-bottom: 20px;
+}
+
+.session-info-modal-content label {
+    display: block;
+    font-size: 1.2em;
+    margin-bottom: 10px;
+}
+
+.session-info-modal-content input {
+    width: calc(100% - 20px);
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.session-info-modal-content button {
     padding: 10px 20px;
     background-color: #3498db;
     color: #fff;
@@ -239,20 +326,20 @@ select {
     padding-left: 0;
   }
   
-  .tab-list-item {
+.tab-list-item {
     display: inline-block;
     list-style: none;
     margin-bottom: -1px;
     padding: 0.5rem 0.75rem;
-  }
-  
-  .tab-list-active {
+}
+
+.tab-list-active {
     background-color: white;
     border: solid #ccc;
     border-width: 1px 1px 0 1px;
-  }
+}
 
-  .explore-link {
+.explore-link {
     display: block;
     margin-top: 15px;
     padding: 10px 20px;
@@ -261,13 +348,13 @@ select {
     text-decoration: none;
     border-radius: 5px;
     font-weight: bold;
-  }
+}
 
-  .explore-link:hover {
+.explore-link:hover {
     background-color: #2675ad;
-  }
+}
 
-  .container {
+.container {
     font-size: 5em;
     background-color: #a8a8a8;
     color: white;
@@ -279,15 +366,15 @@ select {
     font-weight: bold;
     cursor: pointer;
     position: relative;
-  }
-  
-  .link {
+}
+
+.link {
     position: absolute;
     width: 100%;
     height: 100%;
     top: 0;
     left: 0;
     z-index: 1;
-  }
+}
 
   
