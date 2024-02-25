@@ -10,7 +10,6 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const seasonSchema = new Schema({
-    _id: mongoose.Schema.Types.ObjectId,
     year: { type: String, required: true },
     players: [{ type: Schema.Types.ObjectId, ref: 'Player', required: true }],
     games: [{ type: Schema.Types.ObjectId, ref: 'Game', default: [] }],
