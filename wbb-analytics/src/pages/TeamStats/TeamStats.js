@@ -65,48 +65,34 @@ function TeamStats() {
   });
 
   useEffect(() => {
-    const fetchInitialData = async () => {
+    async function fetchData() {
+      // Fetch sessions
+      const sessionResponse = await fetch('http://localhost:3001/api/sessions');
+      const sessionsData = await sessionResponse.json();
+      setSessions(sessionsData.map(session => ({
+        label: `Session: ${new Date(session.date).toLocaleDateString()}`,
+        value: session._id
+      })));
+
+      // Fetch drills
+      const drillResponse = await fetch('http://localhost:3001/api/drills');
+      const drillsData = await drillResponse.json();
+      setAllDrills(drillsData);
+
+      const temposResponse = await fetch('http://localhost:3001/api/tempos');
+      const temposData = await temposResponse.json();
+      setAllTempos(temposData);
+
+      // Pre-select session and drill based on URL params, if present
       const urlParams = new URLSearchParams(window.location.search);
-      const sessionIdParam = urlParams.get('sessionId');
-      const drillIdParam = urlParams.get('drillId');
-
-      try {
-        const sessionResponse = await fetch('http://localhost:3001/api/sessions');
-        const sessionData = await sessionResponse.json();
-        const formattedSessions = sessionData.map(session => {
-          const date = new Date(session.date); // Create a date object
-          // Format the date as MM/dd/yyyy
-          const formattedDate = ((date.getMonth() + 1) + '').padStart(2, '0') + '/' + 
-                                (date.getDate() + '').padStart(2, '0') + '/' + 
-                                date.getFullYear();
-          return {
-            label: `Session: ${formattedDate}`,
-            value: session._id.toString(),
-          };
-        });
-        setSessions(formattedSessions);
-        if (sessionIdParam) {
-          setSelectedSession(sessionIdParam);
-        }
-
-        const drillResponse = await fetch('http://localhost:3001/api/drills');
-        const drillData = await drillResponse.json();
-        setAllDrills(drillData);
-        if (drillIdParam) {
-          setSelectedDrill(drillIdParam);
-        } else if (drillData.length > 0 && !sessionIdParam) {
-          setSelectedDrill(drillData[0]._id.toString());
-        }
-
-        const tempoResponse = await fetch('http://localhost:3001/api/tempos');
-        const tempoData = await tempoResponse.json();
-        setAllTempos(tempoData);
-      } catch (error) {
-        console.error("Failed to fetch initial data:", error);
-      }
-    };
-
-    fetchInitialData();
+      const sessionParam = urlParams.get('sessionId');
+      const drillParam = urlParams.get('drillId');
+      if (sessionParam) setSelectedSession(sessionParam);
+      else setSelectedSession(sessionsData[0]._id);
+      if (drillParam) setSelectedDrill(drillParam);
+      else setSelectedDrill(drillsData[0]._id.toString());
+    }
+    fetchData();
   }, []);
 
   useEffect(() => {
