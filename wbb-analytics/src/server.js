@@ -16,6 +16,7 @@ app.use(cors());
 app.use(cors({ origin: 'http://localhost:3000' }));
 //app.use(cors({ origin: 'http://192.168.0.177:3000' })); This does not currently work, but it should allow the React app to access the server from a different IP address
 //Currently commented out to allow for testing on the same machine
+
 // Connect to MongoDB
 //  Connection string for Gannod's MongoDB
 //mongoose.connect('mongodb://mongoadmin:c%40pSt0n3Sp24!@csclnx01.tntech.edu:27017/nestdb?authMechanism=DEFAULT&authSource=admin')
