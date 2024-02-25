@@ -12,7 +12,7 @@ const cors = require('cors');
 app.use(cors());
 
 // Enable CORS for a specific domain
-app.use(cors({ origin: 'http://192.168.0.177:3000' }));
+app.use(cors({ origin: 'http://localhost:3000' }));
 
 // Connect to MongoDB
 //  Connection string for Gannod's MongoDB
