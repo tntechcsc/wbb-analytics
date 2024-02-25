@@ -87,6 +87,8 @@ function TeamStats() {
         setSessions(formattedSessions);
         if (sessionIdParam) {
           setSelectedSession(sessionIdParam);
+        } else if (formattedSessions.length > 0) {
+          setSelectedSession(formattedSessions[0].value);
         }
 
         const drillResponse = await fetch('http://localhost:3001/api/drills');
@@ -94,7 +96,7 @@ function TeamStats() {
         setAllDrills(drillData);
         if (drillIdParam) {
           setSelectedDrill(drillIdParam);
-        } else if (drillData.length > 0 && !sessionIdParam) {
+        } else if (drillData.length > 0) {
           setSelectedDrill(drillData[0]._id.toString());
         }
 
