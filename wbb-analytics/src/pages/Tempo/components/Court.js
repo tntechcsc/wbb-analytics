@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "./Court.css";
+import ImageMapper from "react-img-mapper";
 import basketballCourtVector from "./basketball-court-vector.jpg";
 import ShotPopup from "./ShotPopup";
 
@@ -46,7 +47,15 @@ const Court = (props) => {
     <div className="grid">
       <div className="presenter"> 
         <div style={{ position: "relative" }}>
-          
+          <ImageMapper
+            src={basketballCourtVector}
+            map={MAP2}
+            width={600}
+            height={550}
+            lineWidth={5}
+            strokeColor={"white"}
+            onClick={(area) => clicked(area)}
+          />
           {isPopupOpen && (
             <>
               <div className="Overlay" onClick={handleOverlayClick}></div>
