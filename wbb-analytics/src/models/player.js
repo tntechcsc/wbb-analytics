@@ -14,8 +14,7 @@ const playerSchema = new Schema({
     name: { type: String, required: true },
     position: { type: String, required: true },
     jersey_number: { type: Number, required: true },
-    height: {type: String}, // Array of Season document references
-    year: { type: String, required: true },
+    seasons: [{ type: Schema.Types.ObjectId, ref: 'Season' }],
     image: { type: String } // Optional image URL
 });
 
