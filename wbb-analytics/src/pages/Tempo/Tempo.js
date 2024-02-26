@@ -39,7 +39,7 @@ function TempoPage() {
     // Function to submit tempo
     const submitTempo = (isOffensive, playersOnCourtIds, timeValue) => {
         const tempoData = {
-            Player_ids: playersOnCourtIds,
+            player_ids: playersOnCourtIds,
             onModel: 'Practice',
             tempo_type: isOffensive,
             transition_time: timeValue,
