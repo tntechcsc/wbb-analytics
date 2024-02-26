@@ -4,7 +4,8 @@ import ImageMapper from "react-img-mapper";
 import basketballCourtVector from "./basketball-court-vector.jpg";
 import ShotPopup from "./ShotPopup";
 
-
+//export zone variable to be used in ShotPopup.js
+// export let zone = null;
 
 //ES6 way
 const Court = (props) => {
@@ -42,6 +43,8 @@ const Court = (props) => {
     handleCourtClick(area.name);
 
   };
+
+  //zone = area.name;
 
   return (
     <div className="grid">
