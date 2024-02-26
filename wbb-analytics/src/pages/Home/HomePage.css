@@ -7,8 +7,8 @@
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center; 
-  width: 97vw; /* 100% of viewport width */
-  height: 95vh; /* 100% of viewport height */
+  width: 100vw; /* 100% of viewport width */
+  height: 100vh; /* 100% of viewport height */
   margin: 0 auto;
   padding: 20px;
   display: grid;

@@ -31,11 +31,13 @@ const CreateSessionsPage = () => {
   const [sessionName, setSessionName] = useState('');
   const [savedSessions, setSavedSessions] = useState([]);
   const [selectedDrillIndex, setSelectedDrillIndex] = useState(null);
+  const [playerData, setPlayerData] = useState([]);
+  const [seasID, setSeasID] = useState('');
+  const [SeasonData, setSeasonData] = useState([]);
   const [activeTab, setActiveTab] = useState('Drills');
   const [team, setOpponentTeam] = useState('');
   const [time, setTime] = useState('');
   const [isSessionInfoModalOpen, setSessionInfoModalOpen] = useState(false); // State for SessionInfoModal
-
  const handleAddDrill = (name, type) => {
     
     if (selectedDrillIndex !== null) {
@@ -94,7 +96,40 @@ const CreateSessionsPage = () => {
   
   useEffect(() => {
     // Populate default selections for List A
-    FetchDrillData();
+    
+    const FetchData = async () => {
+      try {
+        const playerResponse = await fetch('http://localhost:3001/api/players');
+        const playerData = await playerResponse.json();
+        const formattedPlayer = playerData.map(player => {
+          const Pname = player.name;
+          return {
+            name: Pname,
+          }
+        });
+        setPlayerData(formattedPlayer);
+      }
+      catch (error) {
+        console.error('Failed to fetch players:', error);
+      }
+      try {
+        const seasonResponse = await fetch('http://localhost:3001/api/seasons');
+        const seasonData = await seasonResponse.json();
+        const formattedSeasons = seasonData.map(season => {
+          const seasonID = season._id.toString();
+          const year = season.year;
+          return {
+            year: year,
+            ID: season._id.toString(),
+          }
+        });
+        setSeasonData(formattedSeasons);
+      }
+      catch (error) {
+        console.error('Failed to fetch seasons:', error);
+      }
+    };
+    FetchData();
     const defaultListA = Array.from({ length: 5 }, (_, index) => ({
       playerName: playerArray[index],
     }));
@@ -113,7 +148,7 @@ const CreateSessionsPage = () => {
     setListA(defaultListA);
     setListB(defaultListB);
     };
-  }, [playerArray]);
+  },[playerArray]);
 
   const handlePlayerChange = (team, index, event) => {
     const { value } = event.target;
@@ -152,10 +187,10 @@ const CreateSessionsPage = () => {
     console.log(customId);
     for (let i = 0; i < drills.length; i++) {
       const drillData = {
-        SessionID: customId,
-        StartTime: "11:00am",
-        EndTime: "11:00am",
-        DrillName: drills[i].name,
+        practice_id: customId,
+        name: drills[i].name,
+        tempo_events: [],
+        shot_events: [],
       };
       console.log(drillData);
       fetch('http://localhost:3001/api/drills', {
@@ -193,22 +228,64 @@ const CreateSessionsPage = () => {
 
     return result;
   }
-  const FetchDrillData = async () => {
-    const response = await fetch('/api/drills');
-    const jsonData = await response.json();
-    setDrillData(jsonData);
-  };
   const handleSaveSession = async () => {
     const currentDate = new Date();
     const formattedDate = currentDate.toLocaleString(); // You can customize the format as needed
     const customId = generateMongoID();
-  
-    FetchDrillData();
+
+    FindSeason(seasID);
+    console.log(seasID);
+
+    // Handle successful response
+    navigate('/tempo');
+  };
+  const FindSeason = () => {
     
+    const date = new Date().toLocaleDateString();
+    const splitDate = date.split("/");
+    console.log(splitDate);
+    const year = splitDate[2];
+    console.log(year);
+    console.log(playerData);
+    console.log(SeasonData);
+    const month = splitDate[0];
+    const day = splitDate[1];
+      const x = SeasonData.find(season => season.year === year)
+      if(!x)
+      {
+      const seasonData = {
+        year: year,
+        players: [],
+
+      };
+      const respons = fetch('http://localhost:3001/api/seasons', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+
+        body: JSON.stringify(seasonData),
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log('submitting Season',data);
+        postSession(data._id);
+      })
+      .catch(error => console.error('Error submitting Seasion:', error));
+      }
+      else
+      {
+      const season = SeasonData.find(season => season.year === year);
+      console.log(season);
+      postSession(season.ID);
+      }
+  }
+  const postSession = (sesData) => {
     const sessionData = {
       //Include all necessary data here
-      _id: customId,
-      Date: new Date().toLocaleDateString(),
+      season_id: sesData,
+      date: new Date(),
+
     };
       // Send POST request to save session data
       const respons = fetch('http://localhost:3001/api/sessions', {
@@ -256,7 +333,6 @@ const CreateSessionsPage = () => {
     console.log(`Clicked on Add Time`);
   };
   
-
   return (
     <div> 
     <div className="create-sessions-container">

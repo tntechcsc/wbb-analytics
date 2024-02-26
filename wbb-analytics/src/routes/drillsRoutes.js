@@ -16,16 +16,14 @@ router.get('/', async (req, res) => {
 
 
 router.post('/', async (req, res) => {
-  const { SessionID, StartTime, EndTime, ShotIDs, TempoIDs, DrillName } = req.body;
+  const { _id,practice_id,name,tempo_events,shot_events } = req.body;
   
   const newDrill = new Drill({
     _id: new mongoose.Types.ObjectId(),
-    SessionID,
-    StartTime,
-    EndTime,
-    ShotIDs,
-    TempoIDs,
-    DrillName
+    practice_id,
+    name,
+    tempo_events,
+    shot_events,
   });
 
   try {

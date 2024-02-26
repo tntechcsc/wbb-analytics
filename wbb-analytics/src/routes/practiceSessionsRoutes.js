@@ -34,18 +34,18 @@ router.get('/:sessionId/drills', async (req, res) => {
 });
 
 router.post('/', async (req, res) => {
-  const { _id,relationID,Date,DrillIDs } = req.body;
+  const { season_id,date,drills } = req.body;
 
   const session = new PracticeSession({
-    _id,
-    Date: req.body.Date,
-    DrillIDs,
+    season_id,
+    date,
+    drills,
   });
 
   try {
     await session.save();
     res.status(201).json(session);
-  } catch (error) {
+  } catch (err) {
     res.status(400).json({ message: err.message });
   }
 });
