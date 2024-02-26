@@ -12,7 +12,7 @@ const cors = require('cors');
 app.use(cors());
 
 // Enable CORS for a specific domain
-app.use(cors({ origin: 'http://192.168.0.177:3000' }));
+app.use(cors({ origin: 'http://localhost:3000' }));
 
 // Connect to MongoDB
 //  Connection string for Gannod's MongoDB
@@ -38,5 +38,5 @@ app.use('/api/tempos', temposRoutes);
 const port = 3001; // Port where the server will listen
 // Start the server
 app.listen(port, () => {
-  console.log(`Server listening at 192.168.0.177:${port}`);
+  console.log(`Server listening at localhost:${port}`);
 });

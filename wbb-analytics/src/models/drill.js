@@ -16,4 +16,3 @@ const drillSchema = new Schema({
 });
 
 module.exports = mongoose.model('Drill', drillSchema);
- 

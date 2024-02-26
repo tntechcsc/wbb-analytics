@@ -9,16 +9,12 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const practiceSessionSchema = new mongoose.Schema({
-    _id: mongoose.Schema.Types.ObjectId, // Assuming this refers to a single player ID.
-    Date: String, // Assuming 'Date' is a string based on your JSON. Adjust if it's an actual Date.
-    DrillIDs: mongoose.Schema.Types.ObjectId // Assuming this refers to a single drill ID.
-});
-
 const practiceSchema = new Schema({
     season_id: { type: Schema.Types.ObjectId, ref: 'Season', required: true },
     date: { type: Date, required: true },
-    drills: [{ type: Schema.Types.ObjectId, ref: 'Drill', default: [] }]
+    drills: [{ type: Schema.Types.ObjectId, ref: 'Drill', default: [] }],
+    team_purple: [{ type: Schema.Types.ObjectId, ref: 'Player', default: [] }], // Array of player IDs for team purple
+    team_gray: [{ type: Schema.Types.ObjectId, ref: 'Player', default: [] }] // Array of player IDs for team gray
 });
 
 module.exports = mongoose.model('Practice', practiceSchema);

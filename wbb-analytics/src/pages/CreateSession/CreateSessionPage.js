@@ -1,40 +1,55 @@
 // CreateSessionsPage.js
 
 import React, { useState, useEffect, useMemo } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import StoredSessions from '../../data/sessionData';
 import DrillModal from './DrillModal';
 import './CreateSessionPage.css';
 import { SafeAreaView, StatusBar, StyleSheet, View } from "react-native";
 import TabButton from '../../components/TabButton';
 import Stack from '@mui/material/Stack';
-import { useNavigate } from 'react-router-dom';
-
-
-
+import { avatarClasses } from '@mui/material';
 
 const CreateSessionsPage = () => {
-
   const navigate = useNavigate();
+  const location = useLocation();
+  const [players, setPlayers] = useState([]); // Stores all players
+  const [teamPurple, setTeamPurple] = useState([]); // Selected players for Team Purple
+  const [teamGray, setTeamGray] = useState([]); // Selected players for Team Gray 
+  const [listA, setListA] = useState([{playerName: ''}]);
+  const [listB, setListB] = useState([{playerName: ''}]);
+  const [drills, setDrills] = useState([]);
+  const [isModalOpen, setModalOpen] = useState(false);
+
+  // May not need code from here to line 36
   let id1 = -1; //Defualt value so CreateSession can run normally if not directed from OpenSession
-  const  location = useLocation();
   if(location.pathname === '/CreateSession')
   {
   id1 = location.state.ID; // send the session ID to make paramenters for sessionData
-  
   }
   let y= 0;
   let s = 0;
 
-  const [drills, setDrills] = useState([]);
   const [drill_data, setDrillData] = useState([]);
-  const [isModalOpen, setModalOpen] = useState(false);
   const [sessionName, setSessionName] = useState('');
   const [savedSessions, setSavedSessions] = useState([]);
   const [selectedDrillIndex, setSelectedDrillIndex] = useState(null);
+  // Here
+
+  useEffect(() => {
+    const fetchPlayers = async () => {
+      try {
+        const response = await fetch('http://localhost:3001/api/players');
+        const jsonData = await response.json();
+        setPlayers(jsonData);
+      } catch (error) {
+        console.error('Failed to fetch players:', error);
+      }
+    };
+    fetchPlayers();
+  }, []); // Empty dependency array to run only once
 
  const handleAddDrill = (name, type) => {
-    
     if (selectedDrillIndex !== null) {
       const updatedDrills = [...drills];
       updatedDrills[selectedDrillIndex] = { name, type };
@@ -61,29 +76,39 @@ const CreateSessionsPage = () => {
     setDrills(updatedDrills);
   };
 
-  const [listA, setListA] = useState([]);
-  const [listB, setListB] = useState([]);
-  const x=StoredSessions;
-  const playerArray = useMemo(
-    () => [
-      'Player 1', 'Player 2', 'Player 3', 'Player 4', 'Player 5',
-      'Player B', 'Player A', 'Player C', 'Player D', 'Player E'
-    ],
-    []
-  );
+  const getAvailabePlayers = () => {
+    const selectedPlayers = [...teamPurple, ...teamGray];
+    return players.filter((player) => !selectedPlayers.includes(player._id));
+  };
+
+  const handlePlayerChange = (team, index, event) => {
+    const newSelection = event.target.value; // Player ID
+    if (team === 'A') {
+      const updatedTeam = [...teamPurple];
+      updatedTeam[index] = newSelection;
+      setTeamPurple(updatedTeam);
+      const updatedListA = [...listA];
+      updatedListA[index].playerName = players.find(player => player._id === newSelection)?.name || '';
+      setListA(updatedListA);
+    } else if (team === 'B') {
+      const updatedTeam = [...teamGray];
+      updatedTeam[index] = newSelection;
+      setTeamGray(updatedTeam);
+      const updatedListB = [...listB];
+      updatedListB[index].playerName = players.find(player => player._id === newSelection)?.name || '';
+      setListB(updatedListB);
+    }
+  };
+
   const handleRemovePlayer = (team, index) => {
     if (team === 'A') {
       const updatedListA = [...listA];
       updatedListA.splice(index, 1);
       setListA(updatedListA);
-      console.log(`Removed player from Team A at index ${index}`);
-    }
-
-    else if (team === 'B') {
+    } else if (team === 'B') {
       const updatedListB = [...listB];
       updatedListB.splice(index, 1);
       setListB(updatedListB);
-      console.log(`Removed player from Team B at index ${index}`);
     }
   };
   
@@ -113,20 +138,6 @@ const CreateSessionsPage = () => {
     }
   },[playerArray]);
 
-  const handlePlayerChange = (team, index, event) => {
-    const { value } = event.target;
-    if (team === 'A') {
-      const updatedListA = [...listA];
-      updatedListA[index].playerName = value;
-      setListA(updatedListA);
-    }
-    else if (team === 'B') {
-      const updatedListB = [...listB];
-      updatedListB[index].playerName = value;
-      setListB(updatedListB);
-    }
-  };
-
   const styles = StyleSheet.create({
     container: {
       flex: 1,
@@ -138,13 +149,14 @@ const CreateSessionsPage = () => {
     },
   });
 
-  const handleAddDropdownA = () => {
-    setListA([...listA, { playerName: `New Player ${listA.length + 1}` }]);
+  const handleAddDropdown = (team) => {
+    if (team === 'A') {
+      setListA([...listA, { playerName: '' }]);
+    } else if (team === 'B') {
+      setListB([...listB, { playerName: '' }]);
+    }
   };
 
-  const handleAddDropdownB = () => {
-    setListB([...listB, { playerName: `New Player ${listB.length + 1}` }]);
-  };
   const handleSaveDrill = (customId) => {
     console.log(drills);
     console.log(customId);
@@ -272,16 +284,16 @@ const CreateSessionsPage = () => {
 
       <div className="lists-column">
         <div className="list">
-          <h2>Team A</h2>
+          <h2>Team Purple</h2>
           <ul>
             {listA.map((player, index) => (
               <li key={index}>
                 <select className='dropdown' value={player.playerName} onChange={(e) => handlePlayerChange('A', index, e)}>
-                  {(id1 !== -1) && (s < x[id1].Team_A.length) && <option key={s} value={x[id1].Team_A}>{x[id1].Team_A[s++]}</option>} 
-                  {playerArray.map((playerName, playerIndex) => (
-                    <option key={playerIndex} value={playerName}>
-                      {playerName}
-                    </option>
+                  <option value="">Select Player</option>
+                  {getAvailabePlayers().map((availablePlayer) => (
+                    <option key={availablePlayer._id} value={availablePlayer._id}>
+                      {availablePlayer.name}
+                      </option>
                   ))}
                 </select>
                 <button className="remove-player-button" onClick={() => handleRemovePlayer('A', index)}>
@@ -290,7 +302,7 @@ const CreateSessionsPage = () => {
               </li>
             ))}
             <li>
-              <button className="add-dropdown-button" onClick={handleAddDropdownA}>
+              <button className="add-dropdown-button" onClick={handleAddDropdown('A')}>
                 Add Player  
               </button>
             </li>
@@ -298,16 +310,16 @@ const CreateSessionsPage = () => {
         </div>
 
         <div className="list">
-          <h2>Team B</h2>
+          <h2>Team Gray</h2>
           <ul>
             {listB.map((player, index) => (
               <li key={index}>
-                <select className='dropdown' value={player.playerName} onChange={(e) => handlePlayerChange('B', index, e)}>
-                {(id1 !== -1) && (y < x[id1].Team_B.length) &&  <option key={y} value={x[id1].Team_B}>{x[id1].Team_B[y++]}</option>}
-                  {playerArray.map((playerName, playerIndex) => (
-                    <option key={playerIndex} value={playerName}>
-                      {playerName}
-                    </option>
+               <select className='dropdown' value={player.playerName} onChange={(e) => handlePlayerChange('B', index, e)}>
+                  <option value="">Select Player</option>
+                  {getAvailabePlayers().map((availablePlayer) => (
+                    <option key={availablePlayer._id} value={availablePlayer._id}>
+                      {availablePlayer.name}
+                      </option>
                   ))}
                 </select>
                 <button className="remove-player-button" onClick={() => handleRemovePlayer('B', index)}>
@@ -316,7 +328,7 @@ const CreateSessionsPage = () => {
               </li>
             ))}
             <li>
-              <button className="add-dropdown-button" onClick={handleAddDropdownB}>
+              <button className="add-dropdown-button" onClick={handleAddDropdown('B')}>
                 Add Player
               </button>
             </li>

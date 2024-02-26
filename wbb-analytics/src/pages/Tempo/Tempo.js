@@ -21,7 +21,7 @@ function TempoPage() {
     const [allPlayers, setAllPlayers] = useState([]);
 
     useEffect(() => {
-        fetch('http://localhost:3001/api/players')
+        fetch('c')
             .then(response => response.json())
             .then(data => {
                 const playersData = data.map(player => ({
