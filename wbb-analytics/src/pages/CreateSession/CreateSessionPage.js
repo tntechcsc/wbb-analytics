@@ -16,8 +16,6 @@ const CreateSessionsPage = () => {
   const [players, setPlayers] = useState([]); // Stores all players
   const [teamPurple, setTeamPurple] = useState([]); // Selected players for Team Purple
   const [teamGray, setTeamGray] = useState([]); // Selected players for Team Gray 
-  const [listA, setListA] = useState([{playerName: ''}]);
-  const [listB, setListB] = useState([{playerName: ''}]);
   const [drills, setDrills] = useState([]);
   const [isModalOpen, setModalOpen] = useState(false);
 
@@ -41,13 +39,71 @@ const CreateSessionsPage = () => {
       try {
         const response = await fetch('http://localhost:3001/api/players');
         const jsonData = await response.json();
-        setPlayers(jsonData);
+        setPlayers(jsonData.map(player => ({ ...player, selected: false })));
       } catch (error) {
         console.error('Failed to fetch players:', error);
       }
     };
     fetchPlayers();
-  }, []); // Empty dependency array to run only once
+  }, []);
+
+  // Handle player selection change
+  const handlePlayerChange = (team, index, event) => {
+    const selectedPlayerId = event.target.value;
+    let updateFunc = team === 'A' ? setTeamPurple : setTeamGray;
+
+    // Update team state with selected player
+    updateFunc(prevTeam => {
+      const updatedTeam = [...prevTeam];
+      if(selectedPlayerId) {
+        const playerToAdd = players.find(player => player._id === selectedPlayerId);
+        updatedTeam[index] = playerToAdd;
+      } else {
+        updatedTeam.splice(index, 1);
+      }
+      return updatedTeam;
+    });
+
+    // Update players' selected status
+    setPlayers(prevPlayers =>
+      prevPlayers.map(player =>
+        player._id === selectedPlayerId
+          ? { ...player, selected: true }
+          : player._id === (team === 'A' ? teamPurple[index]?._id : teamGray[index]?._id)
+          ? { ...player, selected: false }
+          : player
+      )
+    );
+  };
+  
+  // Handle adding a new player dropdown
+  const handleAddDropdown = team => { 
+    let updateFunc = team === 'A' ? setTeamPurple : setTeamGray;
+    updateFunc(prevTeam => [...prevTeam, {}]);
+  };
+
+  // Handle removing a player from the team
+  const handleRemovePlayer = (team, index) => {
+    let updateFunc = team === 'A' ? setTeamPurple : setTeamGray;
+    updateFunc(prevTeam => {
+      const updatedTeam = [...prevTeam];
+      const playerToRemove = updatedTeam.splice(index, 1)[0];
+      if(playerToRemove && playerToRemove._id) {
+        // Mark the player as not selected
+        setPlayers(prevPlayers =>
+          prevPlayers.map(player =>
+            player._id === playerToRemove._id ? { ...player, selected: false } : player
+          )
+        );
+      }
+      return updatedTeam;
+    });
+  };
+
+  // Get available players for the dropdown
+  const getAvailablePlayers = team => { 
+    return players.filter(player => !player.selected);
+  };
 
  const handleAddDrill = (name, type) => {
     if (selectedDrillIndex !== null) {
@@ -75,69 +131,7 @@ const CreateSessionsPage = () => {
     updatedDrills.splice(index, 1);
     setDrills(updatedDrills);
   };
-
-  const getAvailabePlayers = () => {
-    const selectedPlayers = [...teamPurple, ...teamGray];
-    return players.filter((player) => !selectedPlayers.includes(player._id));
-  };
-
-  const handlePlayerChange = (team, index, event) => {
-    const newSelection = event.target.value; // Player ID
-    if (team === 'A') {
-      const updatedTeam = [...teamPurple];
-      updatedTeam[index] = newSelection;
-      setTeamPurple(updatedTeam);
-      const updatedListA = [...listA];
-      updatedListA[index].playerName = players.find(player => player._id === newSelection)?.name || '';
-      setListA(updatedListA);
-    } else if (team === 'B') {
-      const updatedTeam = [...teamGray];
-      updatedTeam[index] = newSelection;
-      setTeamGray(updatedTeam);
-      const updatedListB = [...listB];
-      updatedListB[index].playerName = players.find(player => player._id === newSelection)?.name || '';
-      setListB(updatedListB);
-    }
-  };
-
-  const handleRemovePlayer = (team, index) => {
-    if (team === 'A') {
-      const updatedListA = [...listA];
-      updatedListA.splice(index, 1);
-      setListA(updatedListA);
-    } else if (team === 'B') {
-      const updatedListB = [...listB];
-      updatedListB.splice(index, 1);
-      setListB(updatedListB);
-    }
-  };
   
-  useEffect(() => {
-    // Populate default selections for List A
-    FetchDrillData();
-    const defaultListA = Array.from({ length: 5 }, (_, index) => ({
-      playerName: playerArray[index],
-    }));
-    // Populate default selections for List B
-    const defaultListB = Array.from({ length: 5 }, (_, index) => ({
-      playerName: playerArray[5 + index],   
-    }));
-    if(id1 !== -1)
-    {
-      setListA(StoredSessions[id1].Team_A);
-      setListB(StoredSessions[id1].Team_B);
-    }
-    else
-    {
-    setListA(defaultListA);
-    setListB(defaultListB);
-    };
-    if(id1 !== -1)
-    {
-      setDrills(StoredSessions[id1].Drills);
-    }
-  },[playerArray]);
-
   const styles = StyleSheet.create({
     container: {
       flex: 1,
@@ -148,14 +142,6 @@ const CreateSessionsPage = () => {
       justifyContent: "space-around",
     },
   });
-
-  const handleAddDropdown = (team) => {
-    if (team === 'A') {
-      setListA([...listA, { playerName: '' }]);
-    } else if (team === 'B') {
-      setListB([...listB, { playerName: '' }]);
-    }
-  };
 
   const handleSaveDrill = (customId) => {
     console.log(drills);
@@ -181,43 +167,21 @@ const CreateSessionsPage = () => {
     }
   };
   
-  const generateMongoID = () => {
-    // Generate a UUID (version 4)
-    const timestamp = Math.floor(new Date().getTime() / 1000).toString(16); // Timestamp in hexadecimal
-    const machineId = generateRandomHexString(6); // 6-character random hexadecimal string
-    const processId = generateRandomHexString(4); // 4-character random hexadecimal string
-    const counter = generateRandomHexString(6); // 6-character random hexadecimal string
+  useEffect(() => {
+    const FetchDrillData = async () => {
+      const response = await fetch('/api/drills');
+      const jsonData = await response.json();
+      setDrillData(jsonData);
+    };
+    FetchDrillData();
+  }, []);
 
-    // Concatenate all parts to form the MongoDB ObjectID
-    const mongoId = timestamp + machineId + processId + counter;
-
-    return mongoId;
-  }
-  const generateRandomHexString = (length) => {
-    const characters = 'abcdef0123456789';
-    let result = '';
-
-    for (let i = 0; i < length; i++) {
-      result += characters.charAt(Math.floor(Math.random() * characters.length));
-    }
-
-    return result;
-  }
-  const FetchDrillData = async () => {
-    const response = await fetch('/api/drills');
-    const jsonData = await response.json();
-    setDrillData(jsonData);
-  };
   const handleSaveSession = async () => {
     const currentDate = new Date();
     const formattedDate = currentDate.toLocaleString(); // You can customize the format as needed
-    const customId = generateMongoID();
-  
-    FetchDrillData();
-    
+
     const sessionData = {
       //Include all necessary data here
-      _id: customId,
       Date: new Date().toLocaleDateString(),
     };
       // Send POST request to save session data
@@ -238,22 +202,22 @@ const CreateSessionsPage = () => {
 
     // Handle successful response
     navigate('/tempo');
-  };
+  } 
+
 
   return (
-    <div> 
     <div>
-      <Stack spacing={2} direction="row">
-      <a href='/createsession'>
-        <TabButton text={"Create Session"} />
-      </a>
-      <a href='/drill'>
-        <TabButton text={"Drill"} />
-      </a>
-      </Stack>
-    </div>
+      <div>
+        <Stack spacing={2} direction="row">
+        <a href='/createsession'>
+          <TabButton text={"Create Session"} />
+        </a>
+        <a href='/drill'>
+         <TabButton text={"Drill"} />
+        </a>
+        </Stack>
+      </div>
     <div className="create-sessions-container">
-      
       <div className="drills-column">
         <h2>Drills</h2>
         <ul>
@@ -283,17 +247,18 @@ const CreateSessionsPage = () => {
       </div>
 
       <div className="lists-column">
+        {/* Team Purple List */}
         <div className="list">
           <h2>Team Purple</h2>
           <ul>
-            {listA.map((player, index) => (
+            {teamPurple.map((player, index) => (
               <li key={index}>
-                <select className='dropdown' value={player.playerName} onChange={(e) => handlePlayerChange('A', index, e)}>
+                <select className='dropdown' value={player._id} onChange={(e) => handlePlayerChange('A', index, e)}>
                   <option value="">Select Player</option>
-                  {getAvailabePlayers().map((availablePlayer) => (
+                  {getAvailablePlayers().map((availablePlayer) => (
                     <option key={availablePlayer._id} value={availablePlayer._id}>
                       {availablePlayer.name}
-                      </option>
+                    </option>
                   ))}
                 </select>
                 <button className="remove-player-button" onClick={() => handleRemovePlayer('A', index)}>
@@ -301,25 +266,28 @@ const CreateSessionsPage = () => {
                 </button>
               </li>
             ))}
-            <li>
-              <button className="add-dropdown-button" onClick={handleAddDropdown('A')}>
-                Add Player  
-              </button>
-            </li>
+            {getAvailablePlayers().length > 0 && (
+              <li>
+                <button className="add-dropdown-button" onClick={handleAddDropdown('A')}>
+                  Add Player
+                </button>
+              </li>
+            )}
           </ul>
         </div>
-
+            
+        {/* Team Gray List */}
         <div className="list">
           <h2>Team Gray</h2>
           <ul>
-            {listB.map((player, index) => (
+            {teamGray.map((player, index) => (
               <li key={index}>
-               <select className='dropdown' value={player.playerName} onChange={(e) => handlePlayerChange('B', index, e)}>
+                <select className='dropdown' value={player._id} onChange={(e) => handlePlayerChange('B', index, e)}>
                   <option value="">Select Player</option>
-                  {getAvailabePlayers().map((availablePlayer) => (
+                  {getAvailablePlayers().map((availablePlayer) => (
                     <option key={availablePlayer._id} value={availablePlayer._id}>
                       {availablePlayer.name}
-                      </option>
+                    </option>
                   ))}
                 </select>
                 <button className="remove-player-button" onClick={() => handleRemovePlayer('B', index)}>
@@ -327,23 +295,22 @@ const CreateSessionsPage = () => {
                 </button>
               </li>
             ))}
-            <li>
-              <button className="add-dropdown-button" onClick={handleAddDropdown('B')}>
-                Add Player
-              </button>
-            </li>
+            {getAvailablePlayers().length > 0 && (
+              <li>
+                <button className="add-dropdown-button" onClick={handleAddDropdown('B')}>
+                  Add Player
+                </button>
+              </li>
+            )}
           </ul>
         </div>
       </div>
-
       <button className="create-session-button" onClick={handleSaveSession}>
         Create Session
       </button>
-
-      <DrillModal isOpen={isModalOpen} onClose={() => setModalOpen(false)} onAddDrill={handleAddDrill} />
     </div>
+      <DrillModal isOpen={isModalOpen} onClose={() => setModalOpen(false)} onAddDrill={handleAddDrill} />
     </div>
   );
 };
-
 export default CreateSessionsPage;
