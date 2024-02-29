@@ -26,10 +26,7 @@ const CreateSessionsPage = () => {
   let s = 0;
 
   const [drills, setDrills] = useState([]);
-  const [drill_data, setDrillData] = useState([]);
   const [isModalOpen, setModalOpen] = useState(false);
-  const [sessionName, setSessionName] = useState('');
-  const [savedSessions, setSavedSessions] = useState([]);
   const [selectedDrillIndex, setSelectedDrillIndex] = useState(null);
   const [playerData, setPlayerData] = useState([]);
   const [seasID, setSeasID] = useState('');
@@ -93,63 +90,18 @@ const CreateSessionsPage = () => {
       console.log(`Removed player from Team B at index ${index}`);
     }
   };
-  
-  useEffect(() => {
-    // Populate default selections for List A
-    
-    const FetchData = async () => {
-      try {
-        const playerResponse = await fetch('http://localhost:3001/api/players');
-        const playerData = await playerResponse.json();
-        const formattedPlayer = playerData.map(player => {
-          const Pname = player.name;
-          return {
-            name: Pname,
-          }
-        });
-        setPlayerData(formattedPlayer);
-      }
-      catch (error) {
-        console.error('Failed to fetch players:', error);
-      }
-      try {
-        const seasonResponse = await fetch('http://localhost:3001/api/seasons');
-        const seasonData = await seasonResponse.json();
-        const formattedSeasons = seasonData.map(season => {
-          const seasonID = season._id.toString();
-          const year = season.year;
-          return {
-            year: year,
-            ID: season._id.toString(),
-          }
-        });
-        setSeasonData(formattedSeasons);
-      }
-      catch (error) {
-        console.error('Failed to fetch seasons:', error);
-      }
-    };
-    FetchData();
-    const defaultListA = Array.from({ length: 5 }, (_, index) => ({
-      playerName: playerArray[index],
-    }));
-    // Populate default selections for List B
-    const defaultListB = Array.from({ length: 5 }, (_, index) => ({
-      playerName: playerArray[5 + index],   
-    }));
-    if(id1 !== -1)
-    {
-      setListA(StoredSessions[id1].Team_A);
-      setListB(StoredSessions[id1].Team_B);
-      setDrills(StoredSessions[id1].Drills);
-    }
-    else
-    {
-    setListA(defaultListA);
-    setListB(defaultListB);
-    };
-  },[playerArray]);
 
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+    },
+    parent: {
+      flex: 1,
+      flexDirection: "row",
+      justifyContent: "space-around",
+    },
+  });
+  
   const handlePlayerChange = (team, index, event) => {
     const { value } = event.target;
     if (team === 'A') {
@@ -163,17 +115,6 @@ const CreateSessionsPage = () => {
       setListB(updatedListB);
     }
   };
-
-  const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-    },
-    parent: {
-      flex: 1,
-      flexDirection: "row",
-      justifyContent: "space-around",
-    },
-  });
 
   const handleAddDropdownA = () => {
     setListA([...listA, { playerName: `New Player ${listA.length + 1}` }]);
@@ -205,33 +146,8 @@ const CreateSessionsPage = () => {
       .catch(error => console.error('Error submitting drill:', error));
     }
   };
-  
-  const generateMongoID = () => {
-    // Generate a UUID (version 4)
-    const timestamp = Math.floor(new Date().getTime() / 1000).toString(16); // Timestamp in hexadecimal
-    const machineId = generateRandomHexString(6); // 6-character random hexadecimal string
-    const processId = generateRandomHexString(4); // 4-character random hexadecimal string
-    const counter = generateRandomHexString(6); // 6-character random hexadecimal string
-
-    // Concatenate all parts to form the MongoDB ObjectID
-    const mongoId = timestamp + machineId + processId + counter;
-
-    return mongoId;
-  }
-  const generateRandomHexString = (length) => {
-    const characters = 'abcdef0123456789';
-    let result = '';
-
-    for (let i = 0; i < length; i++) {
-      result += characters.charAt(Math.floor(Math.random() * characters.length));
-    }
-
-    return result;
-  }
   const handleSaveSession = async () => {
     const currentDate = new Date();
-    const formattedDate = currentDate.toLocaleString(); // You can customize the format as needed
-    const customId = generateMongoID();
 
     FindSeason(seasID);
     console.log(seasID);
@@ -243,13 +159,7 @@ const CreateSessionsPage = () => {
     
     const date = new Date().toLocaleDateString();
     const splitDate = date.split("/");
-    console.log(splitDate);
     const year = splitDate[2];
-    console.log(year);
-    console.log(playerData);
-    console.log(SeasonData);
-    const month = splitDate[0];
-    const day = splitDate[1];
       const x = SeasonData.find(season => season.year === year)
       if(!x)
       {
@@ -332,7 +242,62 @@ const CreateSessionsPage = () => {
     setSessionInfoModalOpen(true);
     console.log(`Clicked on Add Time`);
   };
-  
+  //Use Effect at the end
+  useEffect(() => {
+    // Populate default selections for List A
+    
+    const FetchData = async () => {
+      try {
+        const playerResponse = await fetch('http://localhost:3001/api/players');
+        const playerData = await playerResponse.json();
+        const formattedPlayer = playerData.map(player => {
+          const Pname = player.name;
+          return {
+            name: Pname,
+          }
+        });
+        setPlayerData(formattedPlayer);
+      }
+      catch (error) {
+        console.error('Failed to fetch players:', error);
+      }
+      try {
+        const seasonResponse = await fetch('http://localhost:3001/api/seasons');
+        const seasonData = await seasonResponse.json();
+        const formattedSeasons = seasonData.map(season => {
+          const seasonID = season._id.toString();
+          const year = season.year;
+          return {
+            year: year,
+            ID: season._id.toString(),
+          }
+        });
+        setSeasonData(formattedSeasons);
+      }
+      catch (error) {
+        console.error('Failed to fetch seasons:', error);
+      }
+    };
+    FetchData();
+    const defaultListA = Array.from({ length: 5 }, (_, index) => ({
+      playerName: playerArray[index],
+    }));
+    // Populate default selections for List B
+    const defaultListB = Array.from({ length: 5 }, (_, index) => ({
+      playerName: playerArray[5 + index],   
+    }));
+    if(id1 !== -1)
+    {
+      setListA(StoredSessions[id1].Team_A);
+      setListB(StoredSessions[id1].Team_B);
+      setDrills(StoredSessions[id1].Drills);
+    }
+    else
+    {
+    setListA(defaultListA);
+    setListB(defaultListB);
+    };
+  },[playerArray]);
   return (
     <div> 
     <div className="create-sessions-container">

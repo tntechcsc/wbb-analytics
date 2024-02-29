@@ -7,6 +7,7 @@ import TeamStats from './pages/TeamStats/TeamStats';
 import CreateSessionsPage from './pages/CreateSession/CreateSessionPage';
 import DrillPage from './pages/Drill/DrillPage';
 import TempoPage from './pages/Tempo/Tempo';
+import LoginPage from './pages/Login/LoginPage';
 
 const App = () => {
   return (
@@ -17,7 +18,8 @@ const App = () => {
         <Route path="/teamstats" element={<TeamStats />} />
         <Route path="/createsession" element={<CreateSessionsPage />} />
         <Route path="/drill" element={<DrillPage/>}/>
-        <Route path="/" element={<HomePage />} />
+        <Route path="/homePage" element={<HomePage />} />
+        <Route path="/" element={<LoginPage />}/>
       </Routes>
     </div>
   );

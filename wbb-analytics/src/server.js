@@ -6,6 +6,7 @@ const practiceSessionsRoutes = require('./routes/practiceSessionsRoutes');
 const shotsRoutes = require('./routes/shotsRoutes');
 const temposRoutes = require('./routes/temposRoutes');
 const seasonRoutes = require('./routes/seasonRoutes');
+const userRoutes = require('./routes/userRoutes');
 
 const app = express();
 
@@ -19,10 +20,10 @@ app.use(cors({ origin: 'http://localhost:3000' }));
 
 // Connect to MongoDB
 //  Connection string for Gannod's MongoDB
-//mongoose.connect('mongodb://mongoadmin:c%40pSt0n3Sp24!@csclnx01.tntech.edu:27017/nestdb?authMechanism=DEFAULT&authSource=admin')
+mongoose.connect('mongodb://mongoadmin:c%40pSt0n3Sp24!@csclnx01.tntech.edu:27017/nestdb?authMechanism=DEFAULT&authSource=admin')
 
 // Connection string for Kyle's MongoDB
-mongoose.connect('mongodb+srv://kyleh865:Password@nestcluster.xzqjz3i.mongodb.net/nestdb?retryWrites=true&w=majority')
+//mongoose.connect('mongodb+srv://kyleh865:Password@nestcluster.xzqjz3i.mongodb.net/nestdb?retryWrites=true&w=majority')
 
 
 .then(() => console.log(mongoose.connection))
@@ -37,6 +38,7 @@ app.use('/api/sessions', practiceSessionsRoutes);
 app.use('/api/shots', shotsRoutes);
 app.use('/api/tempos', temposRoutes);
 app.use('/api/seasons', seasonRoutes);
+app.use('/api/users', userRoutes);
 
 const port = 3001; // Port where the server will listen
 // Start the server
