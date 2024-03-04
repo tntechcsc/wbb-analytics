@@ -8,6 +8,7 @@ const LoginPage = () => {
     const [users, setUsers] = useState([]);
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [incorrect,setIncorrect] = useState(false);
     useEffect(() => {
         const FetchData = async () => {
         try
@@ -34,12 +35,21 @@ const LoginPage = () => {
 }, []);
     const handleLogin = (event) => {
         event.preventDefault();
+        console.log(users);
+        if(users.find(x => x.username === username) && users.find(x => x.password === password))
+        {
+        event.preventDefault();
         console.log('username:', username);
         console.log('password:', password);
 
 
         let path = '/homePage';
         navigate(path);
+        }
+        else
+        {
+            setIncorrect(true);
+        }
     }
     return(
             <div className="login-page-container">
@@ -53,6 +63,9 @@ const LoginPage = () => {
                             Password:
                             <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
                         </label>
+                        {incorrect === true && (
+                            <a>Incorrect Username or Password</a>
+                        )}
                         <button type="submit">Submit</button>
                     </form>
                 </div>

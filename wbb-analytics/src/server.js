@@ -6,7 +6,7 @@ const practiceSessionsRoutes = require('./routes/practiceSessionsRoutes');
 const shotsRoutes = require('./routes/shotsRoutes');
 const temposRoutes = require('./routes/temposRoutes');
 const seasonRoutes = require('./routes/seasonRoutes');
-const userRoutes = require('./routes/userRoutes');
+const userRoutes = require('./routes/usersRoutes');
 
 const app = express();
 
