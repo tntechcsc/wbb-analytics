@@ -9,6 +9,10 @@ import SubstitutionPopup from './components/SubstitutionPopup'
 import Court from './components/Court'
 
 function TempoPage() {
+    // Define the base URL for your API
+    // const BASE_URL = 'http://localhost:3001';
+    const BASE_URL = 'http://10.105.194.195:3001';
+
     // State for timing control
     const [isTiming, setIsTiming] = useState(false);
     const [resetTimer, setResetTimer] = useState(false);
@@ -21,7 +25,7 @@ function TempoPage() {
     const [allPlayers, setAllPlayers] = useState([]);
 
     useEffect(() => {
-        fetch('c')
+        fetch(`${BASE_URL}/api/players`)
             .then(response => response.json())
             .then(data => {
                 const playersData = data.map(player => ({
@@ -45,7 +49,7 @@ function TempoPage() {
             PressDefenseTime: isOffensive ? null : timeValue
         };
 
-        fetch('http://localhost:3001/api/tempos', {
+        fetch(`${BASE_URL}/api/tempos`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

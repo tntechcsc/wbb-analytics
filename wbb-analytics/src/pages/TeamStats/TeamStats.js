@@ -8,13 +8,17 @@ import NavagationHeader from './components/NavagationHeader';
 import './TeamStats.css';
 
 function TeamStats() {
+  // Define the base URL for your API
+  const BASE_URL = 'http://10.105.194.195:3001';
+  // const BASE_URL = 'http://localhost:3001';
+
   const [sessions, setSessions] = useState([]);
   const [allDrills, setAllDrills] = useState([]);
   const [filteredDrills, setFilteredDrills] = useState([]);
   const [selectedSession, setSelectedSession] = useState('');
 
   useEffect(() => {
-    fetch('http://localhost:3001/api/sessions')
+    fetch(`${BASE_URL}/api/sessions`)
       .then(response => response.json())
       .then(data => {
         const formattedSessions = data.map(session => ({
@@ -34,7 +38,7 @@ function TeamStats() {
         console.error('Failed to fetch sessions:', error);
       });
 
-    fetch('http://localhost:3001/api/drills')
+    fetch(`${BASE_URL}/api/drills`)
       .then(response => response.json())
       .then(data => {
         setAllDrills(data); // Assuming drills do not need to be formatted

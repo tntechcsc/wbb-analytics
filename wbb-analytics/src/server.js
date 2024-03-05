@@ -12,16 +12,22 @@ const cors = require('cors');
 app.use(cors());
 
 // Enable CORS for a specific domain
-app.use(cors({ origin: 'http://localhost:3000' }));
+app.use(cors({ origin: true }));
+
+const CORSPORT = 3001; // Port where the server will listen
+app.listen(CORSPORT, '0.0.0.0', () => {
+  console.log(`Server listening at http://10.105.194.195:${CORSPORT}`);
+  
+});
 
 // Connect to MongoDB
 //  Connection string for Gannod's MongoDB
-//mongoose.connect('mongodb://mongoadmin:c%40pSt0n3Sp24!@csclnx01.tntech.edu:27017/nestdb?authMechanism=DEFAULT&authSource=admin')
+mongoose.connect('mongodb://mongoadmin:c%40pSt0n3Sp24!@csclnx01.tntech.edu:27017/nestdb?authMechanism=DEFAULT&authSource=admin')
 
 // Connection string for Kyle's MongoDB
 //mongoose.connect('mongodb+srv://kyleh865:Password@nestcluster.xzqjz3i.mongodb.net/nestdb?retryWrites=true&w=majority')
 
-mongoose.connect('mongodb+srv://kyleh865:Password@nestcluster.xzqjz3i.mongodb.net/nestdb?retryWrites=true&w=majority')
+//mongoose.connect('mongodb+srv://kyleh865:Password@nestcluster.xzqjz3i.mongodb.net/nestdb?retryWrites=true&w=majority')
 
 .then(() => console.log(mongoose.connection))
 .catch(err => console.error('Could not connect to MongoDB', err));

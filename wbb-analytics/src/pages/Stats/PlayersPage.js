@@ -3,6 +3,10 @@ import './PlayersPage.css';
 //import players from './../../data/playerData';
 
 const PlayersPage = () => {
+    // Define the base URL for your API
+    // const BASE_URL = 'http://localhost:3001';
+    const BASE_URL = 'http://10.105.194.195:3001';
+
   const [players, setPlayers] = useState([]);
   const [sessions, setSessions] = useState([]);
   const [drills, setDrills] = useState([]);
@@ -12,19 +16,19 @@ const PlayersPage = () => {
 
   useEffect(() => {
     // Fetch players
-    fetch('http://localhost:3001/api/players')
+    fetch(`${BASE_URL}/api/players`)
       .then(response => response.json())
       .then(data => setPlayers(data))
       .catch(error => console.error('Failed to fetch players:', error));
 
     // Fetch sessions
-    fetch('http://localhost:3001/api/sessions')
+    fetch(`${BASE_URL}/api/sessions`)
       .then(response => response.json())
       .then(data => setSessions(data))
       .catch(error => console.error('Failed to fetch sessions:', error));
 
     // Fetch drills
-    fetch('http://localhost:3001/api/drills')
+    fetch(`${BASE_URL}/api/drills`)
       .then(response => response.json())
       .then(data => setDrills(data))
       .catch(error => console.error('Failed to fetch drills:', error));
@@ -33,7 +37,7 @@ const PlayersPage = () => {
   useEffect(() => {
     if (selectedSession) {
       // Fetch drills for the selected session
-      fetch(`http://localhost:3001/api/sessions/${selectedSession}/drills`)
+      fetch(`${BASE_URL}/api/sessions/${selectedSession}/drills`)
         .then(response => response.json())
         .then(data =>{ setFilteredDrills(data);
          console.log(data); }) // This will be the array of drills

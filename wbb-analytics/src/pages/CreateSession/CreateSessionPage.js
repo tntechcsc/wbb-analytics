@@ -11,6 +11,10 @@ import Stack from '@mui/material/Stack';
 import { avatarClasses } from '@mui/material';
 
 const CreateSessionsPage = () => {
+  // Define the base URL for your API
+  // const BASE_URL = 'http://localhost:3001';
+  const BASE_URL = 'http://10.105.194.195:3001';
+
   const navigate = useNavigate();
   const location = useLocation();
   const [players, setPlayers] = useState([]); // Stores all players
@@ -37,7 +41,7 @@ const CreateSessionsPage = () => {
   useEffect(() => {
     const fetchPlayers = async () => {
       try {
-        const response = await fetch('http://localhost:3001/api/players');
+        const response = await fetch(`${BASE_URL}/api/players`);
         const jsonData = await response.json();
         setPlayers(jsonData.map(player => ({ ...player, selected: false })));
       } catch (error) {
@@ -154,7 +158,7 @@ const CreateSessionsPage = () => {
         DrillName: drills[i].name,
       };
       console.log(drillData);
-      fetch('http://localhost:3001/api/drills', {
+      fetch(`${BASE_URL}/api/drills`, {
         method: 'POST',
           headers: {
               'Content-Type': 'application/json'
@@ -185,7 +189,7 @@ const CreateSessionsPage = () => {
       Date: new Date().toLocaleDateString(),
     };
       // Send POST request to save session data
-      const respons = fetch('http://localhost:3001/api/sessions', {
+      const respons = fetch(`${BASE_URL}/api/sessions`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
