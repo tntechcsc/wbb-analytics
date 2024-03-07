@@ -6,9 +6,11 @@ import { useNavigate } from "react-router-dom";
 import SessionOption from './SessionOption.js';
 import './HomePage.css';
 import logo from '../../images/nESTlogo.png';
+import { useAuth } from '../../hooks/AuthProvider';
 
 const HomePage = () => {
   let navigate = useNavigate();
+  const auth = useAuth();
   const [isModelOpen, setModelOpen] = useState(false);
   const gotoStats = () => {
     const path = '/teamstats';
@@ -20,13 +22,15 @@ const HomePage = () => {
   };
   return (
     <div className="home-page-container">
+        <button onClick={() => auth.logOut()} className="log-out">
+          logout
+        </button>
         <button onClick={() => gotoSession()} className="Linkish-Button1">
           New Session
         </button>
         <button onClick={() => gotoStats()} className="Linkish-Button2">
           Stats
         </button>
-
       <section className="about">
       </section>
       <SessionOption isOpen={isModelOpen} onClose={() => setModelOpen(false)}/>
