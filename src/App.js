@@ -4,7 +4,7 @@ import { Route, Routes } from 'react-router-dom';
 import HomePage from './pages/Home/HomePage';
 import PlayersPage from './pages/Stats/PlayersPage';
 import TeamStats from './pages/TeamStats/TeamStats';
-import CreateSessionsPage from './pages/CreateSession/CreateSessionPage';
+import CreateSessionsPage from './pages/SessionPage/Session';
 import Drill from './pages/DrillPage/Drill';
 
 const App = () => {

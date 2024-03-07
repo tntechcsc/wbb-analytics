@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './CreateSessionPage.css';
+import './Session.css';
 
 const SessionInfoModal = ({ isOpen, onClose, onAddSessionInfo }) => {
   const [opponentTeam, setOpponentTeam] = useState('');

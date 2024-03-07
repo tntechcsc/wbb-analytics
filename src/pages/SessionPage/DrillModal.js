@@ -1,7 +1,7 @@
 // DrillModal.js
 
 import React, { useState } from 'react';
-import './CreateSessionPage.css';
+import './Session.css';
 
 const DrillModal = ({ isOpen, onClose, onAddDrill }) => {
   const [drillName, setDrillName] = useState('');
