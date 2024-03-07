@@ -237,7 +237,7 @@ const CreateSessionsPage = () => {
     console.log(seasID);
 
     // Handle successful response
-    navigate('/tempo');
+    navigate('/drill');
   };
   const FindSeason = () => {
     
@@ -304,7 +304,7 @@ const CreateSessionsPage = () => {
       .catch(error => console.error('Error submitting Session:', error));
 
     // Handle successful response
-    navigate('/tempo');
+    navigate('/drill');
   };
 
   const handleTabClick = (tab) => {

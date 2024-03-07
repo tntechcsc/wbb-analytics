@@ -5,13 +5,13 @@ import HomePage from './pages/Home/HomePage';
 import PlayersPage from './pages/Stats/PlayersPage';
 import TeamStats from './pages/TeamStats/TeamStats';
 import CreateSessionsPage from './pages/CreateSession/CreateSessionPage';
-import TempoPage from './pages/Tempo/Tempo';
+import Drill from './pages/DrillPage/Drill';
 
 const App = () => {
   return (
     <div>
       <Routes>
-        <Route path="/tempo" element={<TempoPage />} />
+        <Route path="/drill" element={<Drill />} />
         <Route path="/players" element={<PlayersPage />} />
         <Route path="/teamstats" element={<TeamStats />} />
         <Route path="/createsession" element={<CreateSessionsPage />} />

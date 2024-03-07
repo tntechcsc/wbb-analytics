@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import './Tempo.css';
+import './Drill.css';
 import CancelButton from './components/CancelButton';
 import LastTempoDisplay from './components/LastTempoDisplay';
 import PlayerList from './components/PlayerList';
