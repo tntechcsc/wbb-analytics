@@ -19,7 +19,6 @@ import PrivateRoute from './components/privateRoute';
 const App = () => {
   return (
   <div>
-    <Router>
       <AuthProvider>
         <Routes>
           <Route path="/" element={<LoginPage />} />
@@ -33,7 +32,6 @@ const App = () => {
           </Route>
         </Routes>
       </AuthProvider>
-    </Router>
   </div>
   );
 };

@@ -1,0 +1,6 @@
+# Ignore node_modules directory
+node_modules
+.gitignore
+README.md
+iter1
+notes

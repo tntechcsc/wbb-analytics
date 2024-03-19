@@ -9,5 +9,8 @@ const rootElement = document.getElementById('root');
 const root = createRoot(rootElement);
 // Initial render: Render the <App> into the root
 root.render(
-    <App />
+    
+    <Router>
+        <App />
+    </Router>
 );

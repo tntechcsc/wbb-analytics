@@ -1,0 +1,23 @@
+version: '4'
+services:
+  frontend:
+    build: ./wbb-analytics
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+  backend:
+    build: ./server
+    ports:
+      - "3001:3001"
+    environment:
+      - MONGO_URL=mongodb://mongoadmin:c%40pSt0n3Sp24!@database:27017/nestdb?authMechanism=DEFAULT&authSource=admin
+    depends_on:
+      - database
+  database:
+    image: mongo
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=mongoadmin
+      - MONGO_INITDB_ROOT_PASSWORD=c%40pSt0n3Sp24!
