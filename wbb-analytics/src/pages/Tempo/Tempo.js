@@ -7,11 +7,12 @@ import TempoTimer from './components/TempoTimer';
 import TempoButton from './components/TempoButton'
 import SubstitutionPopup from './components/SubstitutionPopup'
 import Court from './components/Court'
+import MainLayout from '../../layouts/MainLayout';
 
 function TempoPage() {
     // Define the base URL for your API
-    // const BASE_URL = 'http://localhost:3001';
-    const BASE_URL = 'http://10.105.194.195:3001';
+    const BASE_URL = 'http://localhost:3001';
+    //const BASE_URL = 'http://10.105.194.195:3001';
 
     // State for timing control
     const [isTiming, setIsTiming] = useState(false);
@@ -123,6 +124,7 @@ function TempoPage() {
     };
 
     return (
+        <MainLayout>
         <div className="TempoPage">
             <div className="TopContainer">
                 <div className="PlayerListContainer">
@@ -195,6 +197,7 @@ function TempoPage() {
                 </div>
             </div>
         </div>
+        </MainLayout>
     );
 }
 

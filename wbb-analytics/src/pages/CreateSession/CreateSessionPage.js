@@ -9,6 +9,8 @@ import { SafeAreaView, StatusBar, StyleSheet, View } from "react-native";
 import TabButton from '../../components/TabButton';
 import Stack from '@mui/material/Stack';
 import { avatarClasses } from '@mui/material';
+import MainLayout from '../../layouts/MainLayout.js' // Import the MainLayout component
+
 
 const CreateSessionsPage = () => {
   // Define the base URL for your API
@@ -210,17 +212,8 @@ const CreateSessionsPage = () => {
 
 
   return (
+    <MainLayout> {/* Wrap the content of HomePage inside MainLayout */}
     <div>
-      <div>
-        <Stack spacing={2} direction="row">
-        <a href='/createsession'>
-          <TabButton text={"Create Session"} />
-        </a>
-        <a href='/drill'>
-         <TabButton text={"Drill"} />
-        </a>
-        </Stack>
-      </div>
     <div className="create-sessions-container">
       <div className="drills-column">
         <h2>Drills</h2>
@@ -315,6 +308,7 @@ const CreateSessionsPage = () => {
     </div>
       <DrillModal isOpen={isModalOpen} onClose={() => setModalOpen(false)} onAddDrill={handleAddDrill} />
     </div>
+    </MainLayout>
   );
 };
 export default CreateSessionsPage;

@@ -1,0 +1,156 @@
+[{
+  "_id": {
+    "$oid": "654af8a01963d3698be22110"
+  },
+  "name": "Maddie Kellione",
+  "position": "Guard",
+  "jersey_number": 3,
+  "height": "5'6\"",
+  "year": "Grad",
+  "hometown": "Cynthiana, Ky.",
+  "previous_school": "Transylvania",
+  "bio": "2022-23 (at Transylvania, senior): Kellione helped lead the Pioneers to a perfect 33-0 campaign in 2022-23, including an 18-0 march through the Heartland Collegiate Athletic Conference and a dominant run through the NCAA D-III tournament field, winning the national championship with a 57-52 victory over Christopher Newport. Kellione led the team in scoring with a 15.3 point-per-game average, ranking 26th nationally in scoring on the Division III level, while she also dished out 145 assists – an average of 4.4 per game and ranked 13th nationally.\n\nThis past season alone saw a lot of accolades. In addition to being named the NCAA Division III Championship Most Valuable Player, Kellione was a Women’s Basketball Coaches Association First-Team All-American, a D3Hoops Region 8 first-teamer, a D3Hoops Second-Team All-American, a first-team All-HCAC pick, a two-time HCAC Player of the Week and the HCAC Tournament MVP.\n\nKellione also earned a prestigious academic honor as she was awarded the NCAA’s Elite 90 Award, which recognizes the student-athlete with the highest cumulative grade point average who reaches the championship for each of the NCAA’s 90 men’s and women’s sports across Division I, II and III. With a 3.94 cumulative GPA in physics and minors in math, computer science and biology, Kellione will also be an excellent addition to a Golden Eagle squad that has excelled in the classroom.\n\nShe was recently named Transylvania’s Female Athlete of the Year for the second straight season, and repeated as the HCAC Female Athlete of the Year as the award was announced on Thursday.\n\nThrough her three seasons played at Transylvania, Kellione has 1,233 points (15.2 per game), 278 rebounds (3.4 per game), 300 assists (3.7 per game), while shooting .455 from the floor, .383 from 3-point range with 146 3-pointers, and .815 from the free throw line with 303 made charity tosses. She also has 124 steals.\n\nACADEMICS: With a degree already in hand, Kellione is currently working toward a master's degree in computer science.\n"
+},
+{
+  "_id": {
+    "$oid": "654affe01963d3698be22111"
+  },
+  "name": "Cayla Cowart",
+  "position": "Guard",
+  "jersey_number": 1,
+  "height": "5'9\"",
+  "year": "So.",
+  "hometown": "Gainesville, Ga.",
+  "previous_school": "West Forsyth HS",
+  "bio": "Player bio goes here..."
+},
+{
+  "_id": {
+    "$oid": "654b00191963d3698be22112"
+  },
+  "name": "Jennifer Sullivan",
+  "position": "Guard",
+  "jersey_number": 2,
+  "height": "5'8\"",
+  "year": "So.",
+  "hometown": "Knoxville, Tenn.",
+  "previous_school": "Bearden HS",
+  "bio": "Player bio goes here..."
+},
+{
+  "_id": {
+    "$oid": "654b00531963d3698be22113"
+  },
+  "name": "Anna Walker",
+  "position": "Forward",
+  "jersey_number": 4,
+  "height": "6'0\"",
+  "year": "Sr.",
+  "hometown": "Cleveland, Tenn.",
+  "previous_school": "Chattanooga",
+  "bio": "Player bio goes here..."
+},
+{
+  "_id": {
+    "$oid": "654b009f1963d3698be22114"
+  },
+  "name": "Yaubryon Chambers",
+  "position": "Forward",
+  "jersey_number": 5,
+  "height": "6'1\"",
+  "year": "Grad",
+  "hometown": "Murfreesboro, Tenn.",
+  "previous_school": "Vanderbilt",
+  "bio": "Player bio goes here..."
+},
+{
+  "_id": {
+    "$oid": "654b00fe1963d3698be22115"
+  },
+  "name": "Reagan Hurst",
+  "position": "Guard",
+  "jersey_number": 10,
+  "height": "5'10\"",
+  "year": "R-So.",
+  "hometown": "Baxter, Tenn.",
+  "previous_school": "Upperman HS",
+  "bio": "Player bio goes here..."
+},
+{
+  "_id": {
+    "$oid": "654b017f1963d3698be22116"
+  },
+  "name": "Maaliya Owens",
+  "position": "Guard",
+  "jersey_number": 11,
+  "height": "5'9\"",
+  "year": "Grad",
+  "hometown": "Georgetown, Ky.",
+  "previous_school": "Scott County HS",
+  "bio": "Player bio goes here..."
+},
+{
+  "_id": {
+    "$oid": "654b01c91963d3698be22117"
+  },
+  "name": "Harley Paynter",
+  "position": "Guard",
+  "jersey_number": 14,
+  "height": "5'8\"",
+  "year": "R-So.",
+  "hometown": "Grayson, Ky.",
+  "previous_school": "Boyd County HS",
+  "bio": "Player bio goes here..."
+},
+{
+  "_id": {
+    "$oid": "654b02011963d3698be22118"
+  },
+  "name": "Peyton Carter",
+  "position": "Guard",
+  "jersey_number": 22,
+  "height": "5'8\"",
+  "year": "Sr.",
+  "hometown": "Abingdon, Va.",
+  "previous_school": "Abingdon HS",
+  "bio": "Player bio goes here..."
+},
+{
+  "_id": {
+    "$oid": "654b02ff1963d3698be22119"
+  },
+  "name": "Megan Aulbert",
+  "position": "Forward",
+  "jersey_number": 32,
+  "height": "6'2\"",
+  "year": "Fr.",
+  "hometown": "Lake St. Louis, Mo.",
+  "previous_school": "Lutheran HS",
+  "bio": "Player bio goes here..."
+},
+{
+  "_id": {
+    "$oid": "654b03431963d3698be2211a"
+  },
+  "name": "Reghan Grimes",
+  "position": "Guard",
+  "jersey_number": 33,
+  "height": "5'10\"",
+  "year": "So.",
+  "hometown": "Nashville, Tenn.",
+  "previous_school": "Ravenwood HS",
+  "bio": "Player bio goes here..."
+},
+{
+  "_id": {
+    "$oid": "654b037a1963d3698be2211b"
+  },
+  "name": "Kiera Hill",
+  "position": "Forward",
+  "jersey_number": 42,
+  "height": "5'11\"",
+  "year": "Sr.",
+  "hometown": "Trenton, Tenn.",
+  "previous_school": "Walters State CC",
+  "bio": "Player bio goes here..."
+}]

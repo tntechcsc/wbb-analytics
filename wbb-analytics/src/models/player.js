@@ -13,7 +13,6 @@ const playerSchema = new Schema({
     name: { type: String, required: true },
     jersey_number: { type: Number, required: true },
     seasons: [{ type: Schema.Types.ObjectId, ref: 'Season' }], // Array of Season document references
-    image: { type: String } // Optional image URL
 });
 
 module.exports = mongoose.model('Player', playerSchema);
