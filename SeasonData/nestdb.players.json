@@ -1,0 +1,84 @@
+[{
+  "_id": {
+    "$oid": "654b00191963d3698be22112"
+  },
+  "name": "Jennifer Sullivan",
+  "jersey_number": 2
+},
+{
+  "_id": {
+    "$oid": "654af8a01963d3698be22110"
+  },
+  "name": "Maddie Kellione",
+  "jersey_number": 3
+},
+{
+  "_id": {
+    "$oid": "654b02011963d3698be22118"
+  },
+  "name": "Peyton Carter",
+  "jersey_number": 22
+},
+{
+  "_id": {
+    "$oid": "654b02ff1963d3698be22119"
+  },
+  "name": "Megan Aulbert",
+  "jersey_number": 32
+},
+{
+  "_id": {
+    "$oid": "654affe01963d3698be22111"
+  },
+  "name": "Cayla Cowart",
+  "jersey_number": 1
+},
+{
+  "_id": {
+    "$oid": "654b009f1963d3698be22114"
+  },
+  "name": "Yaubryon Chambers",
+  "jersey_number": 5
+},
+{
+  "_id": {
+    "$oid": "654b017f1963d3698be22116"
+  },
+  "name": "Maaliya Owens",
+  "jersey_number": 11
+},
+{
+  "_id": {
+    "$oid": "654b00fe1963d3698be22115"
+  },
+  "name": "Reagan Hurst",
+  "jersey_number": 10
+},
+{
+  "_id": {
+    "$oid": "654b037a1963d3698be2211b"
+  },
+  "name": "Kiera Hill",
+  "jersey_number": 42
+},
+{
+  "_id": {
+    "$oid": "654b03431963d3698be2211a"
+  },
+  "name": "Reghan Grimes",
+  "jersey_number": 33
+},
+{
+  "_id": {
+    "$oid": "654b01c91963d3698be22117"
+  },
+  "name": "Harley Paynter",
+  "jersey_number": 14
+},
+{
+  "_id": {
+    "$oid": "654b00531963d3698be22113"
+  },
+  "name": "Anna Walker",
+  "jersey_number": 4
+}]

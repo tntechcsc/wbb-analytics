@@ -1,0 +1,380 @@
+/* CreateSessionsPage.css */
+
+.create-sessions-container {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+}
+
+.drills-column {
+    width: 30%;
+    height: 100vh;
+    background-color: #f4f4f4;
+    padding: 20px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+}
+
+.drills-column h2 {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.drills-column ul {
+    list-style: none;
+    padding: 0;
+    flex-grow: 1;
+    overflow-y: auto;
+}
+
+.drill-button,
+.add-drill-button {
+    background-color: #3498db;
+    color: #fff;
+    width: calc(100% - 95px);
+    padding: 20px 20px;
+    margin-bottom: 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 1.2em;
+}
+
+.delete-drill-button {
+    background-color: #e74c3c;
+    margin-left: 15px;
+    margin-bottom: 10px;
+    width: calc(100% - 325px);
+    height: 30px;
+    border: none;
+    border-radius: 4px;
+    font-size: 0.9em;
+    position: relative;
+    left: -15px;
+}
+
+.modify-drill-button {
+    background-color: #34dbca;
+    margin-left: 15px;
+    width: calc(100% - 325px);
+    height: 30px;
+    border: none;
+    border-radius: 4px;
+    font-size: 0.9em;
+    position: relative;
+    left: 30px;
+}
+
+.add-drill-button {
+    background-color: #27ae60;
+}
+
+.drill-button:hover {
+    background-color: #2980b9;
+}
+
+.delete-drill-button:hover {
+    background-color: #c0392b;
+}
+
+.modify-drill-button:hover {
+    background-color: #2cc4b8;
+}
+
+.add-drill-button:hover {
+    background-color: #219952;
+}
+
+.add-time {
+    background-color: #27ae60;
+    color: #fff;
+    width: calc(100% - 95px);
+    padding: 20px 20px;
+    margin-bottom: 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 1.2em;
+}
+
+.add-opponent-team {
+    background-color: #27ae60;
+    color: #fff;
+    width: calc(100% - 95px);
+    padding: 20px 20px;
+    margin-bottom: 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 1.2em;
+}
+
+.add-opponent-team:hover {
+    background-color: #219952;
+}
+
+.add-time:hover {
+    background-color: #219952;
+}
+
+.add-button,
+.cancel-button {
+    padding: 10px 20px; 
+    font-size: 16px; 
+    margin-right: 10px; 
+}
+
+.add-button {
+    background-color: #007bff; 
+    color: white; 
+    font-size: 0.9em;
+    border-radius: 9px;
+    padding: 14px;
+    width: calc(30% - 50px);
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-left: 20px;
+    margin-bottom: 20px;
+}
+
+.cancel-button {
+    background-color: #dc3545; 
+    color: white; 
+    font-size: 0.9em;
+    border-radius: 9px;
+    padding: 14px;
+    width: calc(25% - 50px);
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.drill-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.drill-modal-content {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    width: 100%;
+}
+
+.drill-modal-content h2 {
+    font-size: 1.8em;
+    margin-bottom: 20px;
+}
+
+.drill-modal-content label {
+    display: block;
+    font-size: 1.2em;
+    margin-bottom: 10px;
+}
+
+.drill-modal-content input {
+    width: calc(100% - 20px);
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.drill-modal-content button {
+    padding: 10px 20px;
+    background-color: #3498db;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+
+.session-info-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Set a high z-index value */
+}
+
+.session-info-modal-content {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    width: 100%;
+}
+
+.session-info-modal-content h2 {
+    font-size: 1.8em;
+    margin-bottom: 20px;
+}
+
+.session-info-modal-content label {
+    display: block;
+    font-size: 1.2em;
+    margin-bottom: 10px;
+}
+
+.session-info-modal-content input {
+    width: calc(100% - 20px);
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.session-info-modal-content button {
+    padding: 10px 20px;
+    background-color: #3498db;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+.lists-column {
+    position: relative;
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-start; /* Align items at the top */
+    width: 75%;
+}
+
+.list {
+    position: sticky;
+    top: 0;
+    text-align: center;
+    width: 500px;
+    margin-right: 20px;
+    margin-bottom: 90%;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    margin-right: 20px;
+}
+
+.list h2 {
+    margin-bottom: 10px;
+}
+
+select {
+    width: 100%; /* Adjusted the width of the dropdown selections */
+}
+
+.add-dropdown-button {
+    background-color: #27ae60;
+    color: #fff;
+    width: calc(100% - 40px);
+    padding: 16px 20px;
+    margin-bottom: 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 1.2em;
+}
+
+.remove-player-button {
+    background-color: #e74c3c;
+    width: calc(100% - 200px);
+    padding: 10px 20px;
+    margin-bottom: 10px;
+    margin-top: -10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 0.9em;
+}
+
+.create-session-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+}
+
+.tab-list {
+    border-bottom: 1px solid #ccc;
+    padding-left: 0;
+  }
+  
+.tab-list-item {
+    display: inline-block;
+    list-style: none;
+    margin-bottom: -1px;
+    padding: 0.5rem 0.75rem;
+}
+
+.tab-list-active {
+    background-color: white;
+    border: solid #ccc;
+    border-width: 1px 1px 0 1px;
+}
+
+.explore-link {
+    display: block;
+    margin-top: 15px;
+    padding: 10px 20px;
+    background-color: #3498db;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+.explore-link:hover {
+    background-color: #2675ad;
+}
+
+.container {
+    font-size: 5em;
+    background-color: #a8a8a8;
+    color: white;
+    width: 8em;
+    height: 2em;
+    line-height: 2;
+    text-align: center;
+    font-family: Helvetica, Arial, sans-serif;
+    font-weight: bold;
+    cursor: pointer;
+    position: relative;
+}
+
+.link {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 1;
+}
+
+  
