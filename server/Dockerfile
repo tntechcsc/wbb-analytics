@@ -15,4 +15,4 @@ COPY . .
 EXPOSE 3001
 
 # Use script specified in package,json
-CMD ["npm", "run", "dev"]
+CMD ["npm", "start"]

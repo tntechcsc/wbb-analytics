@@ -14,8 +14,6 @@ import PrivateRoute from './components/privateRoute';
 
 
 
-
-
 const App = () => {
   return (
   <div>
