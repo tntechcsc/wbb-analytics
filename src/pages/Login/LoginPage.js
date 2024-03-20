@@ -4,14 +4,17 @@ import { useAuth } from '../../hooks/AuthProvider';
 import './LoginPage.css';
 
 
+
 const LoginPage = () => {
     let navigate = useNavigate();
+    
     const auth = useAuth();
     const [users, setUsers] = useState([]);
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [incorrect,setIncorrect] = useState(false);
     useEffect(() => {
+        console.log('Fetching users');
         const FetchData = async () => {
             try
             {

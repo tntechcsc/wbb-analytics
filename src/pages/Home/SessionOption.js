@@ -11,7 +11,7 @@ const SessionOption = ({isOpen,onClose}) => {
         setCheck1(check)
         if(check !== 0)
         {
-        let path = '/CreateSession';
+        let path = '/createsession';
         navigate(path,
             {
                 state: { ID: check1 }
