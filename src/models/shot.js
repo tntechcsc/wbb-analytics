@@ -9,8 +9,8 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const shotSchema = new Schema({
-    gameOrPractice_id: { type: Schema.Types.ObjectId, required: true, refPath: 'onModel' },
-    onModel: { type: String, required: true, enum: ['Game', 'Practice'] },
+    gameOrDrill_id: { type: Schema.Types.ObjectId, required: true, refPath: 'onModel' },
+    onModel: { type: String, required: true, enum: ['Game', 'Drill'] },
     player_id: { type: Schema.Types.ObjectId, ref: 'Player', required: true },
     made: { type: Boolean, required: true },
     zone: { type: String, required: true },
