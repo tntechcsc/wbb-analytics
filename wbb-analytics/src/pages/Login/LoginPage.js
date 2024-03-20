@@ -11,13 +11,41 @@ const LoginPage = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [incorrect,setIncorrect] = useState(false);
+    useEffect(() => {
+        const FetchData = async () => {
+            try
+            {
+            await fetch('http://localhost:3001/api/users')
+                .then(response => response.json())
+                .then(data => {
+                    const formattedUser = data.map(user => {
+                        const Uname = user.username;
+                        const Upassword = user.password;
+                        const Utoken = user.token;
+                        return {
+                          username: Uname,
+                          password: Upassword,
+                          token: Utoken
+                        }
+                    }); 
+                    setUsers(formattedUser);
+            })
+            }
+            catch (error) {
+            console.error('Failed to fetch users:', error);  
+            } 
+            
+        };
+        FetchData();
+    },[]);
 
 
     const handleLogin = (event) => {
         event.preventDefault();
-        if(username !== "" && password !== "")
+        if(users.find(user => user.username === username && user.password === password))
         {
-        auth.loginAction({username: username, password: password});
+        const content = users.find(user => user.username === username && user.password === password)
+        auth.loginAction({username: username, password: password,token: content.token});
         return;
         }
         setIncorrect(true);
