@@ -29,12 +29,14 @@ a {
 
 a:hover {
 	text-decoration: underline;
+	opacity: 0.5;
 }
 
 .container {
 	margin-left: auto;
 	margin-right: auto;
 	padding: 1em;
+	opacity: 0.5;
 }
 
 .grid {
@@ -44,6 +46,7 @@ a:hover {
 	flex-wrap: wrap;
 	height: 100%;
 	width: 100%;
+	
 
 }
 
@@ -58,6 +61,7 @@ a:hover {
 	margin-right: 0px;
 	margin-left: 0px;
 	flex-grow: 9999;
+	
 
 }
 
@@ -73,12 +77,14 @@ h1, h2, h3, h4, h5, h6 {
 	color: #222;
 	font-weight: 100;
 	margin: 0.5em 0;
+	
 }
 
 pre.message {
 	white-space: normal;
 	width: 0px;
 	text-align: center;
+	
 }
 
 label {
@@ -88,6 +94,7 @@ label {
 	font-weight: bold;
 	margin: 1em 0;
 	text-transform: uppercase;
+	
 }
 
 .hint {

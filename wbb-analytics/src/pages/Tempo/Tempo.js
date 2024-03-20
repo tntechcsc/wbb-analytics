@@ -44,10 +44,11 @@ function TempoPage() {
     // Function to submit tempo
     const submitTempo = (isOffensive, playersOnCourtIds, timeValue) => {
         const tempoData = {
-            DrillID: null, // Since DrillID is not used yet
-            PlayersOnCourt: playersOnCourtIds,
-            TimeToHalfCourt: isOffensive ? timeValue : null,
-            PressDefenseTime: isOffensive ? null : timeValue
+            player_ids: playersOnCourtIds,
+            onModel: 'Practice',
+            tempo_type: isOffensive,
+            transition_time: timeValue,
+            timestamp: new Date()
         };
 
         fetch(`${BASE_URL}/api/tempos`, {
@@ -85,7 +86,7 @@ function TempoPage() {
         setRecordedTempo(currentTempo);
 
         // Determine if tempo is offensive or defensive
-        const isOffensive = type === 'offensive';
+        const isOffensive = type;
 
         // Get the IDs of the players on the court
         const playersOnCourtIds = playersOnCourt.map(player => player.id);
@@ -101,7 +102,7 @@ function TempoPage() {
         setCurrentTempo(0);
         setResetTimer(true);
         setTempoType(null);
-    };
+    }; 
 
     // Handle player click for substitution
     const handlePlayerClick = (player) => {
