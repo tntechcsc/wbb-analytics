@@ -7,8 +7,9 @@ const shotsRoutes = require('./routes/shotsRoutes');
 const temposRoutes = require('./routes/temposRoutes');
 const seasonRoutes = require('./routes/seasonRoutes');
 const userRoutes = require('./routes/usersRoutes');
-require("dotenv").config();
 const app = express();
+const DMname = process.env.REACT_APP_DOMAIN_NAME;
+
 
 const cors = require('cors');
 app.use(cors({origin: true}));
