@@ -1,47 +1,33 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import './HomePage.css';
 
-const SessionOption = ({isOpen,onClose}) => {
+const SessionOption = ({ isOpen, onClose }) => {
     let navigate = useNavigate();
-    const [check1, setCheck1] = useState(0);
-    const [data, setData] = useState([]);
     
-    const gotoSession = (check) => {
-        setCheck1(check)
-        if(check !== 0)
-        {
-        let path = '/CreateSession';
-        navigate(path,
-            {
-                state: { ID: check1 }
-        });
+    const gotoSession = (sessionType) => {
+        onClose(); // Close the modal first
+        if (sessionType ==='practice') {
+            navigate('/createSession');
+        } else if (sessionType ==='game') {
+            navigate('/createGame');
         }
     };
-    const useEffect = () => {
-    };
-    return(
+    
+    if(!isOpen) return null;
 
-        isOpen && (
-            <div className="modal-overlay">
-                <div className="modal-content">
-                    <section>
-                    <button className="close-button" onClick={onClose}>X</button>
-                        <h2>Select Session type</h2>
-                    <section>
-                        <div>
-                            <button className="Linkish-Button" onClick={() =>gotoSession(1)} >Create Practice</button>
-                        </div>
-                        <div>
-                            <button className="Linkish-Button" onClick={() =>gotoSession(2)}>Create Game</button>
-                        </div>
-                    </section>
-                    </section>
-                </div>
+    return (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <button className="close-button" onClick={onClose}>X</button>
+            <h2>Select Session Type</h2>
+            <div>
+              <button className="Linkish-Button" onClick={() => gotoSession('practice')}>Create Practice</button>
+              <button className="Linkish-Button" onClick={() => gotoSession('game')}>Create Game</button>
             </div>
-        )
-        
-    );
-};
-
-export default SessionOption;
+          </div>
+        </div>
+      );
+    };
+    
+    export default SessionOption;

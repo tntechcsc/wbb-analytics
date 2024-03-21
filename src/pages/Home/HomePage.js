@@ -1,36 +1,34 @@
 // HomePage.js
-
-import React,{useState} from 'react';
-import { Link, Navigate } from 'react-router-dom';
+import React, { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import SessionOption from './SessionOption.js';
+import MainLayout from '../../layouts/MainLayout.js' // Import the MainLayout component
 import './HomePage.css';
 import logo from '../../images/nESTlogo.png';
 
 const HomePage = () => {
   let navigate = useNavigate();
-  const [isModelOpen, setModelOpen] = useState(false);
+  const [isModalOpen, setModalOpen] = useState(false);
+  
   const gotoStats = () => {
-    const path = '/teamstats';
-    navigate(path);
+    navigate('/teamstats');
   };
-  const gotoSession = () => {
-    const path = '/createsession';
-    navigate(path);
-  };
+  
   return (
-    <div className="home-page-container">
-        <button onClick={() => gotoSession()} className="Linkish-Button1">
-          New Session
-        </button>
-        <button onClick={() => gotoStats()} className="Linkish-Button2">
-          Stats
-        </button>
+    <MainLayout> {/* Wrap the content of HomePage inside MainLayout */}
+      <div className="home-page-container">
+          <button onClick={() => setModalOpen(true)} className="Linkish-Button1">
+            New Session
+          </button>
+          <button onClick={() => gotoStats()} className="Linkish-Button2">
+            Stats
+          </button>
 
-      <section className="about">
-      </section>
-      <SessionOption isOpen={isModelOpen} onClose={() => setModelOpen(false)}/>
-    </div>
+        <section className="about">
+        </section>
+        <SessionOption isOpen={isModalOpen} onClose={() => setModalOpen(false)}/>
+      </div>
+    </MainLayout>
   );
 };
 

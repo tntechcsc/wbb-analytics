@@ -12,8 +12,8 @@ const drillSchema = new Schema({
     practice_id: { type: Schema.Types.ObjectId, ref: 'Practice', required: true },
     name: { type: String, required: true },
     tempo_events: [{ type: Schema.Types.ObjectId, ref: 'TempoEvent', default: [] }],
-    shot_events: [{ type: Schema.Types.ObjectId, ref: 'ShotEvent', default: [] }]
-});
+    shot_events: [{ type: Schema.Types.ObjectId, ref: 'ShotEvent', default: [] }],
+    players_involved: [{ type: Schema.Types.ObjectId, ref: 'Player', default: [] }]
+}); 
 
 module.exports = mongoose.model('Drill', drillSchema);
- 
