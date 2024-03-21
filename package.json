@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "os-browserify": "^0.3.0"
+  }
+}

@@ -9,22 +9,23 @@ const PlayersPage = () => {
   const [selectedSession, setSelectedSession] = useState('');
   const [selectedDrill, setSelectedDrill] = useState('');
   const [filteredDrills, setFilteredDrills] = useState([]);
-
+  const serverUrl = process.env.REACT_APP_SERVER_URL;
   useEffect(() => {
+    const serverUrl = process.env.REACT_APP_SERVER_URL;
     // Fetch players
-    fetch('http://localhost:3001/api/players')
+    fetch(serverUrl + '/api/players')
       .then(response => response.json())
       .then(data => setPlayers(data))
       .catch(error => console.error('Failed to fetch players:', error));
 
     // Fetch sessions
-    fetch('http://localhost:3001/api/sessions')
+    fetch(serverUrl + '/api/sessions')
       .then(response => response.json())
       .then(data => setSessions(data))
       .catch(error => console.error('Failed to fetch sessions:', error));
 
     // Fetch drills
-    fetch('http://localhost:3001/api/drills')
+    fetch(serverUrl + '/api/drills')
       .then(response => response.json())
       .then(data => setDrills(data))
       .catch(error => console.error('Failed to fetch drills:', error));
@@ -33,7 +34,7 @@ const PlayersPage = () => {
   useEffect(() => {
     if (selectedSession) {
       // Fetch drills for the selected session
-      fetch(`http://localhost:3001/api/sessions/${selectedSession}/drills`)
+      fetch(serverUrl + `/api/sessions/${selectedSession}/drills`)
         .then(response => response.json())
         .then(data =>{ setFilteredDrills(data);
          console.log(data); }) // This will be the array of drills

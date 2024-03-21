@@ -16,12 +16,14 @@ function TempoPage() {
     const [recordedTempo, setRecordedTempo] = useState(null);
     const [lastTempo, setLastTempo] = useState(null);
     const [tempoType, setTempoType] = useState(null);
-
+    const serverUrl = process.env.REACT_APP_SERVER_URL;
     const [playersOnCourt, setPlayersOnCourt] = useState([]);
     const [allPlayers, setAllPlayers] = useState([]);
 
     useEffect(() => {
-        fetch('http://localhost:3001/api/players')
+        
+        console.log(serverUrl) 
+        fetch(serverUrl + '/api/players')
             .then(response => response.json())
             .then(data => {
                 const playersData = data.map(player => ({
@@ -46,7 +48,7 @@ function TempoPage() {
             timestamp: new Date()
         };
 
-        fetch('http://localhost:3001/api/tempos', {
+        fetch(serverUrl + '/api/tempos', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

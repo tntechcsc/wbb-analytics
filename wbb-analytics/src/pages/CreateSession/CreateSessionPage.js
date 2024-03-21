@@ -35,6 +35,7 @@ const CreateSessionsPage = () => {
   const [team, setOpponentTeam] = useState('');
   const [time, setTime] = useState('');
   const [isSessionInfoModalOpen, setSessionInfoModalOpen] = useState(false); // State for SessionInfoModal
+  const serverUrl = process.env.REACT_APP_SERVER_URL;
  const handleAddDrill = (name, type) => {
     
     if (selectedDrillIndex !== null) {
@@ -134,7 +135,7 @@ const CreateSessionsPage = () => {
         shot_events: [],
       };
       console.log(drillData);
-      fetch('http://localhost:3001/api/drills', {
+      fetch(serverUrl + '/api/drills', {
         method: 'POST',
           headers: {
               'Content-Type': 'application/json'
@@ -168,7 +169,7 @@ const CreateSessionsPage = () => {
         players: [],
 
       };
-      const respons = fetch('http://localhost:3001/api/seasons', {
+      const respons = fetch(serverUrl + '/api/seasons', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -198,7 +199,7 @@ const CreateSessionsPage = () => {
 
     };
       // Send POST request to save session data
-      const respons = fetch('http://localhost:3001/api/sessions', {
+      const respons = fetch(serverUrl + '/api/sessions', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -248,7 +249,7 @@ const CreateSessionsPage = () => {
     
     const FetchData = async () => {
       try {
-        const playerResponse = await fetch('http://localhost:3001/api/players');
+        const playerResponse = await fetch(serverUrl + '/api/players');
         const playerData = await playerResponse.json();
         const formattedPlayer = playerData.map(player => {
           const Pname = player.name;
@@ -262,7 +263,7 @@ const CreateSessionsPage = () => {
         console.error('Failed to fetch players:', error);
       }
       try {
-        const seasonResponse = await fetch('http://localhost:3001/api/seasons');
+        const seasonResponse = await fetch(serverUrl + '/api/seasons');
         const seasonData = await seasonResponse.json();
         const formattedSeasons = seasonData.map(season => {
           const seasonID = season._id.toString();
