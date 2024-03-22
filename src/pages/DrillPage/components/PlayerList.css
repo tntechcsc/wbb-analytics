@@ -15,14 +15,15 @@
 }
 
 .PlayerCircle {
-  width: 200px;
-  height: 200px;
+  width: 75px;
+  height: 75px;
   border-radius: 50%;
-  background-color: #ccc;
+  background-color: #4f2984;
   display: flex;
   justify-content: center;
   align-items: center;
   font-size: 3em;
+  color: #ffd700; /* This sets the font color to gold */
 }
 
 .PlayerName {

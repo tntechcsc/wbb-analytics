@@ -42,6 +42,10 @@ const chartOptions = {
 };
 
 function TeamStats() {
+  // Define the base URL for your API
+  const BASE_URL = 'http://10.105.194.195:3001';
+  // const BASE_URL = 'http://localhost:3001';
+
   const [sessions, setSessions] = useState([]);
   const [allDrills, setAllDrills] = useState([]);
   const [filteredDrills, setFilteredDrills] = useState([]);
