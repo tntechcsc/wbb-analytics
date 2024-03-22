@@ -7,7 +7,7 @@ import TeamStats from './pages/TeamStats/TeamStats';
 import CreateSessionsPage from './pages/SessionPage/Session';
 import DrillPage from './pages/DrillPage/Drill';
 import LoginPage from './pages/Login/LoginPage';
-import PrivateRoute from './components/privateRoute';
+import PrivateRoute from './Private/privateRoute';
 
 
 

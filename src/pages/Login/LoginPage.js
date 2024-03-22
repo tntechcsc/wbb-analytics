@@ -51,7 +51,9 @@ const LoginPage = () => {
         auth.loginAction({username: username, password: password,token: content.token});
         return;
         }
+        else{
         setIncorrect(true);
+        }
     }
     return(
             <div className="login-page-container">

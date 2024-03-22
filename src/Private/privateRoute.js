@@ -6,6 +6,7 @@ const PrivateRoutes = () => {
     const user = useAuth();
     if (!user.token) 
     {
+    console.log('route has failed');
     return <Navigate to="/"/>
     }
     return <Outlet/>;

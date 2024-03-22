@@ -20,16 +20,12 @@ const HomePage = () => {
   return (
     <MainLayout> {/* Wrap the content of HomePage inside MainLayout */}
       <div className="home-page-container">
-          <button onClick={() => auth.logOut()} className="log-out">
-            logout
-          </button>
           <button onClick={() => setModalOpen(true)} className="Linkish-Button1">
             New Session
           </button>
           <button onClick={() => gotoStats()} className="Linkish-Button2">
             Stats
           </button>
-
         <section className="about">
         </section>
         <SessionOption isOpen={isModalOpen} onClose={() => setModalOpen(false)}/>

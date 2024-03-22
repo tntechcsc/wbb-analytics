@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const Tempo = require('../models/tempos'); // Adjust the path as necessary
+const Tempo = require('../models/tempo'); // Adjust the path as necessary
 const mongoose = require('mongoose');
 const Joi = require('joi');
 

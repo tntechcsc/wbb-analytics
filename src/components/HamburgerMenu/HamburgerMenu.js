@@ -6,8 +6,10 @@ import './HamburgerMenu.css'; // Ensure your CSS file is correctly imported
 import logoPath from '../../images/nESTlogo.png'; // Update this path to where your logo is stored
 import 'react-datepicker/dist/react-datepicker.css';
 import PracticesModal from '../PracticesModal'; // Adjust the path according to your file structure
+import { useAuth } from '../../hooks/AuthProvider';
 
 export default props => {
+  const auth = useAuth();
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [showSessionOverlay, setShowSessionOverlay] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null); // To store user-selected date
@@ -100,7 +102,7 @@ const fetchPracticesForDate = async (date) => {
         </Link>
         {/* Toggle between Sign In/Sign Out based on authentication state */}
         {/* This example uses a placeholder path for illustration */}
-        <Link className="menu-item" to="/">
+        <Link onClick={() => auth.logOut()} className="menu-item" to="/">
           Sign In/Sign Out
         </Link>
         {/* Add additional menu items as needed */}
