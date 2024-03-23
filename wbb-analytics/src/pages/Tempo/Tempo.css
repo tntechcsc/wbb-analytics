@@ -7,6 +7,22 @@
     overflow: hidden; /* Prevents scrolling if content overflows */
 }
 
+.SubButton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: calc(15% - 40px); /* 50% for two buttons, minus double the padding */
+    height: calc(100% - 40px); /* 100% of the container's height, minus double the padding */
+    font-size: 1em;
+    text-align: center;
+    border: none;
+    border-radius: 10px;
+    background-color: green;
+    color: White;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
 .TopContainer {
     display: flex;
     height: 67vh; /* 2/3 of the viewport height */

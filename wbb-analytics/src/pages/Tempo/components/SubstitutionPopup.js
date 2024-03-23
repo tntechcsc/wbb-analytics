@@ -12,9 +12,6 @@ function SubstitutionPopup({ isOpen, onClose, onSubstitute, playersOnCourt, allP
         <div>
         <ClickAwayListener onClickAway={onClose}>
         <div className="Popup">
-            <div class="relative h-32 w-32 ...">
-                <div class="absolute top-0 right-0 h-16 w-16 ..."><IoCloseSharp onClick={onClose}></IoCloseSharp></div>
-            </div>
             {playersNotOnCourt.map(player => (
                 <div key={player.number} className="PopupPlayerContainer" onClick={() => onSubstitute(player)}>
                     <div className="PopupPlayerCircle">{player.number}</div>
