@@ -18,3 +18,9 @@ services:
     image: mongo
     ports:
       - "27017:27017"
+  nginx:
+    build: ./nginx-config
+    ports:
+      - "80:80"
+    depends_on:
+      - frontend
