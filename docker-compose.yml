@@ -1,0 +1,50 @@
+version: '4'
+services:
+  frontend:
+    build: ./wbb-analytics
+    container_name: frontend
+    hostname: frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    networks: 
+      - my-net
+    stdin_open: true
+    tty: true
+  backend:
+    build: ./server
+    container_name: backend
+    hostname: backend
+    ports:
+      - "3001:3001"
+    networks: 
+      - my-net
+    depends_on:
+      - database
+  database:
+    container_name: mongo
+    image: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - 'data-storage:/data/db'
+  nginx:
+    build: ./nginx-config
+    container_name: nginx
+    hostname: nginx
+    ports:
+      - "80:80"
+    networks: 
+      - my-net
+    depends_on:
+      - frontend
+    restart: "always"
+    volumes:
+      - ./nginx-config/default.conf:/etc/nginx/conf.d/default.conf
+      - ./nginx-config/nginx.conf:/etc/nginx/nginx.conf
+networks:
+  my-net:
+    driver: bridge
+volumes:
+  data-storage:

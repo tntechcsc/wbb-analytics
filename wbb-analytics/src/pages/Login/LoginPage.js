@@ -13,11 +13,12 @@ const LoginPage = () => {
     const [incorrect,setIncorrect] = useState(false);
     useEffect(() => {
         const serverUrl = process.env.REACT_APP_SERVER_URL;
+        console.log("lets, start");
         const FetchData = async () => {
             try
             {
             
-            console.log(serverUrl)
+            console.log(serverUrl);
             await fetch(serverUrl + '/api/users')
                 .then(response => response.json())
                 .then(data => {

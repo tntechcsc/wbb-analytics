@@ -42,6 +42,7 @@ const chartOptions = {
 };
 
 function TeamStats() {
+  const serverUrl = process.env.REACT_APP_SERVER_URL;
   const [sessions, setSessions] = useState([]);
   const [allDrills, setAllDrills] = useState([]);
   const [filteredDrills, setFilteredDrills] = useState([]);
@@ -71,7 +72,7 @@ function TeamStats() {
       const drillIdParam = urlParams.get('drillId');
 
       try {
-        const sessionResponse = await fetch('http://localhost:3001/api/sessions');
+        const sessionResponse = await fetch(serverUrl + '/api/sessions');
         const sessionData = await sessionResponse.json();
         const formattedSessions = sessionData.map(session => {
           const date = new Date(session.date); // Create a date object
@@ -91,7 +92,7 @@ function TeamStats() {
           setSelectedSession(formattedSessions[0].value);
         }
 
-        const drillResponse = await fetch('http://localhost:3001/api/drills');
+        const drillResponse = await fetch(serverUrl + '/api/drills');
         const drillData = await drillResponse.json();
         setAllDrills(drillData);
         if (drillIdParam) {
@@ -100,7 +101,7 @@ function TeamStats() {
           setSelectedDrill(drillData[0]._id.toString());
         }
 
-        const tempoResponse = await fetch('http://localhost:3001/api/tempos');
+        const tempoResponse = await fetch(serverUrl + '/api/tempos');
         const tempoData = await tempoResponse.json();
         setAllTempos(tempoData);
       } catch (error) {
