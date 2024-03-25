@@ -1,8 +1,0 @@
-{
-  "devDependencies": {
-    "file-loader": "^6.2.0"
-  },
-  "dependencies": {
-    "react-burger-menu": "^3.0.9"
-  }
-}
