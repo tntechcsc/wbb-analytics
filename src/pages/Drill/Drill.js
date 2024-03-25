@@ -220,8 +220,8 @@ function TempoPage() {
                                     onClick={(area) => courtClicked(area)}
 
                                 />
-                                {/* isPlayerSelectedforShot && */}
-                                {isShotPopupOpen && (
+                                {/*  */}
+                                {isShotPopupOpen && isPlayerSelectedforShot && (
                                     <>
                                     <div className="Overlay" onClick={handleCourtOverlayClick}></div>
                                     <ShotPopup
