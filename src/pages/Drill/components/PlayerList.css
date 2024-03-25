@@ -1,0 +1,62 @@
+.PlayerList {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.PlayerContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  margin: 10px;
+  width: calc(33.333% - 20px);
+}
+
+.PlayerCircle {
+  width: 75px;
+  height: 75px;
+  border-radius: 50%;
+  background-color: #4f2984;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 3em;
+  color: #ffd700; /* This sets the font color to gold */
+}
+
+.PlayerName {
+  font-size: 1.5em;
+  margin-top: 10px;
+}
+
+/* Media queries for tablet */
+@media (max-width: 768px) {
+  .PlayerContainer {
+    width: calc(50% - 20px); /* Adjust to 50% for 2 players per row */
+  }
+  .PlayerCircle {
+    width: 150px; /* Smaller circles for smaller screens */
+    height: 150px;
+    font-size: 2em; /* Adjust font size accordingly */
+  }
+  .PlayerName {
+    font-size: 1.5em; /* Adjust font size accordingly */
+  }
+}
+
+/* Media queries for mobile phones */
+@media (max-width: 480px) {
+  .PlayerContainer {
+    width: calc(100% - 20px); /* Full width for 1 player per row */
+  }
+  .PlayerCircle {
+    width: 100px; /* Even smaller circles for mobile screens */
+    height: 100px;
+    font-size: 1.5em; /* Adjust font size accordingly */
+  }
+  .PlayerName {
+    font-size: 1em; /* Smaller font size for the names */
+  }
+}

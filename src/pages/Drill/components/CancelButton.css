@@ -1,0 +1,19 @@
+.CancelButton {
+    padding: 10px 20px; /* Adjust padding as needed */
+    font-size: 1em; /* Adjust font size as needed */
+    background-color: orange; /* Adjust background color as needed */
+    color: white;
+    border: none;
+    border-radius: 20px; /* Rounded corners */
+    cursor: pointer;
+    width: 200px; /* Adjust width to content */
+    height: 100px;
+    margin: 0 auto; /* Center the button horizontally */
+    display: block; /* Block display to apply margin auto */
+  }
+  
+  .CancelButton.disabled {
+    background-color: #ccc; /* Gray color for disabled appearance */
+    color: #666; /* Optional: dim the text color too */
+    cursor: not-allowed; /* Change the cursor to indicate disabled state */
+  }

@@ -1,0 +1,38 @@
+.selector-label {
+    margin-right: 10px;
+    color: var(--text-color); /* Assuming you have a text color defined */
+    font-weight: bold;
+  }
+  
+  .selector-select {
+    padding: 10px 15px;
+    font-size: 16px;
+    width: 250px; /* Or any fixed width or percentage you prefer */
+    margin-right: 10px;
+    border: 2px solid #ccc; /* Stylish border */
+    border-radius: 4px; /* Rounded corners for modern look */
+    background-color: var(--card-bg-color); /* Assuming you have a background color defined */
+    color: var(--text-color-dark); /* Text color */
+    -webkit-appearance: none; /* Removes default styling on iOS */
+    -moz-appearance: none; /* Removes default styling on Firefox */
+    appearance: none; /* Standard syntax */
+  }
+  
+  .selector-select:focus {
+    outline: none;
+    border-color: var(--primary-color); /* Highlight color when focused */
+  }
+  
+  /* Styles for the custom arrow - optional
+  .selector-select {
+    background-image: url('path-to-your-custom-arrow-image.svg');
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 12px;
+  }*/
+  
+  /* Remove margin from the last selector */
+  .selector-select:last-child {
+    margin-right: 0;
+  }
+  
