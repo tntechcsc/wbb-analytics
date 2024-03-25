@@ -247,7 +247,7 @@ function TeamStats() {
           setSelectedSeason(defaultSeasonId); // Set default season
 
           // Fetch practices for default season
-          const practicesResponse = await fetch(`http://localhost:3001/api/practices`);
+          const practicesResponse = await fetch(`http://localhost:3001/api/practices/bySeason/${defaultSeasonId}`);
           const practicesData = await practicesResponse.json();
           console.log("Initial Practices")
           console.log(practicesData)
@@ -257,7 +257,8 @@ function TeamStats() {
             setSelectedpractice(defaultpracticeId); // Set default practice
 
             // Fetch Drills for default practice
-            const drillsResponse = await fetch(`http://localhost:3001/api/drills`);
+            console.log(defaultpracticeId)
+            const drillsResponse = await fetch(`http://localhost:3001/api/drills/practice/${defaultpracticeId}`);
             const drillsData = await drillsResponse.json();
             console.log("Initial Drills")
             console.log(drillsData)
@@ -284,7 +285,7 @@ function TeamStats() {
     if (selectedSeason) {
       const fetchpracticesForSeason = async () => {
         try {
-          const response = await fetch(`http://localhost:3001/api/practices/season/${selectedSeason}`);
+          const response = await fetch(`http://localhost:3001/api/practices/bySeason/${selectedSeason}`);
           const practicesData = await response.json();
           setpractices(practicesData);
           setError(''); // Reset any previous errors

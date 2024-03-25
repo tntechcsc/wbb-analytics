@@ -56,7 +56,7 @@ router.get('/name/:name', isAuthenticated, async (req, res) => {
 });
 
 // GET a drill by practice ID
-router.get('/players/:practice_id', isAuthenticated, async (req, res) => {
+router.get('/practice/:practice_id', isAuthenticated, async (req, res) => {
     try {
         const drills = await Drill.find({ practice_id: req.params.practice_id });
         if (!drills.length) {
