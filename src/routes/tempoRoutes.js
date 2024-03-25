@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const Tempo = require('../models/tempos'); // Adjust the path as necessary
+const Tempo = require('../models/tempo'); // Adjust the path as necessary
 const mongoose = require('mongoose');
 const Joi = require('joi');
 
@@ -76,7 +76,7 @@ router.get('/byGameOrPractice/:gameOrPracticeId', isAuthenticated, async (req, r
 });
 
 // GET tempo events by player_id
-router.get('/byPlayer/:playerId', isAuthenticated, async (req, res) => {
+/*router.get('/byPlayer/:playerId', isAuthenticated, async (req, res) => {
     try {
         const tempos = await Tempo.find({ player_ids: mongoose.Types.ObjectId(req.params.playerId) })
                                   .populate(['gameOrPractice_id', 'player_ids']);
@@ -84,6 +84,17 @@ router.get('/byPlayer/:playerId', isAuthenticated, async (req, res) => {
     } catch (err) {
         res.status(500).json({ message: 'Internal server error', error: err.message });
     }
+});*/
+router.get('/byPlayer/:playerID', isAuthenticated, async (req, res) => { //Get drills by a particular player involved
+    try {
+      const tempo = await Tempo.find({ player_ids: { $in: [req.params.playerID] } }); //players_involved: { $in: [req.params.playerID] }, mongoose.Types.ObjectId
+      if (tempo.length === 0) {
+          return res.status(404).json({ message: 'This player was not involved in any tempos' });
+      }
+      res.json(tempo);
+  } catch (err) {
+      res.status(500).json({ message: 'Internal server error', error: err.message });
+  }
 });
 
 // GET tempo events by tempo_type

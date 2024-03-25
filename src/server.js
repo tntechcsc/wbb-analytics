@@ -24,11 +24,11 @@ let mongoURI;
 
 const env = process.env.NODE_ENV;
 // Determine the URI based on NODE_ENV
-if (env.includes('_OFFCAMPUS')) {
-  mongoURI = process.env[`MONGO_URI_${env}`];
-} else {
+//if (env.includes('_OFFCAMPUS')) {
+  //mongoURI = process.env[`MONGO_URI_${env}`];
+//} else {
   mongoURI = process.env[`MONGO_URI_${env}`] || process.env.MONGO_URI_DEVELOPMENT;
-}
+//}
 
 mongoose.connect(mongoURI)
   .then(() => console.log(`Connected to MongoDB at ${mongoURI}`))

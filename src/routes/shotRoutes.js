@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const Shot = require('../models/shots'); // Adjust the path as necessary
+const Shot = require('../models/shot'); // Adjust the path as necessary
 const mongoose = require('mongoose');
 const Joi = require('joi');
 

@@ -115,7 +115,7 @@ router.get('/shot/:shotId', isAuthenticated, async (req, res) => {
 });
 
 // GET a drill by players involved
-router.get('/players/:playerId', isAuthenticated, async (req, res) => {
+/*router.get('/players/:playerId', isAuthenticated, async (req, res) => {
     try {
         const drills = await Drill.find({ players_involved: req.params.playerId }).populate('practice_id tempo_events shot_events players_involved');
         if (!drills.length) {
@@ -125,7 +125,18 @@ router.get('/players/:playerId', isAuthenticated, async (req, res) => {
     } catch (err) {
         res.status(500).json({ message: 'Internal server error', error: err.message });
     }
-});
+});*/
+router.get('/players/:playerID', async (req, res) => { //Get drills by a particular player involved
+    try {
+      const drills = await Drill.find({ players_involved: { $in: [req.params.playerID] } });
+      if (drills.length === 0) {
+          return res.status(404).json({ message: 'This player was not involved in any drills' });
+      }
+      res.json(drills);
+  } catch (err) {
+      res.status(500).json({ message: 'Internal server error', error: err.message });
+  }
+  });
 
 // POST a new drill with validation
 router.post('/', isAuthenticated, async (req, res) => {
