@@ -104,12 +104,6 @@ useEffect(() => {
     } catch (error){
       console.error("Failed to fetch session data: ", error);
     }
-    try{
-      const drillByPrac = await fetch('http://localhost:3001/api/practices/bySeason/' + "65faf0375821b80011711d6e");
-      const drillData = await drillByPrac.json();
-      console.log(drillData)
-    } catch (error){
-    }
   };
   fetchInitialData();
   //submitTempo();
