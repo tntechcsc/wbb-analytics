@@ -58,8 +58,7 @@ router.get('/byDate/:date', isAuthenticated, async (req, res) => {
 // GET practices by season_id
 router.get('/bySeason/:seasonId', isAuthenticated, async (req, res) => {
     try {
-        const practices = await Practice.find({ season_id: mongoose.Types.ObjectId(req.params.seasonId) })
-                                        .populate('season_id drills team_purple team_gray');
+        const practices = await Practice.find({ season_id: mongoose.Types.ObjectId(req.params.season_id) });
         res.json(practices);
     } catch (err) {
         res.status(500).json({ message: 'Internal server error', error: err.message });

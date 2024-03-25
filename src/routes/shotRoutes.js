@@ -24,7 +24,7 @@ const shotSchema = Joi.object({
 // GET all shots without pagination
 router.get('/', isAuthenticated, async (req, res) => {
     try {
-        const shots = await Shot.find().populate(['gameOrPractice_id', 'player_id']);
+        const shots = await Shot.find();
         res.json(shots);
     } catch (err) {
         res.status(500).json({ message: 'Internal server error', error: err.message });

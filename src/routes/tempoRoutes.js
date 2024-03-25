@@ -23,7 +23,7 @@ const tempoSchema = Joi.object({
 // GET all tempo events without pagination
 router.get('/', isAuthenticated, async (req, res) => {
     try {
-        const tempos = await Tempo.find().populate(['gameOrPractice_id', 'player_ids']);
+        const tempos = await Tempo.find();
         res.json(tempos);
     } catch (err) {
         res.status(500).json({ message: 'Internal server error', error: err.message });
