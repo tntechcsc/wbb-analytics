@@ -24,7 +24,7 @@ const shotSchema = Joi.object({
 // GET all shots without pagination
 router.get('/', isAuthenticated, async (req, res) => {
     try {
-        const shots = await Shot.find().populate(['gameOrPractice_id', 'player_id']);
+        const shots = await Shot.find();
         res.json(shots);
     } catch (err) {
         res.status(500).json({ message: 'Internal server error', error: err.message });
@@ -47,7 +47,7 @@ router.get('/:id', isAuthenticated, async (req, res) => {
 // GET a shot by gameOrPractice_id
 router.get('/byGameOrPractice/:gameOrPracticeId', isAuthenticated, async (req, res) => {
     try {
-        const shots = await Shot.find({ gameOrPractice_id: mongoose.Types.ObjectId(req.params.gameOrPracticeId) }).populate(['gameOrPractice_id', 'player_id']);
+        const shots = await Shot.find({ gameOrPractice_id: mongoose.Types.ObjectId(req.params.gameOrPracticeId) });
         if (!shots.length) {
             return res.status(404).json({ message: 'No shots found for the given gameOrPractice_id' });
         }
@@ -60,7 +60,7 @@ router.get('/byGameOrPractice/:gameOrPracticeId', isAuthenticated, async (req, r
 // GET a shot by player_id
 router.get('/byPlayer/:playerId', isAuthenticated, async (req, res) => {
     try {
-        const shots = await Shot.find({ player_id: mongoose.Types.ObjectId(req.params.playerId) }).populate(['gameOrPractice_id', 'player_id']);
+        const shots = await Shot.find({ player_ids: req.params.playerId }); //Shot model has "player_ids" as an attribute, plural
         if (!shots.length) {
             return res.status(404).json({ message: 'No shots found for the given player_id' });
         }
