@@ -203,8 +203,6 @@ function TempoPage() {
                     )}
                 </div>
                 <div className="RightComponent">
-
-                    </div>
                     <div className="CourtContainer">
                         <div className="grid">
                             <div className="presenter"> 
@@ -222,7 +220,8 @@ function TempoPage() {
                                     onClick={(area) => courtClicked(area)}
 
                                 />
-                                {isShotPopupOpen && isPlayerSelectedforShot && (
+                                {/* isPlayerSelectedforShot && */}
+                                {isShotPopupOpen && (
                                     <>
                                     <div className="Overlay" onClick={handleCourtOverlayClick}></div>
                                     <ShotPopup
@@ -237,6 +236,8 @@ function TempoPage() {
                         </div>
                     </div>
             </div>
+            </div>
+        </div>
             <div className="BottomContainer">
                 <div className="TempoControls">
                     <TempoButton
@@ -285,7 +286,7 @@ function TempoPage() {
                 </div>
             </div>
         </div>
-        </div>
+
     );
 }
 

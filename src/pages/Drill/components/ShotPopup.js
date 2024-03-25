@@ -6,10 +6,14 @@ import { useState } from 'react';
 
 
 import area from './Court';
+import { set } from 'mongoose';
 
 function ShotPopup({ isOpen, onClose}) {
 
     const [isMade, setIsMade] = useState(false);
+    const [setShot, setSetShot] = useState(false);
+    const [isZoneSelected, setIsZoneSelected] = useState(false);
+    const [setClock, setSetClock] = useState(0);
 
     const submitShot = (area, isMade) => {
         const shotData = {
@@ -32,16 +36,30 @@ function ShotPopup({ isOpen, onClose}) {
 
     const handleMade = () => {
         setIsMade(true);
-        submitShot(area.name, true);
-        onClose();
-
+        setSetShot(true);
+        // submitShot(area.name, true);
     }
 
     const handleMissed = () => {
         setIsMade(false);
-        submitShot(area.name, false);
-        onClose();
+        setSetShot(true);
+        handleReady();
+        // submitShot(area.name, false);
     }
+
+    const handleClockClick = (clock) => {
+        setIsZoneSelected(true);
+        setSetClock(clock);
+        handleReady();
+        
+    };
+
+    const handleReady = () => {
+        if (isZoneSelected && setShot) {
+            submitShot(area.name, isMade, setClock);
+            onClose();
+        }
+    };
 
     return (
         <div>
@@ -49,6 +67,7 @@ function ShotPopup({ isOpen, onClose}) {
 
             <div className="CPopup">
                 {/* two buttons for made and missed shots */}
+                <div className = "Title">{isMade}</div>
                    
                     <div className="MadeButton"
                         onClick={() => {
@@ -60,10 +79,13 @@ function ShotPopup({ isOpen, onClose}) {
                         onClick={() => {
                             handleMissed();
                         }}
-                        >Missed</div>
-                    </div>
+                    >Missed</div>
+                    
+                    <div className="ClockButton1" onClick={() => {handleClockClick(1);}}>1-10</div>
+                    <div className="ClockButton2" onClick={() => {handleClockClick(2);}}>11-20</div>
+                    <div className="ClockButton3" onClick={() => {handleClockClick(3);}}>21-30</div>
             
-            
+            </div>
         </ClickAwayListener>
         </div>
     );
