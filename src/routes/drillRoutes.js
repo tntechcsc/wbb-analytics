@@ -19,31 +19,11 @@ const drillSchema = Joi.object({
     players_involved: Joi.array().items(Joi.string().regex(/^[0-9a-fA-F]{24}$/))
 });
 
-// GET all drills with pagination and optional filtering
+// GET all drills
 router.get('/', isAuthenticated, async (req, res) => {
-    const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 10;
-    const skip = (page - 1) * limit;
-    const filters = {};
-    
-    // Add optional filters based on query parameters for tempo_events, shot_events, and players_involved
-    ['tempo_events', 'shot_events', 'players_involved'].forEach(filter => {
-        if (req.query[filter]) {
-            filters[filter] = mongoose.Types.ObjectId(req.query[filter]);
-        }
-    });
-
     try {
-        const drills = await Drill.find(filters)
-                                  .populate('practice_id tempo_events shot_events players_involved')
-                                  .skip(skip).limit(limit);
-        const totalDrills = await Drill.countDocuments(filters);
-        res.json({
-            total: totalDrills,
-            page,
-            totalPages: Math.ceil(totalDrills / limit),
-            drills
-        });
+        const drills = await Drill.find().populate('practice_id tempo_events shot_events players_involved');
+        res.json(drills);
     } catch (err) {
         res.status(500).json({ message: 'Internal server error', error: err.message });
     }

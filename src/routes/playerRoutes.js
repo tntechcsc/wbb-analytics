@@ -16,28 +16,15 @@ const isAuthenticated = (req, res, next) => {
     next();
 };
 
-// GET all players with pagination and optional sorting
+// GET all players
 router.get('/', isAuthenticated, async (req, res) => {
-    const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 10;
-    const skip = (page - 1) * limit;
-    const sort = req.query.sort || 'name'; // Sort players by name by default
-
     try {
-        const players = await Player.find().sort(sort).skip(skip).limit(limit).populate('seasons');
-        const totalPlayers = await Player.countDocuments();
-
-        res.json({
-            total: totalPlayers,
-            page,
-            totalPages: Math.ceil(totalPlayers / limit),
-            players
-        });
+        const players = await Player.find().populate('seasons');
+        res.json(players);
     } catch (err) {
         res.status(500).json({ message: 'Internal server error', error: err.message });
     }
 });
-
 
 // GET a player by ID
 router.get('/:id', isAuthenticated, async (req, res) => {

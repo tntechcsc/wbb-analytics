@@ -20,24 +20,11 @@ const gameSchema = Joi.object({
     shot_events: Joi.array().items(Joi.string().regex(/^[0-9a-fA-F]{24}$/))
 });
 
-// GET all games with pagination and optional sorting
+// GET all games
 router.get('/', isAuthenticated, async (req, res) => {
-    const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 10;
-    const skip = (page - 1) * limit;
-    const sort = req.query.sort || 'date'; // Sort games by date by default
-
     try {
-        const games = await Game.find()
-                                .populate('season_id tempo_events shot_events')
-                                .skip(skip).limit(limit).sort(sort);
-        const totalGames = await Game.countDocuments();
-        res.json({
-            total: totalGames,
-            page,
-            totalPages: Math.ceil(totalGames / limit),
-            games
-        });
+        const games = await Game.find().populate('season_id tempo_events shot_events');
+        res.json(games);
     } catch (err) {
         res.status(500).json({ message: 'Internal server error', error: err.message });
     }

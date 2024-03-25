@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const Shot = require('../models/shots'); // Adjust the path as necessary
+const Shot = require('../models/shot'); // Adjust the path as necessary
 const mongoose = require('mongoose');
 const Joi = require('joi');
 
@@ -21,35 +21,11 @@ const shotSchema = Joi.object({
     timestamp: Joi.date().required()
 });
 
-// GET all shots with pagination, sorting, and optional filtering
+// GET all shots without pagination
 router.get('/', isAuthenticated, async (req, res) => {
-    const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 10;
-    const skip = (page - 1) * limit;
-    const sort = req.query.sort || '-timestamp'; // Sort shots by timestamp by default
-
-    // Optional filtering
-    const filters = {};
-    if(req.query.player_id) filters.player_id = mongoose.Types.ObjectId(req.query.player_id);
-    if(req.query.made !== undefined) filters.made = req.query.made === 'true';
-    if(req.query.zone) filters.zone = req.query.zone;
-    if(req.query.shot_clock_time) filters.shot_clock_time = req.query.shot_clock_time;
-    if(req.query.onModel) filters.onModel = req.query.onModel;
-    if(req.query.gameOrPractice_id) filters.gameOrPractice_id = mongoose.Types.ObjectId(req.query.gameOrPractice_id);
-
     try {
-        const shots = await Shot.find(filters)
-                                .populate(['gameOrPractice_id', 'player_id'])
-                                .skip(skip)
-                                .limit(limit)
-                                .sort(sort);
-        const totalShots = await Shot.countDocuments(filters);
-        res.json({
-            total: totalShots,
-            page,
-            totalPages: Math.ceil(totalShots / limit),
-            shots
-        });
+        const shots = await Shot.find().populate(['gameOrPractice_id', 'player_id']);
+        res.json(shots);
     } catch (err) {
         res.status(500).json({ message: 'Internal server error', error: err.message });
     }

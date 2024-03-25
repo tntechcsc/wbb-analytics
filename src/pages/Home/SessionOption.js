@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from "react-router-dom";
-import './HomePage.css';
+import './Home.css';
 
 const SessionOption = ({ isOpen, onClose }) => {
     let navigate = useNavigate();

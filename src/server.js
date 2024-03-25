@@ -8,8 +8,8 @@ const playerRoutes = require('./routes/playerRoutes');
 const seasonRoutes = require('./routes/seasonRoutes');
 const practiceRoutes = require('./routes/practiceRoutes');
 const drillRoutes = require('./routes/drillRoutes');
-const tempoEventRoutes = require('./routes/tempoRoutes');
-const shotEventRoutes = require('./routes/shotRoutes');
+const tempoRoutes = require('./routes/tempoRoutes');
+const shotRoutes = require('./routes/shotRoutes');
 const gameRoutes = require('./routes/gameRoutes');
 
 const app = express();
@@ -19,16 +19,21 @@ app.use(cors()); // Enable CORS
 // Middleware to parse JSON
 app.use(express.json());
 
-// Determine MongoDB URI based on the environment
+const env = process.env.NODE_ENV || 'DEVELOPMENT'; // Default to 'DEVELOPMENT' if NODE_ENV is not set
+
 let mongoURI;
 
-const env = process.env.NODE_ENV;
-// Determine the URI based on NODE_ENV
-if (env.includes('_OFFCAMPUS')) {
+// Check if the environment is an off-campus variant
+if (env.includes('OFFCAMPUS')) {
+  // Use the off-campus URI corresponding to the current NODE_ENV
   mongoURI = process.env[`MONGO_URI_${env}`];
 } else {
+  // Use the on-campus URI, with a fallback to the development URI if not explicitly set
   mongoURI = process.env[`MONGO_URI_${env}`] || process.env.MONGO_URI_DEVELOPMENT;
 }
+
+console.log(mongoURI); // For debugging: output the determined mongoURI
+
 
 mongoose.connect(mongoURI)
   .then(() => console.log(`Connected to MongoDB at ${mongoURI}`))
@@ -39,8 +44,8 @@ app.use('/api/players', playerRoutes);
 app.use('/api/seasons', seasonRoutes);
 app.use('/api/practices', practiceRoutes);
 app.use('/api/drills', drillRoutes);
-app.use('/api/tempoEvents', tempoEventRoutes);
-app.use('/api/shotEvents', shotEventRoutes);
+app.use('/api/tempos', tempoRoutes);
+app.use('/api/shots', shotRoutes);
 app.use('/api/games', gameRoutes);
 
 const port = process.env.PORT || 3001; // Use environment variable or default to 3001

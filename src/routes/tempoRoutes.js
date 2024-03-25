@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const Tempo = require('../models/tempos'); // Adjust the path as necessary
+const Tempo = require('../models/tempo'); // Adjust the path as necessary
 const mongoose = require('mongoose');
 const Joi = require('joi');
 
@@ -13,39 +13,18 @@ const isAuthenticated = (req, res, next) => {
 // Define Joi schema for tempo validation
 const tempoSchema = Joi.object({
     gameOrPractice_id: Joi.string().regex(/^[0-9a-fA-F]{24}$/).allow(null, ''),
-    onModel: Joi.string().required().valid('Game', 'Practice'),
+    onModel: Joi.string().required().valid('Game', 'Drill'),
     player_ids: Joi.array().items(Joi.string().regex(/^[0-9a-fA-F]{24}$/)).required(),
     tempo_type: Joi.string().required().valid('offensive', 'defensive'),
     transition_time: Joi.number().required(),
     timestamp: Joi.date().required()
 });
 
-// GET all tempo events with pagination, sorting, and optional filtering
+// GET all tempo events without pagination
 router.get('/', isAuthenticated, async (req, res) => {
-    const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 10;
-    const skip = (page - 1) * limit;
-    const sort = req.query.sort || '-timestamp'; // Sort tempo events by timestamp by default
-
-    // Optional filtering
-    const filters = {};
-    if(req.query.onModel) filters.onModel = req.query.onModel;
-    if(req.query.tempo_type) filters.tempo_type = req.query.tempo_type;
-    if(req.query.gameOrPractice_id) filters.gameOrPractice_id = mongoose.Types.ObjectId(req.query.gameOrPractice_id);
-
     try {
-        const tempos = await Tempo.find(filters)
-                                  .populate(['gameOrPractice_id', 'player_ids'])
-                                  .skip(skip)
-                                  .limit(limit)
-                                  .sort(sort);
-        const totalTempos = await Tempo.countDocuments(filters);
-        res.json({
-            total: totalTempos,
-            page,
-            totalPages: Math.ceil(totalTempos / limit),
-            tempos
-        });
+        const tempos = await Tempo.find().populate(['gameOrPractice_id', 'player_ids']);
+        res.json(tempos);
     } catch (err) {
         res.status(500).json({ message: 'Internal server error', error: err.message });
     }

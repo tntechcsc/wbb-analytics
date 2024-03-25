@@ -17,22 +17,11 @@ const isAuthenticated = (req, res, next) => {
     next();
 };
 
-// GET all seasons with pagination
+// GET all seasons without pagination
 router.get('/', async (req, res) => {
-    const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 10;
-    const skip = (page - 1) * limit;
-    const sort = req.query.sort || 'year';
-
     try {
-        const seasons = await Season.find().sort(sort).skip(skip).limit(limit).populate(['players', 'games', 'practices']);
-        const totalSeasons = await Season.countDocuments();
-        res.json({
-            total: totalSeasons,
-            page,
-            totalPages: Math.ceil(totalSeasons / limit),
-            seasons
-        });
+        const seasons = await Season.find().populate(['players', 'games', 'practices']);
+        res.json(seasons);
     } catch (err) {
         res.status(500).json({ message: 'Internal server error', error: err.message });
     }

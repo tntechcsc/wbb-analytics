@@ -19,24 +19,11 @@ const practiceSchema = Joi.object({
     team_gray: Joi.array().items(Joi.string().regex(/^[0-9a-fA-F]{24}$/))
 });
 
-// GET all practices with pagination
+// GET all practices
 router.get('/', isAuthenticated, async (req, res) => {
-    const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 10;
-    const skip = (page - 1) * limit;
-    const sort = req.query.sort || 'date'; // Sort practices by date by default
-
     try {
-        const practices = await Practice.find()
-                                        .populate('season_id drills team_purple team_gray')
-                                        .skip(skip).limit(limit).sort(sort);
-        const totalPractices = await Practice.countDocuments();
-        res.json({
-            total: totalPractices,
-            page,
-            totalPages: Math.ceil(totalPractices / limit),
-            practices
-        });
+        const practices = await Practice.find().populate('season_id drills team_purple team_gray');
+        res.json(practices);
     } catch (err) {
         res.status(500).json({ message: 'Internal server error', error: err.message });
     }
