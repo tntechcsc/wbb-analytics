@@ -81,7 +81,7 @@ useEffect(() => {
     try{
       const sessionResponse = await fetch('http://localhost:3001/api/practices');
       const sessionData = await sessionResponse.json();
-      //console.log(sessionData)
+      console.log(sessionData)
       const formattedSessions = sessionData.map(session => {
         const date = new Date(session.date); // Create a date object
         // Format the date as MM/dd/yyyy
@@ -103,6 +103,12 @@ useEffect(() => {
       }
     } catch (error){
       console.error("Failed to fetch session data: ", error);
+    }
+    try{
+      const drillByPrac = await fetch('http://localhost:3001/api/practices/bySeason/' + "65faf0375821b80011711d6e");
+      const drillData = await drillByPrac.json();
+      console.log(drillData)
+    } catch (error){
     }
   };
   fetchInitialData();
@@ -133,6 +139,7 @@ useEffect(() => {
     { title: "Steals", value: "8.2" },   // Steals per game
   ];
 
+  //This is placeholder data for the eventual additional stats we will be adding
   const teamStatsData = {
     headers: ["GP", "MPG", "PPG", "FGM", "FGA", "FG%", "3PM", "3PA", "3P%", "ORB", "DRB", "RPG", "APG", "SPG", "BPG", "TOV", "PF"],
     rows: [
@@ -170,6 +177,11 @@ useEffect(() => {
     }
   };
 
+  /*
+    This function handles the change of the selected drill within a given session.
+
+    Importantly, it sets the selected drill field to the new drill ID and updates the tempo and shot data to reflect the data from the new drill.
+  */
   const handleDrillChange = (event) => {
     const newDrillId = event.target.value;
     setSelectedDrill(newDrillId);
@@ -214,7 +226,7 @@ useEffect(() => {
     }
     setAvgOffensiveTempo(numOffensive > 0 ? (sumOffensiveTempo / numOffensive).toFixed(2) : 0); //Checks if there are any tempos to average
     setAvgDefensiveTempo(numDefensive > 0 ? (sumDefensiveTempo / numDefensive).toFixed(2) : 0);
-  }
+  };
 
   /*
     This function updates the shot data for the selected drill.
@@ -249,47 +261,7 @@ useEffect(() => {
       }
     }
     setShotClockData(shotDat);
-  }
-
-  const submitTempo = () => {
-    const tempDat = {
-      gameOrPractice_id: "65f8fea3cd927f35da90a9b0", //Same as below hard code
-      onModel: "Practice",
-      player_ids: ["654af8a01963d3698be22110"],
-      tempo_type: "offensive",
-      transition_time: 3.2
-    };
-    fetch('http://localhost:3001/api/tempos', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(tempDat)
-    })
-        .then(response => response.json())
-        .then(data => console.log('Tempo submitted:', data))
-        .catch(error => console.error('Error submitting tempo:', error));
-  }
-
-  const submitDrill = () => {
-    const drillDat = {
-        name: "This is a test instance for the route", // Since DrillID is not used yet
-        practice_id: "65f8fea3cd927f35da90a9b0", //Hard coded lol (this exists I checked(?))
-        tempo_events: [],
-        players_involved: ["654af8a01963d3698be22110"]
-    };
-
-    fetch('http://localhost:3001/api/drills', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(drillDat)
-    })
-        .then(response => response.json())
-        .then(data => console.log('Tempo submitted:', data))
-        .catch(error => console.error('Error submitting tempo:', error));
-};
+  };
   
   return (
     <div className="team-stats-container">

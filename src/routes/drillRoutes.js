@@ -58,7 +58,7 @@ router.get('/name/:name', isAuthenticated, async (req, res) => {
 // GET a drill by practice ID
 router.get('/practice/:practiceId', isAuthenticated, async (req, res) => {
     try {
-        const drills = await Drill.find({ practice_id: req.params.practiceId }).populate('practice_id tempo_events shot_events players_involved');
+        const drills = await Drill.find({ practice_id: req.params.practiceId });
         if (!drills.length) {
             return res.status(404).json({ message: 'No drills found for the given practice' });
         }
