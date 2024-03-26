@@ -19,7 +19,7 @@ const isAuthenticated = (req, res, next) => {
 // GET all players
 router.get('/', isAuthenticated, async (req, res) => {
     try {
-        const players = await Player.find().populate('seasons');
+        const players = await Player.find();
         res.json(players);
     } catch (err) {
         res.status(500).json({ message: 'Internal server error', error: err.message });
@@ -42,7 +42,7 @@ router.get('/:id', isAuthenticated, async (req, res) => {
 // GET players by name (case-insensitive search)
 router.get('/name/:name', isAuthenticated, async (req, res) => {
     try {
-        const players = await Player.find({ name: { $regex: new RegExp(req.params.name, 'i') } }).populate('seasons');
+        const players = await Player.find({ name: { $regex: new RegExp(req.params.name, 'i') } });
         if (!players.length) {
             return res.status(404).json({ message: 'No players found with that name' });
         }
@@ -55,7 +55,7 @@ router.get('/name/:name', isAuthenticated, async (req, res) => {
 // GET players by jersey number
 router.get('/jersey/:jerseyNumber', isAuthenticated, async (req, res) => {
     try {
-        const players = await Player.find({ jersey_number: req.params.jerseyNumber }).populate('seasons');
+        const players = await Player.find({ jersey_number: req.params.jerseyNumber });
         if (!players.length) {
             return res.status(404).json({ message: 'No players found with that jersey number' });
         }

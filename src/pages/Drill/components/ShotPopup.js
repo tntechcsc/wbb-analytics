@@ -1,26 +1,21 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './ShotPopup.css';
 import ClickAwayListener from 'react-click-away-listener';
-import { IoCloseSharp } from "react-icons/io5";
-import { useState } from 'react';
 
+function ShotPopup({ isOpen, onClose, gameOrDrill_id, onModel, player_id, zone }) {
+    const [shotOutcome, setShotOutcome] = useState(null); // 'made' or 'missed'
 
-import area from './Court';
-import { set } from 'mongoose';
-
-function ShotPopup({ isOpen, onClose}) {
-
-    const [isMade, setIsMade] = useState(false);
-    const [setShot, setSetShot] = useState(false);
-    const [isZoneSelected, setIsZoneSelected] = useState(false);
-    const [setClock, setSetClock] = useState(0);
-
-    const submitShot = (area, isMade) => {
+    const submitShot = (isMade, shotClockTime) => {
         const shotData = {
-            area: area,
-            isMade: isMade
-
+            gameOrDrill_id: gameOrDrill_id,
+            onModel: onModel,
+            player_id: player_id,
+            made: isMade === 'made',
+            zone: zone,
+            shot_clock_time: shotClockTime,
+            timestamp: new Date()
         };
+        console.log('Submitting shot:', shotData);
 
         fetch('http://localhost:3001/api/shots', {
             method: 'POST',
@@ -29,66 +24,50 @@ function ShotPopup({ isOpen, onClose}) {
             },
             body: JSON.stringify(shotData)
         })
-            .then(response => response.json())
-            .then(data => console.log('Shot submitted:', data))
-            .catch(error => console.error('Error submitting shot:', error));
+        .then(response => response.json())
+        .then(data => {
+            console.log('Shot submitted:', data);
+            resetAndClose(); // Close the popup after submission
+        })
+        .catch(error => console.error('Error submitting shot:', error));
     };
 
-    const handleMade = () => {
-        setIsMade(true);
-        setSetShot(true);
-        // submitShot(area.name, true);
-    }
-
-    const handleMissed = () => {
-        setIsMade(false);
-        setSetShot(true);
-        handleReady();
-        // submitShot(area.name, false);
-    }
-
-    const handleClockClick = (clock) => {
-        setIsZoneSelected(true);
-        setSetClock(clock);
-        handleReady();
-        
+    const resetAndClose = () => {
+        setShotOutcome(null);
+        onClose();
     };
 
-    const handleReady = () => {
-        if (isZoneSelected && setShot) {
-            submitShot(area.name, isMade, setClock);
-            onClose();
+    const handleClockTimeSelection = (timeMapping) => {
+        if (shotOutcome) {
+            submitShot(shotOutcome === 'made', timeMapping);
+            console.log('Shot submitted:', shotOutcome, timeMapping);
         }
     };
 
-    return (
-        <div>
-        <ClickAwayListener onClickAway={onClose}>
+    const handleShotOutcome = (outcome) => {
+        setShotOutcome(outcome);
+    };
 
-            <div className="CPopup">
-                {/* two buttons for made and missed shots */}
-                <div className = "Title">{isMade}</div>
-                   
-                    <div className="MadeButton"
-                        onClick={() => {
-                            handleMade();  
-                        }}
-                    >Made</div>
-                    <div className="Space"></div>
-                    <div className= "MissedButton"
-                        onClick={() => {
-                            handleMissed();
-                        }}
-                    >Missed</div>
-                    
-                    <div className="ClockButton1" onClick={() => {handleClockClick(1);}}>1-10</div>
-                    <div className="ClockButton2" onClick={() => {handleClockClick(2);}}>11-20</div>
-                    <div className="ClockButton3" onClick={() => {handleClockClick(3);}}>21-30</div>
-            
+    return isOpen ? (
+        <ClickAwayListener onClickAway={resetAndClose}>
+            <div className="ShotPopup">
+                <div className="ShotOutcomeSelection">
+                    {!shotOutcome ? (
+                        <>
+                            <div className="MadeButton" onClick={() => handleShotOutcome('made')}>Made</div>
+                            <div className="MissedButton" onClick={() => handleShotOutcome('missed')}>Missed</div>
+                        </>
+                    ) : (
+                        <div className="ClockTimeSelection">
+                            <div className="ClockButton1" onClick={() => handleClockTimeSelection('first_third')}>1-10</div>
+                            <div className="ClockButton2" onClick={() => handleClockTimeSelection('second_third')}>11-20</div>
+                            <div className="ClockButton3" onClick={() => handleClockTimeSelection('final_third')}>21-30</div>
+                        </div>
+                    )}
+                </div>
             </div>
         </ClickAwayListener>
-        </div>
-    );
+    ) : null;
 }
 
 export default ShotPopup;
