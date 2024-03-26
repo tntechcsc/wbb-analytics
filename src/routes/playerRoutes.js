@@ -19,7 +19,7 @@ const isAuthenticated = (req, res, next) => {
 // GET all players
 router.get('/', isAuthenticated, async (req, res) => {
     try {
-        const players = await Player.find().populate('seasons');
+        const players = await Player.find();
         res.json(players);
     } catch (err) {
         res.status(500).json({ message: 'Internal server error', error: err.message });
