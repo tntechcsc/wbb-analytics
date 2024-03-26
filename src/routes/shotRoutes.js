@@ -34,7 +34,7 @@ router.get('/', isAuthenticated, async (req, res) => {
 // GET a shot by 
 router.get('/:id', isAuthenticated, async (req, res) => {
     try {
-        const shot = await Shot.findById(req.params.id).populate(['gameOrPractice_id', 'player_id']);
+        const shot = await Shot.findById(req.params.id);
         if (!shot) {
             return res.status(404).json({ message: 'Shot not found' });
         }
@@ -73,7 +73,7 @@ router.get('/byPlayer/:playerId', isAuthenticated, async (req, res) => {
 // GET a shot by made
 router.get('/byMade/:made', isAuthenticated, async (req, res) => {
     try {
-        const shots = await Shot.find({ made: req.params.made === 'true' }).populate(['gameOrPractice_id', 'player_id']);
+        const shots = await Shot.find({ made: req.params.made === 'true' });
         if (!shots.length) {
             return res.status(404).json({ message: 'No shots found for the given made value' });
         }
@@ -86,7 +86,7 @@ router.get('/byMade/:made', isAuthenticated, async (req, res) => {
 // GET a shot by zone
 router.get('/byZone/:zone', isAuthenticated, async (req, res) => {
     try {
-        const shots = await Shot.find({ zone: req.params.zone }).populate(['gameOrPractice_id', 'player_id']);
+        const shots = await Shot.find({ zone: req.params.zone });
         if (!shots.length) {
             return res.status(404).json({ message: 'No shots found for the given zone' });
         }
@@ -99,7 +99,7 @@ router.get('/byZone/:zone', isAuthenticated, async (req, res) => {
 // GET a shot by shot_clock_time
 router.get('/byShotClockTime/:shotClockTime', isAuthenticated, async (req, res) => {
     try {
-        const shots = await Shot.find({ shot_clock_time: req.params.shotClockTime }).populate(['gameOrPractice_id', 'player_id']);
+        const shots = await Shot.find({ shot_clock_time: req.params.shotClockTime });
         if (!shots.length) {
             return res.status(404).json({ message: 'No shots found for the given shot clock time' });
         }
@@ -112,7 +112,7 @@ router.get('/byShotClockTime/:shotClockTime', isAuthenticated, async (req, res) 
 // GET a shot by timestamp
 router.get('/byTimestamp/:timestamp', isAuthenticated, async (req, res) => {
     try {
-        const shots = await Shot.find({ timestamp: req.params.timestamp }).populate(['gameOrPractice_id', 'player_id']);
+        const shots = await Shot.find({ timestamp: req.params.timestamp });
         if (!shots.length) {
             return res.status(404).json({ message: 'No shots found for the given timestamp' });
         }
@@ -147,7 +147,7 @@ router.patch('/:id', isAuthenticated, async (req, res) => {
     }
 
     try {
-        const updatedShot = await Shot.findByIdAndUpdate(req.params.id, value, { new: true }).populate(['gameOrPractice_id', 'player_id']);
+        const updatedShot = await Shot.findByIdAndUpdate(req.params.id, value, { new: true });
         if (!updatedShot) {
             return res.status(404).json({ message: 'Shot not found' });
         }
