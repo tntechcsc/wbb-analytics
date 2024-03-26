@@ -1,3 +1,10 @@
+.PlayerList {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+  }
+
 .PlayerContainer {
     display: flex;
     flex-direction: column;
