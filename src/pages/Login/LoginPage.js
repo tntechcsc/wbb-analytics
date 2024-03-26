@@ -1,24 +1,26 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from "react-router-dom";
 import { useAuth } from '../../hooks/AuthProvider';
+import bcrypt from 'bcryptjs';
 import './LoginPage.css';
-
 
 
 const LoginPage = () => {
     let navigate = useNavigate();
-    
     const auth = useAuth();
     const [users, setUsers] = useState([]);
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [incorrect,setIncorrect] = useState(false);
+    const [hashPassword,setHashPassword] = useState('');
+    
     useEffect(() => {
-        console.log('Fetching users');
+        const serverUrl = process.env.REACT_APP_SERVER_URL;
         const FetchData = async () => {
             try
             {
-            await fetch('http://localhost:3001/api/users')
+            console.log(serverUrl);
+            await fetch(serverUrl + '/api/users')
                 .then(response => response.json())
                 .then(data => {
                     const formattedUser = data.map(user => {
@@ -44,16 +46,23 @@ const LoginPage = () => {
 
 
     const handleLogin = (event) => {
+        const saltRounds = 10;
         event.preventDefault();
-        if(users.find(user => user.username === username && user.password === password))
-        {
-        const content = users.find(user => user.username === username && user.password === password)
-        auth.loginAction({username: username, password: password,token: content.token});
-        return;
-        }
-        else{
+        const content = users.find(user => user.username === username);
+        console.log(content);
+            bcrypt
+                .compare(password,content.password)
+                .then(res => {
+                console.log(res)
+                if(res === true)
+                {
+                auth.loginAction({username: username, password: content.password,token: content.token});
+                return;
+                }
+            })
+            .catch(err => console.error(err.message))
+        
         setIncorrect(true);
-        }
     }
     return(
             <div className="login-page-container">
