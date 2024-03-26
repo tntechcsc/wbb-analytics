@@ -32,7 +32,7 @@ router.get('/', isAuthenticated, async (req, res) => {
 // GET a drill by ID
 router.get('/:id', isAuthenticated, async (req, res) => {
     try {
-        const drill = await Drill.findById(req.params.id).populate('practice_id tempo_events shot_events players_involved');
+        const drill = await Drill.findById(req.params.id);
         if (!drill) {
             return res.status(404).json({ message: 'Drill not found' });
         }
@@ -45,7 +45,7 @@ router.get('/:id', isAuthenticated, async (req, res) => {
 // GET a drill by name (case-insensitive search)
 router.get('/name/:name', isAuthenticated, async (req, res) => {
     try {
-        const drills = await Drill.find({ name: { $regex: new RegExp(req.params.name, 'i') } }).populate('practice_id tempo_events shot_events players_involved');
+        const drills = await Drill.find({ name: { $regex: new RegExp(req.params.name, 'i') } });
         if (!drills.length) {
             return res.status(404).json({ message: 'No drills found with that name' });
         }
@@ -71,7 +71,7 @@ router.get('/practice/:practice_id', isAuthenticated, async (req, res) => {
 // GET a drill by tempo event ID
 router.get('/tempo/:tempoId', isAuthenticated, async (req, res) => {
     try {
-        const drills = await Drill.find({ tempo_events: req.params.tempoId }).populate('practice_id tempo_events shot_events players_involved');
+        const drills = await Drill.find({ tempo_events: req.params.tempoId });
         if (!drills.length) {
             return res.status(404).json({ message: 'No drills found for the given tempo event' });
         }
@@ -84,7 +84,7 @@ router.get('/tempo/:tempoId', isAuthenticated, async (req, res) => {
 // GET a drill by shot event ID
 router.get('/shot/:shotId', isAuthenticated, async (req, res) => {
     try {
-        const drills = await Drill.find({ shot_events: req.params.shotId }).populate('practice_id tempo_events shot_events players_involved');
+        const drills = await Drill.find({ shot_events: req.params.shotId });
         if (!drills.length) {
             return res.status(404).json({ message: 'No drills found for the given shot event' });
         }
@@ -132,7 +132,7 @@ router.patch('/:id', isAuthenticated, async (req, res) => {
     }
 
     try {
-        const updatedDrill = await Drill.findByIdAndUpdate(req.params.id, value, { new: true }).populate('practice_id tempo_events shot_events players_involved');
+        const updatedDrill = await Drill.findByIdAndUpdate(req.params.id, value, { new: true });
         if (!updatedDrill) {
             return res.status(404).json({ message: 'Drill not found' });
         }

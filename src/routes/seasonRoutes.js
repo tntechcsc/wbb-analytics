@@ -32,7 +32,7 @@ router.get('/', async (req, res) => {
 // GET a season by ID
 router.get('/:id', async (req, res) => {
     try {
-        const season = await Season.findById(req.params.id).populate(['players', 'games', 'practices']);
+        const season = await Season.findById(req.params.id);
         if (!season) {
             return res.status(404).json({ message: 'Season not found' });
         }
@@ -45,7 +45,7 @@ router.get('/:id', async (req, res) => {
 // GET a season by year
 router.get('/year/:year', async (req, res) => {
     try {
-        const season = await Season.findOne({ year: req.params.year }).populate(['players', 'games', 'practices']);
+        const season = await Season.findOne({ year: req.params.year });
         if (!season) {
             return res.status(404).json({ message: 'Season not found for the given year' });
         }
@@ -58,7 +58,7 @@ router.get('/year/:year', async (req, res) => {
 // GET players from a season by season ID
 router.get('/:id/players', async (req, res) => {
     try {
-        const season = await Season.findById(req.params.id).populate('players');
+        const season = await Season.findById(req.params.id);
         if (!season) {
             return res.status(404).json({ message: 'Season not found' });
         }
