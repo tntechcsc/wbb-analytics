@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from "react-router-dom";
 import { useAuth } from '../../hooks/AuthProvider';
+import bcrypt from 'bcryptjs';
 import './LoginPage.css';
 
 
@@ -11,6 +12,8 @@ const LoginPage = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [incorrect,setIncorrect] = useState(false);
+    const [hashPassword,setHashPassword] = useState('');
+    
     useEffect(() => {
         const serverUrl = process.env.REACT_APP_SERVER_URL;
         const FetchData = async () => {
@@ -43,13 +46,22 @@ const LoginPage = () => {
 
 
     const handleLogin = (event) => {
+        const saltRounds = 10;
         event.preventDefault();
-        if(users.find(user => user.username === username && user.password === password))
-        {
-        const content = users.find(user => user.username === username && user.password === password)
-        auth.loginAction({username: username, password: password,token: content.token});
-        return;
-        }
+        const content = users.find(user => user.username === username);
+        console.log(content);
+            bcrypt
+                .compare(password,content.password)
+                .then(res => {
+                console.log(res)
+                if(res === true)
+                {
+                auth.loginAction({username: username, password: content.password,token: content.token});
+                return;
+                }
+            })
+            .catch(err => console.error(err.message))
+        
         setIncorrect(true);
     }
     return(
