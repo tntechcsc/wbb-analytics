@@ -86,13 +86,13 @@ const fetchPracticesForDate = async (date) => {
               onClose={() => setShowPracticesModal(false)} />
         )}
 
-        <Link className="menu-item" to="/">
+        <Link className="menu-item" to="/practice">
           Create Practice
         </Link>
         <Link className="menu-item" to="/teamstats">
           Team Stats
         </Link>
-        <Link className="menu-item" to="/playerstats">
+        <Link className="menu-item" to="/playerstats?playerID=3">
           Player Stats
         </Link>
         <Link className="menu-item" to="/export">
