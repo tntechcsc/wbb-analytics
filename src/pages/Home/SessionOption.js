@@ -8,9 +8,9 @@ const SessionOption = ({ isOpen, onClose }) => {
     const gotoSession = (sessionType) => {
         onClose(); // Close the modal first
         if (sessionType ==='practice') {
-            navigate('/createSession');
+            navigate('/practice');
         } else if (sessionType ==='game') {
-            navigate('/createGame');
+            navigate('/game');
         }
     };
     

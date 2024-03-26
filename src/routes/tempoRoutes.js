@@ -12,7 +12,7 @@ const isAuthenticated = (req, res, next) => {
 
 // Define Joi schema for tempo validation
 const tempoSchema = Joi.object({
-    gameOrPractice_id: Joi.string().regex(/^[0-9a-fA-F]{24}$/).allow(null, ''),
+    gameOrDrill_id: Joi.string().regex(/^[0-9a-fA-F]{24}$/).allow(null, ''),
     onModel: Joi.string().required().valid('Game', 'Drill'),
     player_ids: Joi.array().items(Joi.string().regex(/^[0-9a-fA-F]{24}$/)).required(),
     tempo_type: Joi.string().required().valid('offensive', 'defensive'),
@@ -23,7 +23,7 @@ const tempoSchema = Joi.object({
 // GET all tempo events without pagination
 router.get('/', isAuthenticated, async (req, res) => {
     try {
-        const tempos = await Tempo.find().populate(['gameOrPractice_id', 'player_ids']);
+        const tempos = await Tempo.find();
         res.json(tempos);
     } catch (err) {
         res.status(500).json({ message: 'Internal server error', error: err.message });
@@ -43,11 +43,10 @@ router.get('/:id', isAuthenticated, async (req, res) => {
     }
 });
 
-// GET tempo events by gameOrPractice_id
-router.get('/byGameOrPractice/:gameOrPracticeId', isAuthenticated, async (req, res) => {
+// GET tempo events by gameOrDrill_id
+router.get('/byGameOrDrill/:gameOrDrillId', isAuthenticated, async (req, res) => {
     try {
-        const tempos = await Tempo.find({ gameOrPractice_id: mongoose.Types.ObjectId(req.params.gameOrPracticeId) })
-                                  .populate(['gameOrPractice_id', 'player_ids']);
+        const tempos = await Tempo.find({ gameOrDrill_id: req.params.gameOrDrillId })
         res.json(tempos);
     } catch (err) {
         res.status(500).json({ message: 'Internal server error', error: err.message });
@@ -57,8 +56,7 @@ router.get('/byGameOrPractice/:gameOrPracticeId', isAuthenticated, async (req, r
 // GET tempo events by player_id
 router.get('/byPlayer/:playerId', isAuthenticated, async (req, res) => {
     try {
-        const tempos = await Tempo.find({ player_ids: mongoose.Types.ObjectId(req.params.playerId) })
-                                  .populate(['gameOrPractice_id', 'player_ids']);
+        const tempos = await Tempo.find({ player_ids: req.params.playerId });
         res.json(tempos);
     } catch (err) {
         res.status(500).json({ message: 'Internal server error', error: err.message });

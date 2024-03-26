@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const Season = require('../models/season'); // Adjust the path as necessary
+const Games = require('../models/game');
+const Practice = require('../models/practice');
 const Joi = require('joi');
 
 // Define Joi schema for season validation
@@ -20,7 +22,7 @@ const isAuthenticated = (req, res, next) => {
 // GET all seasons without pagination
 router.get('/', async (req, res) => {
     try {
-        const seasons = await Season.find().populate(['players', 'games', 'practices']);
+        const seasons = await Season.find();
         res.json(seasons);
     } catch (err) {
         res.status(500).json({ message: 'Internal server error', error: err.message });
@@ -30,7 +32,7 @@ router.get('/', async (req, res) => {
 // GET a season by ID
 router.get('/:id', async (req, res) => {
     try {
-        const season = await Season.findById(req.params.id).populate(['players', 'games', 'practices']);
+        const season = await Season.findById(req.params.id);
         if (!season) {
             return res.status(404).json({ message: 'Season not found' });
         }
@@ -43,7 +45,7 @@ router.get('/:id', async (req, res) => {
 // GET a season by year
 router.get('/year/:year', async (req, res) => {
     try {
-        const season = await Season.findOne({ year: req.params.year }).populate(['players', 'games', 'practices']);
+        const season = await Season.findOne({ year: req.params.year });
         if (!season) {
             return res.status(404).json({ message: 'Season not found for the given year' });
         }
@@ -56,7 +58,7 @@ router.get('/year/:year', async (req, res) => {
 // GET players from a season by season ID
 router.get('/:id/players', async (req, res) => {
     try {
-        const season = await Season.findById(req.params.id).populate('players');
+        const season = await Season.findById(req.params.id);
         if (!season) {
             return res.status(404).json({ message: 'Season not found' });
         }
@@ -69,7 +71,7 @@ router.get('/:id/players', async (req, res) => {
 // GET games from a season by season ID
 router.get('/:id/games', async (req, res) => {
     try {
-        const season = await Season.findById(req.params.id).populate('games');
+        const season = await Season.findById(req.params.id);
         if (!season) {
             return res.status(404).json({ message: 'Season not found' });
         }
@@ -79,10 +81,32 @@ router.get('/:id/games', async (req, res) => {
     }
 });
 
+// GET games from a season by season ID with id, date, opponent, and location
+router.get('/:id/gamesDate', async (req, res) => {
+    try {
+        const games = await Games.find({ season_id: req.params.id }, '_id date opponent location');
+        res.json(games);
+    } catch (err) {
+        res.status(500).json({ message: 'Internal server error', error: err.message });
+    }
+});
+
+// GET practices from a season by season ID with only id and date
+router.get('/:id/practicesDate', async (req, res) => {
+    try {
+        const practices = await Practice.find({ season_id: req.params.id }, '_id date');
+        res.json(practices);
+    } catch (err) {
+        res.status(500).json({ message: 'Internal server error', error: err.message });
+    }
+});
+
+
+
 // GET practices from a season by season ID
 router.get('/:id/practices', async (req, res) => {
     try {
-        const season = await Season.findById(req.params.id).populate('practices');
+        const season = await Season.findById(req.params.id);
         if (!season) {
             return res.status(404).json({ message: 'Season not found' });
         }

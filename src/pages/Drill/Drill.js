@@ -56,7 +56,7 @@ function TempoPage() {
     const submitTempo = (isOffensive, playersOnCourtIds, timeValue) => {
         const tempoData = {
             player_ids: playersOnCourtIds,
-            onModel: 'Practice',
+            onModel: 'Drill',
             tempo_type: isOffensive,
             transition_time: timeValue,
             timestamp: new Date()
@@ -223,9 +223,11 @@ function TempoPage() {
                                     <div className="Overlay" onClick={handleCourtOverlayClick}></div>
                                     <ShotPopup
                                         isOpen={isShotPopupOpen}
-                                        onClose={handleShotPopupClose}
-                                        area={selectedZone}
-                                        player={player}
+                                        onClose={() => handleShotPopupClose()}
+                                        gameOrDrill_id={null}
+                                        onModel="Drill"
+                                        player_id={player.id}
+                                        zone={selectedZone}
                                     />
                                 </>
                             )}
