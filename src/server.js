@@ -11,7 +11,6 @@ const drillRoutes = require('./routes/drillRoutes');
 const tempoRoutes = require('./routes/tempoRoutes');
 const shotRoutes = require('./routes/shotRoutes');
 const gameRoutes = require('./routes/gameRoutes');
-const userRoutes = require('./routes/usersRoutes');
 
 const app = express();
 
@@ -48,7 +47,6 @@ app.use('/api/drills', drillRoutes);
 app.use('/api/tempos', tempoRoutes);
 app.use('/api/shots', shotRoutes);
 app.use('/api/games', gameRoutes);
-app.use('/api/users', userRoutes);
 
 const port = process.env.PORT || 3001; // Use environment variable or default to 3001
 // Start the server on a single port

@@ -9,8 +9,8 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const tempoSchema = new Schema({
-    gameOrPractice_id: { type: Schema.Types.ObjectId, required: false, refPath: 'onModel' },
-    onModel: { type: String, required: true, enum: ['Game', 'Practice'] },
+    gameOrDrill_id: { type: Schema.Types.ObjectId, required: false, refPath: 'onModel' },
+    onModel: { type: String, required: true, enum: ['Game', 'Drill'] },
     player_ids: [{ type: Schema.Types.ObjectId, ref: 'Player', required: true }],
     tempo_type: { type: String, required: true, enum: ['offensive', 'defensive'] },
     transition_time: { type: Number, required: true },
