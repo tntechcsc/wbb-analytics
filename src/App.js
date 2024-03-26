@@ -5,16 +5,20 @@ import TeamStats from './pages/TeamStats/TeamStats';
 import PlayerStats from './pages/PlayerStats/PlayerStats';
 import Practice from './pages/Practice/Practice';
 import Drill from './pages/Drill/Drill'
+import MainLayout from './layouts/MainLayout';
+import ExportPage from './pages/ExportPage'; // Import the ExportPage component
 
 const App = () => {
   return (
-    <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/teamstats" element={<TeamStats />} />
-        <Route path="/drill" element={<Drill />} />
-        <Route path="/playerstats" element={<PlayerStats />} />
-        <Route path="/practice" element={<Practice />} />
-    </Routes>
+    <MainLayout>
+      <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/teamstats" element={<TeamStats />} />
+          <Route path="/drill" element={<Drill />} />
+          <Route path="/playerstats" element={<PlayerStats />} />
+          <Route path="/export" element={<ExportPage />} />
+      </Routes>
+    </MainLayout>
   );
 };
 
