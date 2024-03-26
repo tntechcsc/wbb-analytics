@@ -20,7 +20,7 @@ const isAuthenticated = (req, res, next) => {
 // GET all seasons without pagination
 router.get('/', async (req, res) => {
     try {
-        const seasons = await Season.find().populate(['players', 'games', 'practices']);
+        const seasons = await Season.find();
         res.json(seasons);
     } catch (err) {
         res.status(500).json({ message: 'Internal server error', error: err.message });
