@@ -43,19 +43,18 @@ function TeamStats() {
   // State variables for storing fetched data and user selections
   const [seasons, setSeasons] = useState([]);
   const [selectedSeason, setSelectedSeason] = useState('');
-  const [sessions, setSessions] = useState([]);
-  const [selectedSession, setSelectedSession] = useState('');
+  const [practices, setpractices] = useState([]);
+  const [selectedpractice, setSelectedpractice] = useState('');
   const [drills, setDrills] = useState([]);
   const [selectedDrill, setSelectedDrill] = useState('');
-  const [error, setError] = useState(''); // State for storing any error messages
-  
+
   // State variables for statistics calculations
   const [avgOffensiveTempo, setAvgOffensiveTempo] = useState(0);
   const [avgDefensiveTempo, setAvgDefensiveTempo] = useState(0);
   const [TotalPoints, setTotalPoints] = useState(0);
   const [ThreePointPercentage, setThreePointPercentage] = useState(0);
   const [TwoPointPercentage, setTwoPointPercentage] = useState(0);
-  
+
   // Initial state for bar chart data, with dummy values replaced later
   const [barChartData, setBarChartData] = useState({
     labels: ['Zone 1', 'Zone 2', 'Zone 3', 'Zone 4', 'Zone 5', 'Zone 6', 'Zone 7', 'Zone 8'],
@@ -78,71 +77,66 @@ function TeamStats() {
       setSeasons(data);
     } catch (error) {
       console.error('Failed to fetch seasons:', error);
-      setError('Failed to load seasons. Please try again.');
     }
   };
 
-  // Fetches sessions for a given season ID
-  const fetchSessions = async (seasonId) => {
+  // Fetches practices for a given season ID
+  const fetchpractices = async (seasonID) => {
     try {
-      const response = await fetch(`http://localhost:3001/api/sessions/season/${seasonId}`);
+      const response = await fetch(`http://localhost:3001/api/practices/bySeason/${seasonID}`);
       const data = await response.json();
-      setSessions(data);
+      setpractices(data);
     } catch (error) {
-      console.error('Failed to fetch sessions:', error);
-      setError('Failed to load sessions. Please try again.');
+      console.error('Failed to fetch practices:', error);
     }
   };
 
-  // Fetches drills for a given session ID
-  const fetchDrills = async (sessionId) => {
+  // Fetches drills for a given practice ID
+  const fetchDrills = async (practiceID) => {
     try {
-      const response = await fetch(`http://localhost:3001/api/drills/session/${sessionId}`);
+      const response = await fetch(`http://localhost:3001/api/drills/practice/${practiceID}`);
       const data = await response.json();
       setDrills(data);
     } catch (error) {
       console.error('Failed to fetch drills:', error);
-      setError('Failed to load drills. Please try again.');
     }
   };
 
-  // Function to fetch all tempos and filter based on the selected drill ID
+  //Fetches tempos for a given game or drill ID
   const fetchTempos = async (gameOrDrillId) => {
     try {
-      // Fetching all tempos
-      const response = await fetch(`http://localhost:3001/api/tempos/`);
+      const response = await fetch(`http://localhost:3001/api/tempos/byGameOrDrill/${gameOrDrillId}`);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-      const allTempos = await response.json();
-
-      // Filtering by gameOrDrillId on the client side
-      const filteredTempos = allTempos.filter(tempo => tempo.gameOrDrill_id === gameOrDrillId);
-      console.log('Filtered tempos:', filteredTempos);
-
-      const offensiveTempos = filteredTempos.filter(tempo => tempo.tempo_type === 'offensive');
-      const defensiveTempos = filteredTempos.filter(tempo => tempo.tempo_type === 'defensive');
-
-      const offensiveTempoSum = offensiveTempos.reduce((total, tempo) => total + tempo.transition_time, 0);
-      const defensiveTempoSum = defensiveTempos.reduce((total, tempo) => total + tempo.transition_time, 0);
-
-      const offensiveTempoAvg = offensiveTempos.length > 0 ? offensiveTempoSum / offensiveTempos.length : 0;
-      const defensiveTempoAvg = defensiveTempos.length > 0 ? defensiveTempoSum / defensiveTempos.length : 0;
-
-      // Assuming setAvgOffensiveTempo and setAvgDefensiveTempo are React state setters
-      setAvgOffensiveTempo(offensiveTempoAvg.toFixed(2));
-      setAvgDefensiveTempo(defensiveTempoAvg.toFixed(2));
-      setError(''); // Assuming setError is a React state setter for handling errors
+      const tempoData = await response.json();
+      
+      calculateAvgTempo(tempoData);
     } catch (error) {
       console.error('Failed to fetch tempos:', error);
-      setError('Failed to load tempos. Please try again.');
     }
   };
+
+  // Calculate average offensive and defensive tempos
+  const calculateAvgTempo = (tempoData) => {
+
+    const offensiveTempos = tempoData.filter(tempo => tempo.tempo_type === 'offensive');
+    const defensiveTempos = tempoData.filter(tempo => tempo.tempo_type === 'defensive');
+
+    const offensiveTempoSum = offensiveTempos.reduce((total, tempo) => total + tempo.transition_time, 0);
+    const defensiveTempoSum = defensiveTempos.reduce((total, tempo) => total + tempo.transition_time, 0);
+
+    const offensiveTempoAvg = offensiveTempos.length > 0 ? offensiveTempoSum / offensiveTempos.length : 0;
+    const defensiveTempoAvg = defensiveTempos.length > 0 ? defensiveTempoSum / defensiveTempos.length : 0;
+
+    setAvgOffensiveTempo(offensiveTempoAvg.toFixed(2));
+    setAvgDefensiveTempo(defensiveTempoAvg.toFixed(2));
+};
 
   // Fetch all shots
   const fetchShots = async (gameOrDrillId) => {
     try {
-      const response = await fetch(`http://localhost:3001/api/shots/`);
+      const response = await fetch(`http://localhost:3001/api/shots`);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -187,7 +181,6 @@ function TeamStats() {
 
     } catch (error) {
       console.error('Failed to fetch shots:', error);
-      setError('Failed to load shots. Please try again.');
     }
   };
 
@@ -228,112 +221,16 @@ function TeamStats() {
     });
   };
 
-
-  useEffect(() => {
-    const fetchInitialData = async () => {
-      // Fetch Seasons
-      try {
-        const response = await fetch('http://localhost:3001/api/seasons');
-        const seasonsData = await response.json();
-        setSeasons(seasonsData);
-        setError(''); // Reset any previous errors
-        if (seasonsData.length > 0) {
-          const defaultSeasonId = seasonsData[0]._id;
-          setSelectedSeason(defaultSeasonId); // Set default season
-
-          // Fetch Sessions for default season
-          const sessionsResponse = await fetch(`http://localhost:3001/api/sessions/season/${defaultSeasonId}`);
-          const sessionsData = await sessionsResponse.json();
-          setSessions(sessionsData);
-          if (sessionsData.length > 0) {
-            const defaultSessionId = sessionsData[0]._id;
-            setSelectedSession(defaultSessionId); // Set default session
-
-            // Fetch Drills for default session
-            const drillsResponse = await fetch(`http://localhost:3001/api/drills/session/${defaultSessionId}`);
-            const drillsData = await drillsResponse.json();
-            setDrills(drillsData);
-            if (drillsData.length > 0) {
-              const defaultDrillId = drillsData[0]._id;
-              setSelectedDrill(defaultDrillId); // Set default drill
-              // Optionally, fetch tempos and shots for the default drill
-              fetchTempos(defaultDrillId);
-              fetchShots(defaultDrillId);
-            }
-          }
-        }
-      } catch (error) {
-        console.error('Failed to fetch initial data:', error);
-        setError('Failed to load initial data. Please try again.');
-      }
-    };
-
-    fetchInitialData();
-  }, []); // The empty dependency array ensures this effect runs only once after the initial render
-
-  useEffect(() => {
-    if (selectedSeason) {
-      const fetchSessionsForSeason = async () => {
-        try {
-          const response = await fetch(`http://localhost:3001/api/sessions/season/${selectedSeason}`);
-          const sessionsData = await response.json();
-          setSessions(sessionsData);
-          setError(''); // Reset any previous errors
-          if (sessionsData.length > 0) {
-            setSelectedSession(sessionsData[0]._id); // Automatically select the first session
-          } else {
-            setSelectedSession('');
-            setDrills([]); // Clear drills if no sessions are available
-          }
-        } catch (error) {
-          console.error('Failed to fetch sessions:', error);
-          setError('Failed to load sessions. Please try again.');
-        }
-      };
-
-      fetchSessionsForSeason();
-    }
-  }, [selectedSeason]); // Re-fetch sessions when selectedSeason changes
-
-  useEffect(() => {
-    if (selectedSession) {
-      const fetchDrillsForSession = async () => {
-        try {
-          const response = await fetch(`http://localhost:3001/api/drills/session/${selectedSession}`);
-          const drillsData = await response.json();
-          setDrills(drillsData);
-          setError(''); // Reset any previous errors
-          if (drillsData.length > 0) {
-            setSelectedDrill(drillsData[0]._id); // Automatically select the first drill
-            fetchTempos(drillsData[0]._id); // Fetch tempos for the first drill
-            fetchShots(drillsData[0]._id); // Fetch shots for the first drill
-          } else {
-            setSelectedDrill('');
-          }
-        } catch (error) {
-          console.error('Failed to fetch drills:', error);
-          setError('Failed to load drills. Please try again.');
-        }
-      };
-
-      fetchDrillsForSession();
-    } else {
-      setDrills([]); // Clear drills if no session is selected
-      // Optionally clear tempos and shots data as well
-    }
-  }, [selectedSession]); // Re-fetch drills, tempos, and shots when selectedSession changes
-
-
   const handleSeasonChange = async (e) => {
     const newSelectedSeason = e.target.value;
     setSelectedSeason(newSelectedSeason);
-    await fetchSessions(newSelectedSeason);
+    await fetchpractices(newSelectedSeason);
   };
 
-  const handleSessionChange = async (e) => {
-    const newSelectedSession = e.target.value;
-    setSelectedSession(newSelectedSession);
-    await fetchDrills(newSelectedSession);
+  const handlepracticeChange = async (e) => {
+    const newSelectedpractice = e.target.value;
+    setSelectedpractice(newSelectedpractice);
+    await fetchDrills(newSelectedpractice);
   };
 
   const handleDrillChange = async (e) => {
@@ -344,10 +241,99 @@ function TeamStats() {
     await fetchShots(newSelectedDrill);
   };
 
+
+  useEffect(() => {
+    const fetchInitialData = async () => {
+      // Fetch Seasons
+      try {
+        const response = await fetch('http://localhost:3001/api/seasons');
+        const seasonsData = await response.json();
+        setSeasons(seasonsData);
+        if (seasonsData.length > 0) {
+          const defaultSeasonId = seasonsData[0]._id;
+          setSelectedSeason(defaultSeasonId); // Set default season
+
+          // Fetch practices for default season
+          const practicesResponse = await fetch(`http://localhost:3001/api/practices/bySeason/${defaultSeasonId}`);
+          const practicesData = await practicesResponse.json();
+          setpractices(practicesData);
+          if (practicesData.length > 0) {
+            const defaultpracticeId = practicesData[0]._id;
+            setSelectedpractice(defaultpracticeId); // Set default practice
+
+            // Fetch Drills for default practice
+            const drillsResponse = await fetch(`http://localhost:3001/api/drills/practice/${defaultpracticeId}`);
+            const drillsData = await drillsResponse.json();
+            setDrills(drillsData);
+            if (drillsData.length > 0) {
+              const defaultDrillId = drillsData[0]._id;
+              setSelectedDrill(defaultDrillId); // Set default drill
+
+              // Optionally, fetch tempos and shots for the default drill
+              fetchTempos(defaultDrillId);
+              fetchShots(defaultDrillId);
+            }
+          }
+        }
+      } catch (error) {
+        console.error('Failed to fetch initial data:', error);
+      }
+    };
+
+    fetchInitialData();
+  }, []); // The empty dependency array ensures this effect runs only once after the initial render
+
+  useEffect(() => {
+    if (selectedSeason) {
+      const fetchpracticesForSeason = async () => {
+        try {
+          const response = await fetch(`http://localhost:3001/api/practices/bySeason/${selectedSeason}`);
+          const practicesData = await response.json();
+          setpractices(practicesData);
+          if (practicesData.length > 0) {
+            setSelectedpractice(practicesData[0]._id); // Automatically select the first practice
+          } else {
+            setSelectedpractice('');
+            setDrills([]); // Clear drills if no practices are available
+          }
+        } catch (error) {
+          console.error('Failed to fetch practices:', error);
+        }
+      };
+
+      fetchpracticesForSeason();
+    }
+  }, [selectedSeason]); // Re-fetch practices when selectedSeason changes
+
+  useEffect(() => {
+    if (selectedpractice) {
+      const fetchDrillsForpractice = async () => {
+        try {
+          const response = await fetch(`http://localhost:3001/api/drills/practice/${selectedpractice}`);
+          const drillsData = await response.json();
+          setDrills(drillsData);
+          if (drillsData.length > 0) {
+            setSelectedDrill(drillsData[0]._id); // Automatically select the first drill
+            fetchTempos(drillsData[0]._id); // Fetch tempos for the first drill
+            fetchShots(drillsData[0]._id); // Fetch shots for the first drill
+          } else {
+            setSelectedDrill('');
+          }
+        } catch (error) {
+          console.error('Failed to fetch drills:', error);
+        }
+      };
+
+      fetchDrillsForpractice();
+    } else {
+      setDrills([]); // Clear drills if no practice is selected
+      // Optionally clear tempos and shots data as well
+    }
+  }, [selectedpractice]); // Re-fetch drills, tempos, and shots when selectedpractice changes
+
   return (
     <div className="team-stats-container">
       <header className="team-header">
-        {/* Assuming NavagationHeader is a typo and should be NavigationHeader */}
         <NavigationHeader />
       </header>
 
@@ -359,13 +345,13 @@ function TeamStats() {
           value={selectedSeason}
         />
         <Selector
-          options={sessions.map(session => {
-            const date = new Date(session.date);
-            return { label: `Session: ${date.toLocaleDateString()}`, value: session._id };
+          options={practices.map(practice => {
+            const date = new Date(practice.date);
+            return { label: `Practice: ${date.toLocaleDateString()}`, value: practice._id };
           })}
-          onChange={handleSessionChange}
-          label="Session"
-          value={selectedSession}
+          onChange={handlepracticeChange}
+          label="Practice"
+          value={selectedpractice}
           disabled={!selectedSeason} // Disable if no season is selected
         />
         <Selector
@@ -373,7 +359,7 @@ function TeamStats() {
           onChange={handleDrillChange}
           label="Drill"
           value={selectedDrill}
-          disabled={!selectedSession} // Disable if no session is selected
+          disabled={!selectedpractice} // Disable if no practice is selected
         />
       </div>
 
