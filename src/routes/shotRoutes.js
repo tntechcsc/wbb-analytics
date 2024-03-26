@@ -47,9 +47,9 @@ router.get('/:id', isAuthenticated, async (req, res) => {
 // GET a shot by gameOrDrill_id
 router.get('/byGameOrDrill/:gameOrDrillId', isAuthenticated, async (req, res) => {
     try {
-        const shots = await Shot.find({ gameOrDrill_id: req.params.gameOrPracticeId });
+        const shots = await Shot.find({ gameOrDrill_id: req.params.gameOrDrillId });
         if (!shots.length) {
-            return res.status(404).json({ message: 'No shots found for the given gameOrPractice_id' });
+            return res.status(404).json({ message: 'No shots found for the given gameOrDrillId' });
         }
         res.json(shots);
     } catch (err) {
@@ -60,7 +60,7 @@ router.get('/byGameOrDrill/:gameOrDrillId', isAuthenticated, async (req, res) =>
 // GET a shot by player_id
 router.get('/byPlayer/:playerId', isAuthenticated, async (req, res) => {
     try {
-        const shots = await Shot.find({ player_id: mongoose.Types.ObjectId(req.params.playerId) }).populate(['gameOrPractice_id', 'player_id']);
+        const shots = await Shot.find({ player_ids: req.params.playerId }); //Shot model has "player_ids" as an attribute, plural
         if (!shots.length) {
             return res.status(404).json({ message: 'No shots found for the given player_id' });
         }

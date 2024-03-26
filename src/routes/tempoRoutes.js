@@ -56,8 +56,7 @@ router.get('/byGameOrDrill/:gameOrDrillId', isAuthenticated, async (req, res) =>
 // GET tempo events by player_id
 router.get('/byPlayer/:playerId', isAuthenticated, async (req, res) => {
     try {
-        const tempos = await Tempo.find({ player_ids: mongoose.Types.ObjectId(req.params.playerId) })
-                                  .populate(['gameOrPractice_id', 'player_ids']);
+        const tempos = await Tempo.find({ player_ids: req.params.playerId });
         res.json(tempos);
     } catch (err) {
         res.status(500).json({ message: 'Internal server error', error: err.message });
