@@ -15,12 +15,11 @@ const LoginPage = () => {
     const [hashPassword,setHashPassword] = useState('');
     
     useEffect(() => {
-        const serverUrl = process.env.REACT_APP_SERVER_URL;
         const FetchData = async () => {
             try
             {
             console.log(serverUrl);
-            await fetch(serverUrl + '/api/users')
+            await fetch('http://localhost:3001/api/users')
                 .then(response => response.json())
                 .then(data => {
                     const formattedUser = data.map(user => {
