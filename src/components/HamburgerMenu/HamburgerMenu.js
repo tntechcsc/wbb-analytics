@@ -89,13 +89,13 @@ const fetchPracticesForDate = async (date) => {
         <Link className="menu-item" to="/">
           Create Practice
         </Link>
-        <Link className="menu-item" to="/">
+        <Link className="menu-item" to="/teamstats">
           Team Stats
         </Link>
-        <Link className="menu-item" to="/">
+        <Link className="menu-item" to="/playerstats">
           Player Stats
         </Link>
-        <Link className="menu-item" to="/">
+        <Link className="menu-item" to="/export">
           Export
         </Link>
         {/* Toggle between Sign In/Sign Out based on authentication state */}

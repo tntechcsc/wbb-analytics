@@ -14,7 +14,6 @@ const HomePage = () => {
   };
   
   return (
-    <MainLayout> {/* Wrap the content of HomePage inside MainLayout */}
       <div className="home-page-container">
           <button onClick={() => setModalOpen(true)} className="Linkish-Button1">
             New Session
@@ -27,7 +26,6 @@ const HomePage = () => {
         </section>
         <SessionOption isOpen={isModalOpen} onClose={() => setModalOpen(false)}/>
       </div>
-    </MainLayout>
   );
 };
 
