@@ -92,7 +92,7 @@ const fetchPracticesForDate = async (date) => {
         <Link className="menu-item" to="/teamstats">
           Team Stats
         </Link>
-        <Link className="menu-item" to="/playerstats?playerID=3">
+        <Link className="menu-item" to="/playerstats">
           Player Stats
         </Link>
         <Link className="menu-item" to="/export">
