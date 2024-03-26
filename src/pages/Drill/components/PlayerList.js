@@ -1,14 +1,12 @@
 import React from 'react';
-import './PlayerList.css'; // Ensure you have the correct path to your CSS file
+import PlayerItem from './PlayerItem'; // Adjust the import path as necessary
+import './PlayerList.css';
 
-function PlayerList({ players, onPlayerClick }) {
+function PlayerList({ players, onLongPress, onSelect }) {
   return (
     <div className="PlayerList">
       {players.map(player => (
-        <div key={player.number} className="PlayerContainer" onClick={() => onPlayerClick(player)}>
-          <div className="PlayerCircle">{player.number}</div>
-          <div className="PlayerName">{player.name}</div>
-        </div>
+        <PlayerItem key={player.number} player={player} onLongPress={onLongPress} onSelect={onSelect} />
       ))}
     </div>
   );
