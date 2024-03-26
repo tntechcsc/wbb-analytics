@@ -44,12 +44,12 @@ router.get('/:id', isAuthenticated, async (req, res) => {
     }
 });
 
-// GET a shot by gameOrPractice_id
-router.get('/byGameOrPractice/:gameOrPracticeId', isAuthenticated, async (req, res) => {
+// GET a shot by gameOrDrill_id
+router.get('/byGameOrDrill/:gameOrDrillId', isAuthenticated, async (req, res) => {
     try {
-        const shots = await Shot.find({ gameOrPractice_id: mongoose.Types.ObjectId(req.params.gameOrPracticeId) });
+        const shots = await Shot.find({ gameOrDrill_id: req.params.gameOrDrillId });
         if (!shots.length) {
-            return res.status(404).json({ message: 'No shots found for the given gameOrPractice_id' });
+            return res.status(404).json({ message: 'No shots found for the given gameOrDrillId' });
         }
         res.json(shots);
     } catch (err) {

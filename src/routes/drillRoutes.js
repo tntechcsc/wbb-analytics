@@ -22,7 +22,7 @@ const drillSchema = Joi.object({
 // GET all drills
 router.get('/', isAuthenticated, async (req, res) => {
     try {
-        const drills = await Drill.find().populate('practice_id tempo_events shot_events players_involved');
+        const drills = await Drill.find();
         res.json(drills);
     } catch (err) {
         res.status(500).json({ message: 'Internal server error', error: err.message });
@@ -56,11 +56,11 @@ router.get('/name/:name', isAuthenticated, async (req, res) => {
 });
 
 // GET a drill by practice ID
-router.get('/practice/:practiceId', isAuthenticated, async (req, res) => {
+router.get('/practice/:practice_id', isAuthenticated, async (req, res) => {
     try {
-        const drills = await Drill.find({ practice_id: req.params.practiceId });
+        const drills = await Drill.find({ practice_id: req.params.practice_id });
         if (!drills.length) {
-            return res.status(404).json({ message: 'No drills found for the given practice' });
+            return res.status(404).json({ message: 'No drills found for the given player' });
         }
         res.json(drills);
     } catch (err) {
