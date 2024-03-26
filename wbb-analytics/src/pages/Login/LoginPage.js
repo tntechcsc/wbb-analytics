@@ -49,6 +49,11 @@ const LoginPage = () => {
         const saltRounds = 10;
         event.preventDefault();
         const content = users.find(user => user.username === username);
+        if(!content){
+            setIncorrect(true);
+        }
+        else
+        {
         console.log(content);
             bcrypt
                 .compare(password,content.password)
@@ -59,10 +64,15 @@ const LoginPage = () => {
                 auth.loginAction({username: username, password: content.password,token: content.token});
                 return;
                 }
+                else
+                {
+                    setIncorrect(true);
+                }
             })
             .catch(err => console.error(err.message))
+        }
         
-        setIncorrect(true);
+        
     }
     return(
             <div className="login-page-container">
