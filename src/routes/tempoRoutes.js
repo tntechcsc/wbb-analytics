@@ -43,11 +43,10 @@ router.get('/:id', isAuthenticated, async (req, res) => {
     }
 });
 
-// GET tempo events by gameOrPractice_id
-router.get('/byGameOrPractice/:gameOrPracticeId', isAuthenticated, async (req, res) => {
+// GET tempo events by gameOrDrill_id
+router.get('/byGameOrDrill/:gameOrDrillId', isAuthenticated, async (req, res) => {
     try {
-        const tempos = await Tempo.find({ gameOrPractice_id: mongoose.Types.ObjectId(req.params.gameOrPracticeId) })
-                                  .populate(['gameOrPractice_id', 'player_ids']);
+        const tempos = await Tempo.find({ gameOrDrill_id: req.params.gameOrDrillId })
         res.json(tempos);
     } catch (err) {
         res.status(500).json({ message: 'Internal server error', error: err.message });
