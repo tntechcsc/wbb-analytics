@@ -1,19 +1,13 @@
 import React from 'react';
-import useLongPress from './useLongPress';
+import './PlayerWrapper.css'; // Assuming your CSS for .player-inverted is here
 
-const PlayerItem = ({ player, onLongPress, onSelect }) => {
-  const longPressProps = useLongPress(
-    () => onLongPress(player),
-    () => onSelect(player),
-    { shouldPreventDefault: true, delay: 500 }
-  );
-
+function PlayerItem({ player, isSelected, ...props }) {
   return (
-    <div {...longPressProps} className="PlayerContainer">
-      <div className={"PlayerCircle PlayerCircle" + player.number}>{player.number}</div>
-      <div className="PlayerName">{player.name}</div>
+    <div {...props} className={`PlayerContainer ${isSelected ? 'player-inverted' : ''}`}>
+      <span className="PlayerCircle">{player.number}</span>
+      <span className="PlayerName">{player.name}</span>
     </div>
   );
-};
+}
 
 export default PlayerItem;

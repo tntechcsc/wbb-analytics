@@ -3,13 +3,10 @@ import './Drill.css';
 import CancelButton from './components/CancelButton';
 import LastTempoDisplay from './components/LastTempoDisplay';
 import PlayerList from './components/PlayerList';
-import PlayerItem from './components/PlayerItem';
 import TempoTimer from './components/TempoTimer';
 import TempoButton from './components/TempoButton'
 import SubstitutionPopup from './components/SubstitutionPopup'
-import Court from './components/Court'
 import ShotPopup from './components/ShotPopup'
-import Button from 'react-bootstrap/Button';
 
 import area from './components/Court';
 
@@ -35,6 +32,9 @@ function TempoPage() {
     const [player, setPlayer] = useState(null);
     const [isPopupOpen, setIsPopupOpen] = useState(false);
     const [selectedPlayerForSub, setSelectedPlayerForSub] = useState(null);
+    const [isShotPopupOpen, setIsShotPopupOpen] = useState(false);
+    const [selectedZone, setSelectedZone] = useState(null);
+    const [isPlayer, setIsPlayer] = useState(false);
 
     useEffect(() => {
         fetch('http://localhost:3001/api/players')
@@ -52,7 +52,7 @@ function TempoPage() {
             .catch(error => console.error('Failed to fetch players:', error));
     }, []);
 
-    // Function to submit tempo data to the server
+    // Function to submit tempo
     const submitTempo = (isOffensive, playersOnCourtIds, timeValue) => {
         const tempoData = {
             player_ids: playersOnCourtIds,
@@ -111,16 +111,6 @@ function TempoPage() {
         setTempoType(null);
     };
 
-    // Handle player click for substitution
-    const handlePlayerClick = (player) => {
-        console.log(`Player ${player.number} clicked for substitution`);
-        setSelectedPlayerForSub(player);
-        setIsPopupOpen(true);
-        console.log(`Player ${player.number} clicked for shot`);
-        setIsPlayerSelectedforShot(true);
-        setPlayer(player);
-    };
-
     // Handle substitution with a new player
     const handleSubstitute = (newPlayer) => {
         console.log(`Substituting player ${selectedPlayerForSub.number} with ${newPlayer.number}`);
@@ -137,10 +127,6 @@ function TempoPage() {
         setIsSub(false);
         setIsPlayerSelectedforShot(false);
     };
-
-    const [isShotPopupOpen, setIsShotPopupOpen] = useState(false);
-    const [selectedZone, setSelectedZone] = useState(null);
-    const [isPlayer, setIsPlayer] = useState(false);
 
     let MAP2 = {
         name: "my-map",
@@ -182,89 +168,67 @@ function TempoPage() {
     }
 
 
-
-
-
-
-
-
-    const onPlayerSelect = (player) => {
-        console.log(`Player ${player.number} selected`);
+    // Example method signatures in the TempoPage component
+    const onPlayerSelectForShot = (player) => {
         setIsPlayerSelectedforShot(true);
         setPlayer(player);
+        // Further logic to handle shot selection
     };
 
-    const onPlayerSubstitute = (player) => {
-        console.log(`Player ${player.number} long pressed for substitution`);
-        setSelectedPlayerForSub(player);
-        setIsPopupOpen(true);
-    };
-
-    // Rendering players using PlayerItem for each player
-    const renderPlayers = playersOnCourt.map((player) => (
-        <PlayerItem
-            key={player.id}
-            player={player}
-            onSelect={onPlayerSelect}
-            onLongPress={onPlayerSubstitute}
-        />
-    ));
+    const onPlayerSelectForSub = (player) => {
+        setSelectedPlayerForSub(player); // Set the player selected for substitution
+        setIsPopupOpen(true); // Open the substitution popup
+        // Note: You might not need `isSub` if it's solely for controlling the popup state.
+        // But if it serves additional logic, set it accordingly
+        setIsSub(true); // Assuming `isSub` is used to distinguish between different actions
+      };
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    return (
+      return (
         <div className="TempoPage">
-            <div className="SubButton" style={{ backgroundColor: isSub ? 'green' : 'red' }} onClick={() => setIsSub(true)}>Substitute</div>
-            <div>{isPlayerSelectedforShot ? "Player Selected: " + player.number : "No Player Selected"}</div>
             <div className="TopContainer">
                 <div className="PlayerListContainer">
-                    {renderPlayers}
+                    <PlayerList
+                        players={playersOnCourt}
+                        onPlayerSelectForShot={onPlayerSelectForShot}
+                        onPlayerSelectForSub={onPlayerSelectForSub}
+                    />
+                    {isPopupOpen && (
+                        <>
+                            <div className="Overlay" onClick={handleOverlayClick}></div>
+                            <SubstitutionPopup
+                                isOpen={isPopupOpen}
+                                onClose={() => setIsPopupOpen(false)}
+                                onSubstitute={handleSubstitute}
+                                playersOnCourt={playersOnCourt}
+                                allPlayers={allPlayers}
+                            />
+                        </>
+                    )}
                 </div>
                 <div className="RightComponent">
                     <div className="CourtContainer">
-                        <div className="grid">
-                            <div className="presenter">
-
-                                {/* <div>{isPlayer ? <h1>Player Selected</h1> : <h2>No Player Selected</h2>}</div>
-                                < div>{isShotPopupOpen ? <h1>Popup Open</h1> : <h2>No Popup Open</h2>}</div> */}
-                                <div style={{ position: "relative" }}>
-                                    <ImageMapper
-                                        src={basketballCourtVector}
-                                        map={MAP2}
-                                        width={600}
-                                        height={550}
-                                        lineWidth={5}
-                                        strokeColor={"white"}
-                                        onClick={(area) => courtClicked(area)}
-
+                        <div style={{ position: "relative" }}>
+                            <ImageMapper
+                                src={basketballCourtVector}
+                                map={MAP2}
+                                width={600}
+                                height={550}
+                                lineWidth={5}
+                                strokeColor={"white"}
+                                onClick={courtClicked}
+                            />
+                            {isShotPopupOpen && isPlayerSelectedforShot && (
+                                <>
+                                    <div className="Overlay" onClick={handleCourtOverlayClick}></div>
+                                    <ShotPopup
+                                        isOpen={isShotPopupOpen}
+                                        onClose={handleShotPopupClose}
+                                        area={selectedZone}
+                                        player={player}
                                     />
-                                    {/*  */}
-                                    {isShotPopupOpen && isPlayerSelectedforShot && (
-                                        <>
-                                            <div className="Overlay" onClick={handleCourtOverlayClick}></div>
-                                            <ShotPopup
-                                                isOpen={isShotPopupOpen}
-                                                onClose={() => handleShotPopupClose()}
-                                                area={area}
-                                                player={player}
-                                            />
-                                        </>
-                                    )}
-                                </div>
-                            </div>
+                                </>
+                            )}
                         </div>
                     </div>
                 </div>
@@ -275,16 +239,9 @@ function TempoPage() {
                         tempoType="Defensive"
                         className={`TempoButton ${isTiming && tempoType !== 'defensive' ? 'disabled' : ''} ${isTiming && tempoType === 'defensive' ? 'stop' : 'start'}`}
                         isTiming={isTiming && tempoType === 'defensive'}
-                        onClick={() => {
-                            if (isTiming && tempoType === 'defensive') {
-                                handleStopTempo('defensive');
-                            } else {
-                                startTempo('defensive');
-                            }
-                        }}
+                        onClick={() => isTiming && tempoType === 'defensive' ? handleStopTempo('defensive') : startTempo('defensive')}
                         disabled={isTiming && tempoType !== 'defensive'}
                     />
-
                     <div className="TimerAndLastTempo">
                         <TempoTimer
                             isTiming={isTiming}
@@ -300,24 +257,16 @@ function TempoPage() {
                             disabled={!isTiming}
                         />
                     </div>
-
                     <TempoButton
                         tempoType="Offensive"
                         className={`TempoButton ${isTiming && tempoType === 'offensive' ? 'stop' : 'start'} ${isTiming && tempoType !== 'offensive' ? 'disabled' : ''}`}
                         isTiming={isTiming && tempoType === 'offensive'}
-                        onClick={() => {
-                            if (isTiming && tempoType === 'offensive') {
-                                handleStopTempo('offensive');
-                            } else {
-                                startTempo('offensive');
-                            }
-                        }}
+                        onClick={() => isTiming && tempoType === 'offensive' ? handleStopTempo('offensive') : startTempo('offensive')}
                         disabled={isTiming && tempoType !== 'offensive'}
                     />
                 </div>
             </div>
         </div>
-
     );
 }
 
