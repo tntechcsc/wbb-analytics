@@ -1,14 +1,24 @@
-import React from 'react';
-import './PlayerList.css'; // Ensure you have the correct path to your CSS file
+import React, { useState } from 'react';
+import PlayerWrapper from './PlayerWrapper';
 
-function PlayerList({ players, onPlayerClick }) {
+function PlayerList({ players, onPlayerSelectForShot, onPlayerSelectForSub }) {
+  const [selectedPlayerId, setSelectedPlayerId] = useState(null);
+
+  const handleSelect = (player) => {
+    setSelectedPlayerId(player.id);
+    onPlayerSelectForShot(player);
+  };
+
   return (
     <div className="PlayerList">
       {players.map(player => (
-        <div key={player.number} className="PlayerContainer" onClick={() => onPlayerClick(player)}>
-          <div className="PlayerCircle">{player.number}</div>
-          <div className="PlayerName">{player.name}</div>
-        </div>
+        <PlayerWrapper
+          key={player.number}
+          player={player}
+          isSelected={player.id === selectedPlayerId}
+          onSelect={() => handleSelect(player)}
+          onLongPress={() => onPlayerSelectForSub(player)}
+        />
       ))}
     </div>
   );

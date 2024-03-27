@@ -22,7 +22,7 @@ const practiceSchema = Joi.object({
 // GET all practices
 router.get('/', isAuthenticated, async (req, res) => {
     try {
-        const practices = await Practice.find().populate('season_id drills team_purple team_gray');
+        const practices = await Practice.find();
         res.json(practices);
     } catch (err) {
         res.status(500).json({ message: 'Internal server error', error: err.message });
@@ -32,7 +32,7 @@ router.get('/', isAuthenticated, async (req, res) => {
 // GET a practice by ID
 router.get('/:id', isAuthenticated, async (req, res) => {
     try {
-        const practice = await Practice.findById(req.params.id).populate('season_id drills team_purple team_gray');
+        const practice = await Practice.findById(req.params.id);
         if (!practice) {
             return res.status(404).json({ message: 'Practice not found' });
         }
@@ -45,7 +45,7 @@ router.get('/:id', isAuthenticated, async (req, res) => {
 // GET practices by date
 router.get('/byDate/:date', isAuthenticated, async (req, res) => {
     try {
-        const practices = await Practice.find({ date: req.params.date }).populate('season_id drills team_purple team_gray');
+        const practices = await Practice.find({ date: req.params.date });
         if (!practices.length) {
             return res.status(404).json({ message: 'No practices found for the given date' });
         }
@@ -68,8 +68,7 @@ router.get('/bySeason/:seasonId', isAuthenticated, async (req, res) => {
 // GET practices by drill ID
 router.get('/byDrill/:drillId', isAuthenticated, async (req, res) => {
     try {
-        const practices = await Practice.find({ drills: mongoose.Types.ObjectId(req.params.drillId) })
-                                        .populate('season_id drills team_purple team_gray');
+        const practices = await Practice.find({ drills: mongoose.Types.ObjectId(req.params.drillId) });
         res.json(practices);
     } catch (err) {
         res.status(500).json({ message: 'Internal server error', error: err.message });
@@ -80,7 +79,6 @@ router.get('/byDrill/:drillId', isAuthenticated, async (req, res) => {
 router.get('/byTeamPurple/:playerId', isAuthenticated, async (req, res) => {
     try {
         const practices = await Practice.find({ team_purple: mongoose.Types.ObjectId(req.params.playerId) })
-                                        .populate('season_id drills team_purple team_gray');
         res.json(practices);
     } catch (err) {
         res.status(500).json({ message: 'Internal server error', error: err.message });
@@ -90,8 +88,7 @@ router.get('/byTeamPurple/:playerId', isAuthenticated, async (req, res) => {
 // GET practices by team_gray player ID
 router.get('/byTeamGray/:playerId', isAuthenticated, async (req, res) => {
     try {
-        const practices = await Practice.find({ team_gray: mongoose.Types.ObjectId(req.params.playerId) })
-                                        .populate('season_id drills team_purple team_gray');
+        const practices = await Practice.find({ team_gray: mongoose.Types.ObjectId(req.params.playerId) });
         res.json(practices);
     } catch (err) {
         res.status(500).json({ message: 'Internal server error', error: err.message });
@@ -123,8 +120,7 @@ router.patch('/:id', isAuthenticated, async (req, res) => {
     }
 
     try {
-        const updatedPractice = await Practice.findByIdAndUpdate(req.params.id, value, { new: true })
-                                               .populate('season_id drills team_purple team_gray');
+        const updatedPractice = await Practice.findByIdAndUpdate(req.params.id, value, { new: true });
         if (!updatedPractice) {
             return res.status(404).json({ message: 'Practice not found' });
         }

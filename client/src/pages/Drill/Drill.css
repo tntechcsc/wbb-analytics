@@ -61,11 +61,6 @@
     padding: 20px;
 }
 
-/* Debug borders (remove or comment out when done debugging) */
-.TopContainer, .BottomContainer, .PlayerListContainer, .RightComponent {
-    border: 1px solid red; /* Temporary borders for visual debugging */
-}
-
 /* Media queries */
 /* Adjustments for tablets */
 @media (max-width: 768px) {
