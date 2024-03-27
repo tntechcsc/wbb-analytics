@@ -126,3 +126,28 @@ select {
     font-size: 1.2em;
 }
   
+
+.create-session-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #3498db; /* A pleasant blue */
+    color: white; /* White text */
+    border: none; /* Remove default border */
+    border-radius: 8px; /* Rounded corners */
+    padding: 10px 20px; /* Top & Bottom, Left & Right padding */
+    font-size: 1.2em; /* Larger text */
+    cursor: pointer; /* Cursor changes to pointer to indicate interactivity */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    transition: background-color 0.3s ease, transform 0.1s ease; /* Smooth background color change on hover */
+}
+
+.create-session-button:hover, .create-session-button:focus {
+    background-color: #2675ad; /* Darker shade of blue on hover/focus for visual feedback */
+    transform: translateY(-2px); /* Slight lift effect on hover/focus */
+}
+
+.create-session-button:active {
+    transform: translateY(1px); /* Pushed effect when clicked */
+    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1); /* Shorter shadow when clicked */
+}
