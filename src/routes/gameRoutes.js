@@ -34,8 +34,7 @@ router.get('/', isAuthenticated, async (req, res) => {
 // Example: GET games by season_id
 router.get('/bySeason/:seasonId', isAuthenticated, async (req, res) => {
     try {
-        const games = await Game.find({ season_id: mongoose.Types.ObjectId(req.params.seasonId) })
-                                .populate('season_id tempo_events shot_events');
+        const games = await Game.find({ season_id: mongoose.Types.ObjectId(req.params.seasonId) });
         res.json(games);
     } catch (err) {
         res.status(500).json({ message: 'Internal server error', error: err.message });
@@ -45,8 +44,7 @@ router.get('/bySeason/:seasonId', isAuthenticated, async (req, res) => {
 // Repeat the pattern above for other specific GET functions by adapting the query as needed
 router.get('/byDate/:date', isAuthenticated, async (req, res) => {
     try {
-        const games = await Game.find({ date: req.params.date })
-                                .populate('season_id tempo_events shot_events');
+        const games = await Game.find({ date: req.params.date });
         res.json(games);
     } catch (err) {
         res.status(500).json({ message: 'Internal server error', error: err.message });
@@ -55,8 +53,7 @@ router.get('/byDate/:date', isAuthenticated, async (req, res) => {
 
 router.get('/byOpponent/:opponent', isAuthenticated, async (req, res) => {
     try {
-        const games = await Game.find({ opponent: req.params.opponent })
-                                .populate('season_id tempo_events shot_events');
+        const games = await Game.find({ opponent: req.params.opponent });
         res.json(games);
     } catch (err) {
         res.status(500).json({ message: 'Internal server error', error: err.message });
@@ -65,8 +62,7 @@ router.get('/byOpponent/:opponent', isAuthenticated, async (req, res) => {
 
 router.get('/byLocation/:location', isAuthenticated, async (req, res) => {
     try {
-        const games = await Game.find({ location: req.params.location })
-                                .populate('season_id tempo_events shot_events');
+        const games = await Game.find({ location: req.params.location });
         res.json(games);
     } catch (err) {
         res.status(500).json({ message: 'Internal server error', error: err.message });
@@ -75,8 +71,7 @@ router.get('/byLocation/:location', isAuthenticated, async (req, res) => {
 
 router.get('/byTempoEvent/:tempoEventId', isAuthenticated, async (req, res) => {
     try {
-        const games = await Game.find({ tempo_events: mongoose.Types.ObjectId(req.params.tempoEventId) })
-                                .populate('season_id tempo_events shot_events');
+        const games = await Game.find({ tempo_events: mongoose.Types.ObjectId(req.params.tempoEventId) });
         res.json(games);
     } catch (err) {
         res.status(500).json({ message: 'Internal server error', error: err.message });
@@ -85,8 +80,7 @@ router.get('/byTempoEvent/:tempoEventId', isAuthenticated, async (req, res) => {
 
 router.get('/byShotEvent/:shotEventId', isAuthenticated, async (req, res) => {
     try {
-        const games = await Game.find({ shot_events: mongoose.Types.ObjectId(req.params.shotEventId) })
-                                .populate('season_id tempo_events shot_events');
+        const games = await Game.find({ shot_events: mongoose.Types.ObjectId(req.params.shotEventId) });
         res.json(games);
     } catch (err) {
         res.status(500).json({ message: 'Internal server error', error: err.message });
@@ -96,7 +90,7 @@ router.get('/byShotEvent/:shotEventId', isAuthenticated, async (req, res) => {
 // GET a game by ID
 router.get('/:id', isAuthenticated, async (req, res) => {
     try {
-        const game = await Game.findById(req.params.id).populate('season_id tempo_events shot_events');
+        const game = await Game.findById(req.params.id);
         if (!game) {
             return res.status(404).json({ message: 'Game not found' });
         }
