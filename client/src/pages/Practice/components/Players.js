@@ -6,7 +6,7 @@ import { useLocation } from 'react-router-dom';
 
 const Players = ({ listA, setListA, listB, setListB, playerData, setPlayerData }) => {
 
-    const serverUrl = process.env.REACT_APP_SERVER_URL;
+    const serverUrl = useState(process.env.REACT_APP_SERVER_URL);
 
     const handleAddDropdownA = () => {
         const newPlayer = playerData.length > listA.length ? playerData[listA.length].name : `New Player ${listA.length + 1}`;

@@ -36,11 +36,12 @@ function PlayerStats() {
   const drillIdParam = urlParams.get('drillId');
   const playerID  = urlParams.get('playerID');
   const [selectedPlayer, setSelectedPlayer] = useState(''); //
+  const serverUrl = useState(process.env.REACT_APP_SERVER_URL);
 
 useEffect(() => {
   const fetchInitialData = async () => {
     try {
-      const playerResponse = await fetch('http://localhost:3001/api/players/'); //Note to self: feetches as an ARRAY // Also should switch this to player ID at some point
+      const playerResponse = await fetch(serverUrl + '/api/players/'); //Note to self: feetches as an ARRAY // Also should switch this to player ID at some point
       const playerData = await playerResponse.json();
       //console.log(playerData[0]); //Array
       setAllPlayers(playerData.map(player => ({
@@ -61,7 +62,7 @@ useEffect(() => {
       console.error("Failed to player data: ", error);
     }
     try{
-      const sessionResponse = await fetch('http://localhost:3001/api/practices');
+      const sessionResponse = await fetch(serverUrl + '/api/practices');
       const sessionData = await sessionResponse.json();
       //console.log(sessionData)
       const formattedSessions = sessionData.map(session => {
@@ -256,7 +257,7 @@ useEffect(() => {
 
   const fetchPlayerData = async (playerID) => {
     try {
-      const drillResponse = await fetch('http://localhost:3001/api/drills/players/'+ playerID);
+      const drillResponse = await fetch(serverUrl + '/api/drills/players/'+ playerID);
       const drillData = await drillResponse.json();
       //console.log("These are the drills Maddie is in: ")
       //console.log(drillData);
@@ -270,7 +271,7 @@ useEffect(() => {
       console.error("Failed to fetch drill data:", error);
     }
     try {
-      const tempoResponse = await fetch('http://localhost:3001/api/tempos/byPlayer/' + playerID);
+      const tempoResponse = await fetch(serverUrl + '/api/tempos/byPlayer/' + playerID);
       const tempoData = await tempoResponse.json();
       //console.log("These are tempos:")
       //console.log(tempoData);
@@ -279,7 +280,7 @@ useEffect(() => {
       console.error("Failed to fetch tempos from drill data:", error);
     }
     try {
-      const shotsResponse = await fetch('http://localhost:3001/api/shots/');//byPlayer/' + playerData[0]._id);
+      const shotsResponse = await fetch(serverUrl + '/api/shots/');//byPlayer/' + playerData[0]._id);
       const shotsData = await shotsResponse.json(); //This is not programmed to get shots by player yet; the route does not cooperate
       //console.log("These are shots:")
       //console.log(shotsData);

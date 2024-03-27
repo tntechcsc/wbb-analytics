@@ -6,6 +6,7 @@ import DrillModal from '../components/DrillModal'; // Adjust the import path as 
 const DrillButtons = ({ drills, setDrills, onAddDrill, practiceID }) => {
     const [isModalOpen, setModalOpen] = useState(false);
     const navigate = useNavigate(); // Initialize useNavigate
+    const serverUrl = useState(process.env.REACT_APP_SERVER_URL);
 
     // Function to handle adding a new drill
     const handleNewDrill = (drill) => {
@@ -23,7 +24,7 @@ const DrillButtons = ({ drills, setDrills, onAddDrill, practiceID }) => {
 
         try {
             // Assuming you have a function or API endpoint to delete the drill by its ID
-            const response = await fetch(`http://localhost:3001/api/drills/${drillId}`, {
+            const response = await fetch(serverUrl + `/api/drills/${drillId}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',

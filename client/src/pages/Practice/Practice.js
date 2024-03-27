@@ -56,7 +56,7 @@ const Practice = () => {
     
                 const createPracticeSession = async () => {
                     try {
-                        const response = await fetch('http://localhost:3001/api/practices', {
+                        const response = await fetch(serverUrl + '/api/practices', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json'
@@ -89,7 +89,7 @@ const Practice = () => {
         };
 
         try {
-            const response = await fetch(`http://localhost:3001/api/practices/${SessionData._id}`, {
+            const response = await fetch(serverUrl + `/api/practices/${SessionData._id}`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
@@ -111,15 +111,6 @@ const Practice = () => {
         const year = splitDate[0];
         const seasonByDate = SeasonData.find(season => season.year === year)
 
-<<<<<<< HEAD:client/src/pages/Practice/Practice.js
-        if (!x) {
-            const seasonData = {
-                year: year,
-                players: listIDA.concat(listIDB),
-            };
-    
-            fetch(serverUrl + '/api/seasons', {
-=======
         return seasonByDate;
     };
 
@@ -131,8 +122,7 @@ const Practice = () => {
         };
 
         try {
-            const response = await fetch('http://localhost:3001/api/drills', {
->>>>>>> c2d8349a4e0222a8e7959afe24d3e5678ec9764f:src/pages/Practice/Practice.js
+            const response = await fetch(serverUrl + '/api/drills', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -148,52 +138,6 @@ const Practice = () => {
         }
     };
 
-<<<<<<< HEAD:client/src/pages/Practice/Practice.js
-    const postSession = (sesData, date) => {
-
-        if (!date) {
-            const currentDate = new Date();
-            date = `${currentDate.getFullYear()}-${(currentDate.getMonth() + 1).toString().padStart(2, '0')}-${currentDate.getDate().toString().padStart(2, '0')}`;
-        }
-
-        else { date = date;}
-
-        const listIDA = listA.map(player => player._id);
-        const listIDB = listB.map(player => player._id);
-
-        const sessionData = {
-            season_id: sesData,
-            date: date,
-            //drills: drillIDS,
-            team_purple: listIDA,
-            team_gray: listIDB
-        };
-
-        //console.log('players: ', listIDA, listIDB)
-    
-        // Send POST request to save session data
-        const respons = fetch(serverUrl + '/api/practices', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(sessionData),
-        })
-    
-        .then(response => response.json())
-        .then(data => {
-            console.log('Session Submitted:', data);
-            handleSaveDrill(data._id);
-        })
-    
-        .catch(error => console.error('Error submitting Session:', error));
-    
-        // Handle successful response
-        navigate('/drill');
-    };
-    
-=======
->>>>>>> c2d8349a4e0222a8e7959afe24d3e5678ec9764f:src/pages/Practice/Practice.js
 
     const handleTabClick = (tab) => {
         setActiveTab(tab);

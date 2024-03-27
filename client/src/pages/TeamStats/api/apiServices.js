@@ -1,5 +1,6 @@
 // src/api/apiService.js
-const API_BASE_URL = 'http://localhost:3001/api';
+const serverUrl = useState(process.env.REACT_APP_SERVER_URL);
+const API_BASE_URL = serverUrl + '/api';
 
 export const fetchSeasons = async () => {
   const response = await fetch(`${API_BASE_URL}/seasons`);

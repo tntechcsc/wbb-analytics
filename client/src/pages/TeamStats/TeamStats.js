@@ -40,7 +40,7 @@ const chartOptions = {
 };
 
 function TeamStats() {
-  const serverUrl = process.env.REACT_APP_SERVER_URL;
+  const serverUrl = useState(process.env.REACT_APP_SERVER_URL);
   // State variables for storing fetched data and user selections
   const [seasons, setSeasons] = useState([]);
   const [selectedSeason, setSelectedSeason] = useState('');
