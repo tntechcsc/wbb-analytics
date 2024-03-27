@@ -12,7 +12,6 @@ RUN npm install
 RUN npm install dotenv
 RUN npm install @mui/x-data-grid
 RUN npm install bcryptjs
-
 # Layer 5: Copying all the files from the root of the project to the `app` directory in the container.
 COPY . .
 

@@ -30,13 +30,12 @@ function TempoPage() {
 
     const [isPlayerSelectedforShot, setIsPlayerSelectedforShot] = useState(false);
     const [player, setPlayer] = useState(null);
-    const serverUrl = useState(process.env.REACT_APP_SERVER_URL);
     const [isPopupOpen, setIsPopupOpen] = useState(false);
     const [selectedPlayerForSub, setSelectedPlayerForSub] = useState(null);
     const [isShotPopupOpen, setIsShotPopupOpen] = useState(false);
     const [selectedZone, setSelectedZone] = useState(null);
     const [isPlayer, setIsPlayer] = useState(false);
-
+    const serverUrl = process.env.REACT_APP_SERVER_URL;
     useEffect(() => {
         
         fetch(serverUrl + '/api/players')

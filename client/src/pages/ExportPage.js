@@ -8,7 +8,7 @@ const ExportPage = () => {
   const [seasons, setSeasons] = useState([]);
   const [selectedSeason, setSelectedSeason] = useState('');
   const [gamesAndPractices, setGamesAndPractices] = useState([]);
-  const serverUrl = useState(process.env.REACT_APP_SERVER_URL);
+  const serverUrl = process.env.REACT_APP_SERVER_URL;
 
   const columns = [
     { field: 'id', headerName: 'ID', width: 90 },

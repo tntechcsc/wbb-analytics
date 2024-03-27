@@ -40,7 +40,7 @@ const chartOptions = {
 };
 
 function TeamStats() {
-  const serverUrl = useState(process.env.REACT_APP_SERVER_URL);
+  const serverUrl = process.env.REACT_APP_SERVER_URL;
   // State variables for storing fetched data and user selections
   const [seasons, setSeasons] = useState([]);
   const [selectedSeason, setSelectedSeason] = useState('');
@@ -84,6 +84,7 @@ function TeamStats() {
   // Fetches practices for a given season ID
   const fetchpractices = async (seasonID) => {
     try {
+      console.log(serverUrl);
       const response = await fetch(serverUrl + `/api/practices/bySeason/${seasonID}`);
       const data = await response.json();
       setpractices(data);
@@ -246,6 +247,7 @@ function TeamStats() {
   useEffect(() => {
     const fetchInitialData = async () => {
       // Fetch Seasons
+      console.log(serverUrl);
       try {
         const response = await fetch(serverUrl + '/api/seasons');
         const seasonsData = await response.json();
@@ -309,6 +311,7 @@ function TeamStats() {
   useEffect(() => {
     if (selectedpractice) {
       const fetchDrillsForpractice = async () => {
+        console.log(selectedpractice);
         try {
           const response = await fetch(serverUrl + `/api/drills/practice/${selectedpractice}`);
           const drillsData = await response.json();

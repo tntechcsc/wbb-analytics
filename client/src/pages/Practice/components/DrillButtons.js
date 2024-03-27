@@ -6,7 +6,7 @@ import DrillModal from '../components/DrillModal'; // Adjust the import path as 
 const DrillButtons = ({ drills, setDrills, onAddDrill, practiceID }) => {
     const [isModalOpen, setModalOpen] = useState(false);
     const navigate = useNavigate(); // Initialize useNavigate
-    const serverUrl = useState(process.env.REACT_APP_SERVER_URL);
+    const serverUrl = process.env.REACT_APP_SERVER_URL;
 
     // Function to handle adding a new drill
     const handleNewDrill = (drill) => {

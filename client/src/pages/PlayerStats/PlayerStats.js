@@ -36,9 +36,10 @@ function PlayerStats() {
   const drillIdParam = urlParams.get('drillId');
   const playerID  = urlParams.get('playerID');
   const [selectedPlayer, setSelectedPlayer] = useState(''); //
-  const serverUrl = useState(process.env.REACT_APP_SERVER_URL);
+  const serverUrl = process.env.REACT_APP_SERVER_URL;
 
 useEffect(() => {
+  console.log(serverUrl);
   const fetchInitialData = async () => {
     try {
       const playerResponse = await fetch(serverUrl + '/api/players/'); //Note to self: feetches as an ARRAY // Also should switch this to player ID at some point
@@ -62,6 +63,7 @@ useEffect(() => {
       console.error("Failed to player data: ", error);
     }
     try{
+      
       const sessionResponse = await fetch(serverUrl + '/api/practices');
       const sessionData = await sessionResponse.json();
       //console.log(sessionData)

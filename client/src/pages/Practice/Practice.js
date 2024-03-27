@@ -20,7 +20,7 @@ const Practice = () => {
     const [listA, setListA] = useState([]);
     const [listB, setListB] = useState([]);
     const [playerData, setPlayerData] = useState([]);
-    const serverUrl = useState(process.env.REACT_APP_SERVER_URL);
+    const serverUrl = process.env.REACT_APP_SERVER_URL;
 
 
     useEffect(() => {
@@ -55,6 +55,7 @@ const Practice = () => {
                 };
     
                 const createPracticeSession = async () => {
+                    console.log(serverUrl);
                     try {
                         const response = await fetch(serverUrl + '/api/practices', {
                             method: 'POST',

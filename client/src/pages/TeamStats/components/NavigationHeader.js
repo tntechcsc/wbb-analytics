@@ -16,7 +16,7 @@ function NavigationHeader() {
         <div className={isMenuOpen ? "bar3 change" : "bar3"}></div>
       </div>
       <ul className={isMenuOpen ? "nav-links open" : "nav-links"}>
-        <li><a href="/homePage">Home</a></li>
+        <li><a href="/homepage">Home</a></li>
         <li><a href="/createsession">Create Session</a></li>
         <li><a href="/stats">Stats</a></li>
       </ul>

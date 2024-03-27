@@ -1,5 +1,5 @@
 // src/api/apiService.js
-const serverUrl = useState(process.env.REACT_APP_SERVER_URL);
+const serverUrl = process.env.REACT_APP_SERVER_URL;
 const API_BASE_URL = serverUrl + '/api';
 
 export const fetchSeasons = async () => {
