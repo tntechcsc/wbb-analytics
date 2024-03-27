@@ -21,21 +21,23 @@ const Players = ({ listA, setListA, listB, setListB, playerData, setPlayerData }
 
     const handlePlayerChange = (team, index, event) => {
         const { value } = event.target;
-    
-        if (team === 'A') {
-            const updatedListA = [...listA];
-            updatedListA[index].playerName = value;
-            setListA(updatedListA);
-        }
-        
-        else if (team === 'B') {
-            const adjustedIndex = index; // No need to adjust index for listB
 
-            if (adjustedIndex >= 0 && adjustedIndex < listB.length) {
-                const updatedListB = [...listB];
-                updatedListB[adjustedIndex].playerName = value;
-                setListB(updatedListB);
-            }
+        if (team === 'A') {
+            const updatedListA = listA.map((player, i) => {
+                if (i === index) {
+                    return { ...player, playerName: value, _id: playerData.find(p => p.name === value)._id };
+                }
+                return player;
+            });
+            setListA(updatedListA);
+        } else if (team === 'B') {
+            const updatedListB = listB.map((player, i) => {
+                if (i === index) {
+                    return { ...player, playerName: value, _id: playerData.find(p => p.name === value)._id };
+                }
+                return player;
+            });
+            setListB(updatedListB);
         }
     };
     

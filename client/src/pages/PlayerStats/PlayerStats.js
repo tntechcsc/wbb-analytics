@@ -18,6 +18,7 @@ function PlayerStats() {
 
 
   const [sessions, setSessions] = useState([]);
+  const [allPlayers, setAllPlayers] = useState([]);
   const [allDrills, setAllDrills] = useState([]);
   const [filteredDrills, setFilteredDrills] = useState([]);
   const [allTempos, setAllTempos] = useState([]);
@@ -39,49 +40,30 @@ function PlayerStats() {
 useEffect(() => {
   const fetchInitialData = async () => {
     try {
-      const playerResponse = await fetch('http://localhost:3001/api/players/jersey/' + playerID); //Note to self: feetches as an ARRAY // Also should switch this to player ID at some point
+      const playerResponse = await fetch('http://localhost:3001/api/players/'); //Note to self: feetches as an ARRAY // Also should switch this to player ID at some point
       const playerData = await playerResponse.json();
       //console.log(playerData[0]); //Array
-      setSelectedPlayer(playerData[0]._id); //What about jersey number that no exis?
-      try {
-        const drillResponse = await fetch('http://localhost:3001/api/drills/players/'+ playerData[0]._id);
-        const drillData = await drillResponse.json();
-        //console.log("These are the drills Maddie is in: ")
-        //console.log(drillData);
-        setAllDrills(drillData);
-        if (drillIdParam) {
-          setSelectedDrill(drillIdParam);
-        } else if (drillData.length > 0) {
-          setSelectedDrill(drillData[0]._id.toString());
-        }
-      } catch (error) {
-        console.error("Failed to fetch drill data:", error);
+      setAllPlayers(playerData.map(player => ({
+      label: `${player.name}`,
+      value: player._id.toString(),
+    })));
+      console.log(allPlayers);
+      if (playerID) {
+        //Find the player with the matching ID
+        setSelectedPlayer(playerData.find(player => player._id === playerID))
+        fetchPlayerData(playerData.find(player => player._id === playerID)._id);
+      } else if (playerData.length > 0) {
+        setSelectedPlayer(playerData[0]); //What about jersey number that no exis?
+        fetchPlayerData(playerData[0]._id);
       }
-      try {
-        const tempoResponse = await fetch('http://localhost:3001/api/tempos/byPlayer/' + playerData[0]._id);
-        const tempoData = await tempoResponse.json();
-        //console.log("These are tempos:")
-        //console.log(tempoData);
-        setAllTempos(tempoData);
-      } catch (error){
-        console.error("Failed to fetch tempos from drill data:", error);
-      }
-      try {
-        const shotsResponse = await fetch('http://localhost:3001/api/shots/');//byPlayer/' + playerData[0]._id);
-        const shotsData = await shotsResponse.json(); //This is not programmed to get shots by player yet; the route does not cooperate
-        //console.log("These are shots:")
-        //console.log(shotsData);
-        setAllShots(shotsData);
-      } catch (error) {
-        console.error("Failed to fetch shot data:", error);
-      }
+      console.log(selectedPlayer);
     } catch (error){
       console.error("Failed to player data: ", error);
     }
     try{
       const sessionResponse = await fetch('http://localhost:3001/api/practices');
       const sessionData = await sessionResponse.json();
-      console.log(sessionData)
+      //console.log(sessionData)
       const formattedSessions = sessionData.map(session => {
         const date = new Date(session.date); // Create a date object
         // Format the date as MM/dd/yyyy
@@ -143,6 +125,21 @@ useEffect(() => {
   };
 
   const sectionLabels = ["30-20", "20-10", "10-0"]; //This is for the shot clock data
+
+  const handlePlayerChange = (event) => {
+    const newPlayerID = event.target.value;
+    setSelectedPlayer(newPlayerID);
+
+    setSelectedPlayer(allPlayers.find(player => player._id === playerID))
+
+    const urlParams = new URLSearchParams(window.location.search);
+    urlParams.set('playerID', newPlayerID);
+    window.history.pushState(null, '', `${window.location.pathname}?${urlParams}`);
+
+    // Immediately filter drills for the newly selected session and set the first drill as selected
+    // This assumes allDrills has been previously populated with all available drills
+    fetchPlayerData(newPlayerID);
+  }
 
   const handleSessionChange = (event) => {
     const newSessionId = event.target.value;
@@ -256,14 +253,51 @@ useEffect(() => {
     }
     setShotClockData(shotDat);
   };
+
+  const fetchPlayerData = async (playerID) => {
+    try {
+      const drillResponse = await fetch('http://localhost:3001/api/drills/players/'+ playerID);
+      const drillData = await drillResponse.json();
+      //console.log("These are the drills Maddie is in: ")
+      //console.log(drillData);
+      setAllDrills(drillData);
+      if (drillIdParam) {
+        setSelectedDrill(drillIdParam);
+      } else if (drillData.length > 0) {
+        setSelectedDrill(drillData[0]._id.toString());
+      }
+    } catch (error) {
+      console.error("Failed to fetch drill data:", error);
+    }
+    try {
+      const tempoResponse = await fetch('http://localhost:3001/api/tempos/byPlayer/' + playerID);
+      const tempoData = await tempoResponse.json();
+      //console.log("These are tempos:")
+      //console.log(tempoData);
+      setAllTempos(tempoData);
+    } catch (error){
+      console.error("Failed to fetch tempos from drill data:", error);
+    }
+    try {
+      const shotsResponse = await fetch('http://localhost:3001/api/shots/');//byPlayer/' + playerData[0]._id);
+      const shotsData = await shotsResponse.json(); //This is not programmed to get shots by player yet; the route does not cooperate
+      //console.log("These are shots:")
+      //console.log(shotsData);
+      setAllShots(shotsData);
+    } catch (error) {
+      console.error("Failed to fetch shot data:", error);
+    }
+  };
   
   return (
     <div className="team-stats-container">
-      <header className="team-header">
-        <NavagationHeader />
-      </header>
-
       <div className="selectors">
+      <Selector
+          options={allPlayers}
+          onChange={handlePlayerChange}
+          label="Player"
+          value={selectedPlayer}
+        />
       <Selector
           options={sessions}
           onChange={handleSessionChange}
@@ -281,7 +315,6 @@ useEffect(() => {
 
       <div className="detailed-stats">
         <div className="tempo-cards">
-          <h3 classname = "player-information">Player ID: {selectedPlayer.jersey_number}, Player Name: {selectedPlayer.name}</h3>
           <TempoCard title="Avg Offensive Tempo" tempo={avgOffensiveTempo} />
           <TempoCard title="Avg Defensive Tempo" tempo={avgDefensiveTempo} />
         </div>
