@@ -4,7 +4,7 @@ import ClickAwayListener from 'react-click-away-listener';
 
 function ShotPopup({ isOpen, onClose, gameOrDrill_id, onModel, player_id, zone }) {
     const [shotOutcome, setShotOutcome] = useState(null); // 'made' or 'missed'
-    const serverUrl = useState(process.env.REACT_APP_SERVER_URL);
+    const serverUrl = process.env.REACT_APP_SERVER_URL;
     const submitShot = (isMade, shotClockTime) => {
         const shotData = {
             gameOrDrill_id: gameOrDrill_id,
