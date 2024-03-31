@@ -44,7 +44,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "start-client": "cd client && cross-env REACT_APP_SERVER_URL=http://localhost:3001 npm start",
-    "start-server": "node server/src/server",
+    "start-server": "cd server && node src/server",
     "dev": "concurrently \"npm run start-server\" \" npm run start-client\"",
     "dev_offcampus": "concurrently \"npm run start-client\" \"cross-env NODE_ENV=DEVELOPMENT_OFFCAMPUS npm run start-server\"",
     "prod": "npm run build && cross-env NODE_ENV=production node src/server.js",
