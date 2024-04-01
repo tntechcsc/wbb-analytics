@@ -26,11 +26,11 @@ const LoginPage = () => {
                     const formattedUser = data.map(user => {
                         const Uname = user.username;
                         const Upassword = user.password;
-                        const Utoken = user.token;
+                        const Uroles = user.roles;
                         return {
                           username: Uname,
                           password: Upassword,
-                          token: Utoken
+                          token: Uroles
                         }
                     }); 
                     setUsers(formattedUser);
@@ -58,7 +58,7 @@ const LoginPage = () => {
             bcrypt
                 .compare(password,content.password)
                 .then(res => {
-                console.log(res)
+                console.log(res);
                 if(res === true)
                 {
                 auth.loginAction({username: username, password: content.password,token: content.token});

@@ -15,6 +15,7 @@ const HomePage = () => {
   
   return (
       <div className="home-page-container">
+        
           <button onClick={() => setModalOpen(true)} className="Linkish-Button1">
             New Session
           </button>

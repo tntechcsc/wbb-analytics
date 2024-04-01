@@ -87,7 +87,6 @@ const fetchPracticesForDate = async (date) => {
               selectedDate={selectedDate}
               onClose={() => setShowPracticesModal(false)} />
         )}
-
         <Link className="menu-item" to="/practice">
           Create Practice
         </Link>
