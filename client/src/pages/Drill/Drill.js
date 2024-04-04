@@ -8,7 +8,7 @@ import TempoButton from './components/TempoButton'
 import SubstitutionPopup from './components/SubstitutionPopup'
 import ShotPopup from './components/ShotPopup'
 
-import area from './components/Court';
+
 
 import ImageMapper from "react-img-mapper";
 import basketballCourtVector from './components/basketball-court-vector.jpg';
