@@ -24,6 +24,14 @@ body, html {
   color: var(--text-color-dark); /* Improved readability */
 }
 
+.shots-table-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  padding: 1rem;
+  background-color: var(--card-bg-color);
+}
+
 .team-stats-container {
   display: flex;
   flex-direction: column;
@@ -61,8 +69,23 @@ body, html {
 }
 
 .heatmap {
+  flex-grow: 1;
   background-color: var(--primary-color);
+  border-radius: 8px;
+  padding: 1rem;
+  margin-left: 1rem;
+  overflow: auto; /* Add this to allow scrolling within the heatmap if content overflows */
+  max-height: 500px;
+  max-width: 100%;
+  overflow: auto;
 }
+
+.heatmap canvas {
+  max-height: 500px !important;
+  width: 100% !important;
+  height: auto !important;
+}
+
 
 .stats-overview {
   background-color: var(--card-bg-color);
