@@ -12,6 +12,9 @@ import area from './components/Court';
 
 import ImageMapper from "react-img-mapper";
 import basketballCourtVector from './components/basketball-court-vector.jpg';
+import ExtraStats from './components/ExtraStats';
+import { Button } from 'react-bootstrap';
+import { set } from 'mongoose';
 
 
 function TempoPage() {
@@ -35,6 +38,15 @@ function TempoPage() {
     const [isShotPopupOpen, setIsShotPopupOpen] = useState(false);
     const [selectedZone, setSelectedZone] = useState(null);
     const [isPlayer, setIsPlayer] = useState(false);
+
+    const [isRebound, setIsRebound] = useState(false);
+    const [isAssist, setIsAssist] = useState(false);
+    const [isTurnover, setIsTurnover] = useState(false);
+    const [isSteal, setIsSteal] = useState(false);
+    const [isBlock, setIsBlock] = useState(false);
+    const [isFoul, setIsFoul] = useState(false);
+    const [isCharge, setIsCharge] = useState(false);
+
     const serverUrl = process.env.REACT_APP_SERVER_URL;
     useEffect(() => {
         
@@ -184,6 +196,55 @@ function TempoPage() {
         setIsSub(true); // Assuming `isSub` is used to distinguish between different actions
       };
 
+    const handleReboud = (player) => {
+        alert(`Player ${player.number} got the rebound`);
+        //Push rebound to db
+        setIsRebound(false);
+        setIsPlayerSelectedforShot(false);
+    };
+
+    const handleAssist = (player) => {
+        alert(`Player ${player.number} got the assist`);
+        //Push assist to db
+        setIsPlayerSelectedforShot(false);
+        setIsAssist(false);
+    }
+
+    const handleTurnover = (player) => {
+        alert(`Player ${player.number} got the turnover`);
+        //Push turnover to db
+        setIsPlayerSelectedforShot(false);
+        setIsTurnover(false);
+    }
+
+    const handleSteal = (player) => {
+        alert(`Player ${player.number} got the steal`);
+        //Push steal to db
+        setIsPlayerSelectedforShot(false);
+        setIsSteal(false);
+    }
+
+    const handleBlock = (player) => {
+        alert(`Player ${player.number} got the block`);
+        //Push block to db
+        setIsPlayerSelectedforShot(false);
+        setIsBlock(false);
+    }
+
+    const handleFoul = (player) => {
+        alert(`Player ${player.number} got the foul`);
+        //Push foul to db
+        setIsPlayerSelectedforShot(false);
+        setIsFoul(false);
+    }
+
+    const handleCharge = (player) => {
+        alert(`Player ${player.number} got the charge`);
+        //Push charge to db
+        setIsPlayerSelectedforShot(false);
+        setIsCharge(false);
+    }
+
 
       return (
         <div className="TempoPage">
@@ -235,6 +296,58 @@ function TempoPage() {
                         </div>
                     </div>
                 </div>
+            </div>
+            <div className="MiddleContainer">
+                <ExtraStats
+                    className="Rebound"
+                    onClick={() => setIsRebound(true)}
+                    
+                />
+                {isRebound && isPlayerSelectedforShot && (
+                    handleReboud(player)
+                )}
+                <ExtraStats
+                    className="Assist"
+                    onClick={() => setIsAssist(true)}
+                />
+                {isAssist && isPlayerSelectedforShot && (
+                    handleAssist(player)
+                )}
+                <ExtraStats
+                    className="Turnover"
+                    onClick={() => setIsTurnover(true)}
+                />
+                {isTurnover && isPlayerSelectedforShot && (
+                    handleTurnover(player)
+                )}
+                <ExtraStats
+                    className="Steal"
+                    onClick={() => setIsSteal(true)}
+                />
+                {isSteal && isPlayerSelectedforShot && (
+                    handleSteal(player)
+                )}
+                <ExtraStats
+                    className="Block"
+                    onClick={() => setIsBlock(true)}
+                />
+                {isBlock && isPlayerSelectedforShot && (
+                    handleBlock(player)
+                )}
+                <ExtraStats
+                    className="Foul"
+                    onClick={() => setIsFoul(true)}
+                />
+                {isFoul && isPlayerSelectedforShot && (
+                    handleFoul(player)
+                )}
+                <ExtraStats
+                    className="Charge"
+                    onClick={() => setIsCharge(true)}
+                />
+                {isCharge && isPlayerSelectedforShot && (
+                    handleCharge(player)
+                )}
             </div>
             <div className="BottomContainer">
                 <div className="TempoControls">
