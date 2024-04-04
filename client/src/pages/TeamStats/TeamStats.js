@@ -386,7 +386,7 @@ function TeamStats() {
           disabled={!selectedSeason} // Disable if no season is selected
         />
         <Selector
-          options={drills.map(drill => ({ label: drill.name, value: drill._id }))}
+          options={drills.map(drill => ({ label: `Drill: ${drill.name}`, value: drill._id }))}
           onChange={handleDrillChange}
           label="Drill"
           value={selectedDrill}
