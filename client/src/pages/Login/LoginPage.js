@@ -11,72 +11,78 @@ const LoginPage = () => {
     const [users, setUsers] = useState([]);
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [userKey, setUserKey] = useState('');
     const [incorrect,setIncorrect] = useState(false);
     const [hashPassword,setHashPassword] = useState('');
-    
-    useEffect(() => {
-        const serverUrl = process.env.REACT_APP_SERVER_URL;
-        const FetchData = async () => {
-            try
-            {
-            console.log(serverUrl);
-            await fetch(serverUrl + '/api/users')
-                .then(response => response.json())
-                .then(data => {
-                    const formattedUser = data.map(user => {
-                        const Uname = user.username;
-                        const Upassword = user.password;
-                        const Uroles = user.roles;
-                        return {
-                          username: Uname,
-                          password: Upassword,
-                          token: Uroles
-                        }
-                    }); 
-                    setUsers(formattedUser);
-            })
-            }
-            catch (error) {
-            console.error('Failed to fetch users:', error);  
-            } 
-            
-        };
-        FetchData();
-    },[]);
+    const [isRegistering,setIsRegistering] = useState(false);
+    const serverUrl = process.env.REACT_APP_SERVER_URL;
+    const moveToRegister = () => {
+        setIsRegistering(true);
+    };
+    const moveToLogin = () => {
+        setIsRegistering(false);
+    };
+    const handleRegister = async (event) => {
 
 
-    const handleLogin = (event) => {
+
+
         const saltRounds = 10;
         event.preventDefault();
-        const content = users.find(user => user.username === username);
-        if(!content){
-            setIncorrect(true);
-        }
-        else
+
+        if(username === '' || password === '' || userKey === '')
         {
-        console.log(content);
-            bcrypt
-                .compare(password,content.password)
-                .then(res => {
-                console.log(res);
-                if(res === true)
-                {
-                auth.loginAction({username: username, password: content.password,token: content.token});
-                return;
-                }
-                else
-                {
-                    setIncorrect(true);
-                }
-            })
-            .catch(err => console.error(err.message))
+            return;
         }
+        if(username.length < 8)
+        {
+            return;
+        }
+        if(password.length < 8)
+        {
+            return;
+        }
+
+        const keyResponse = await fetch(serverUrl + '/api/keys/' + userKey);
+        const keyData = await keyResponse.json();
         
+        if(keyData.message){
+            setIncorrect(true);
+            return;
+        }
+
+        const hash = await bcrypt.hash(password, saltRounds);
+        setHashPassword(hash);
+        const registerResponse = await fetch(serverUrl + '/api/users/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({username: username, password: hashPassword}),
+        });
+        const registerData = await registerResponse.json();
+        auth.loginAction({username: registerData.username, password: registerData.password, token: registerData.roles});
+    };
+    const handleLogin = async (event) => {
+        const saltRounds = 10;
+        event.preventDefault();
+
         
-    }
+        const loginResponse = await fetch(serverUrl + '/api/users/userCheck/' + username + '/' + password);
+        const loginData = await loginResponse.json();    
+        console.log(loginResponse);
+        console.log(loginData);
+        if(loginData.message){
+            setIncorrect(true);
+        } else {
+            auth.loginAction({username: loginData.username, password: loginData.password, token: loginData.roles});
+        }
+        };
+        
     return(
             <div className="login-page-container">
                 <div className="login-form">
+                    { !isRegistering ? ( 
                     <form onSubmit={handleLogin}>
                         <label>
                             Username:
@@ -90,7 +96,29 @@ const LoginPage = () => {
                             <a>Incorrect Username or Password</a>
                         )}
                         <button type="submit">Submit</button>
+                        <a onClick={() => moveToRegister()}>Register</a>
                     </form>
+                    ) : (
+                    <form onSubmit={handleRegister}>
+                        <label>
+                            Username:
+                            <input type="text" value={username} onChange={(e) => setUsername(e.target.value)}/>
+                        </label>
+                        <label>
+                            Password:
+                            <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+                        </label>
+                        <label>
+                            UserKey:
+                            <input type="text" value={userKey} onChange={(e) => setUserKey(e.target.value)} />
+                        </label>
+                        {incorrect === true && (
+                            <a>Incorrect Key</a>
+                        )}
+                        <button type="submit">Submit</button>
+                        <a onClick={() => moveToLogin()}>Login</a>
+                    </form>
+                    )}
                 </div>
             </div>
     );
