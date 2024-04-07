@@ -17,22 +17,22 @@ const HomePage = () => {
   
   return (
       <div className="home-page-container">
-        {  localStorage.getItem('site') === 'Admin' && (
-          <button className="Linkish-Button1">
-            Register
-          </button>
-        )}
+          {  sessionStorage.getItem('site') === 'Admin' && (
+            <button onClick={() => setModalOpenReg(true)} className="Reg-Button">
+              Register
+            </button>
+          )}
           <button onClick={() => setModalOpen(true)} className="Linkish-Button1">
             New Session
           </button>
           <button onClick={() => gotoStats()} className="Linkish-Button2">
             Stats
           </button>
-
+          
         <section className="about">
         </section>
-        <Register isOpen={isModalOpenReg} onClose={() => setModalOpenReg(false)}/>
         <SessionOption isOpen={isModalOpen} onClose={() => setModalOpen(false)}/>
+        <Register isOpen={isModalOpenReg} onClose={() => setModalOpenReg(false)}/>
       </div>
   );
 };

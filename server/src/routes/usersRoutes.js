@@ -30,20 +30,25 @@ router.get('/', async (req, res) => {
 });
 
 router.post('/', async (req, res) => {
-  const {username,password,roles} = req.body;
-  
+  const saltRounds = 10;
+  const {username,password,role} = req.body;
+  console.log('hello im here');
+  try {
   const existingUser = await User.findOne({ username });
   if (existingUser) {
       return res.status(400).json({ message: 'Username is already taken' });
   }
+  console.log('we are about to hash');
+  const hashedPassword = await bcrypt.hash(password, saltRounds);
+  console.log('Hashed password:', hashedPassword);
   const newUser = new User({
     _id: new mongoose.Types.ObjectId(),
     username,
-    password,
-    roles,
+    password: hashedPassword,
+    role
   });
-
-  try {
+  console.log(newUser);
+  
     await newUser.save();
     res.status(201).json(newUser);
   } catch (error) {

@@ -1,7 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const Key = require('../models/key'); // Adjust the path as necessary
 const mongoose = require('mongoose');
+const Key = require('../models/key'); // Adjust the path as necessary
+
+
 function generateRandomString(length) {
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     let result = '';
@@ -13,12 +15,13 @@ function generateRandomString(length) {
 
 //Create a new key
 router.post('/', async (req, res) => {
-    const { key, role } = req.body;
+    const role = req.body.role;
+    const key = generateRandomString(10);
     const newKey = new Key({
         _id: new mongoose.Types.ObjectId(),
-        key: generateRandomString(10),
+        key,
         role
-    });
+    }); 
     try {
         await newKey.save();
         res.status(201).json(newKey);
@@ -38,3 +41,5 @@ router.delete('/:key', async (req, res) => {
         res.status(500).json({ message: 'Internal server error', error: err.message });
     }
 });
+
+module.exports = router;

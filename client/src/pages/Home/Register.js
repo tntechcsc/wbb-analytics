@@ -1,26 +1,31 @@
 import React, { useState } from 'react';
-
+import './Home.css';
 const Register = ({ isOpen, onClose }) => {
     const [giveRole, setGiveRole] = useState(false);
     const [role, setRole] = useState('');
     const [key, setKey] = useState('');
-    const GiveKey = async (event) => {
-      event.preventDefault();
+    const serverUrl = process.env.REACT_APP_SERVER_URL;
+    const GiveKey = async () => {
       const data = {
         role: role,
       };
-      const response = fetch('http://localhost:5000/api/keys/' + key, {
+      console.log(data);
+      fetch(serverUrl + '/api/keys', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(data),
       })
-      const keyData = await response.json();
-      if(!keyData.message){
-        setKey(keyData.key);
-        setGiveRole(true);
-      }
+      .then(response => response.json())
+      .then(data => {
+        if(!data.message){
+          setKey(data.key);
+          setGiveRole(true);
+        }
+      } )
+      
+      
     }    
     
     if(!isOpen) return null;
@@ -30,18 +35,18 @@ const Register = ({ isOpen, onClose }) => {
           <div className="modal-content">
             <button className="close-button" onClick={onClose}>X</button>
             <h2>Register</h2>
-            {giveRole ? (
+            {!giveRole ? (
             <div>
-              
-                <label>What Role will the user have?</label>
+                <br/>
+                <h4 style={{textAlign: 'left'}}>What Role will the user have?</h4>
+                
                 <select value={role} onChange={(e) => setRole(e.target.value)}>
                     <option value="Select">Select</option>
                     <option value="Admin">Admin</option>
                     <option value="Moderator">Moderator</option>
                     <option value="User">User</option>
                 </select>
-                
-                <button onClick={() => GiveKey()}>Submit</button>
+                <button className="submit-button" onClick={() => GiveKey()}>Submit</button>
               
             </div>
             ) : (

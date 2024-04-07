@@ -8,61 +8,128 @@ import './LoginPage.css';
 const LoginPage = () => {
     let navigate = useNavigate();
     const auth = useAuth();
-    const [users, setUsers] = useState([]);
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [errorUser,setErrorUser] = useState('');
+    const [errorPass,setErrorPass] = useState('');
+    const [errorKey,setErrorKey] = useState('');
+    const [error,setError] = useState(false);
     const [userKey, setUserKey] = useState('');
     const [incorrect,setIncorrect] = useState(false);
-    const [hashPassword,setHashPassword] = useState('');
     const [isRegistering,setIsRegistering] = useState(false);
+
     const serverUrl = process.env.REACT_APP_SERVER_URL;
+
+    useEffect(() => {
+        if (auth.token) {
+          navigate('/homepage');
+        }
+      }, [auth.token]);
+    
     const moveToRegister = () => {
+        setUsername('');
+        setPassword('');
         setIsRegistering(true);
     };
     const moveToLogin = () => {
+        setUsername('');
+        setPassword('');
+        setUserKey('');
         setIsRegistering(false);
     };
     const handleRegister = async (event) => {
 
-
+        setError(false);
+        setErrorUser('');
+        setErrorPass('');
+        setErrorKey('');
 
 
         const saltRounds = 10;
         event.preventDefault();
-
-        if(username === '' || password === '' || userKey === '')
-        {
-            return;
-        }
+        const regex = /[!@#$%^&*()]/;
+        const cap = /QWERTYUIOPASDFGHJKLZXCVBNM/;
         if(username.length < 8)
         {
-            return;
+            console.log("visited");
+            setErrorUser('Username is too short!');
+            setError(true);
         }
+        console.log(username.length);
+        console.log(error);
         if(password.length < 8)
         {
-            return;
+            setErrorPass('Password is too short!');
+            setError(true);
         }
+        else if (!regex.test(password) && !cap.test(password)) {
+            setErrorPass('Password does not contain characters like !?/& and/or a capital letter');
+            setError(true);
 
-        const keyResponse = await fetch(serverUrl + '/api/keys/' + userKey);
-        const keyData = await keyResponse.json();
-        
-        if(keyData.message){
-            setIncorrect(true);
-            return;
         }
+        if(userKey === '')
+        {
+            setErrorKey('You need to enter a key');
+            setError(true);
 
-        const hash = await bcrypt.hash(password, saltRounds);
-        setHashPassword(hash);
-        const registerResponse = await fetch(serverUrl + '/api/users/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({username: username, password: hashPassword}),
-        });
-        const registerData = await registerResponse.json();
-        auth.loginAction({username: registerData.username, password: registerData.password, token: registerData.roles});
+        }
+        if(!error)
+        {
+            try {
+            const keyResponse = await fetch(serverUrl + '/api/keys/' + userKey, 
+            {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+            const data = await keyResponse.json();
+            console.log(data);
+            if (data.message) {
+                setErrorKey(data.message);
+                return;
+            } else {
+                const userData = {
+                    username: username,
+                    password: password,
+                    role: data.role
+                };
+
+                console.log(userData);
+
+                const userResponse = await fetch(serverUrl + '/api/users', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(userData),
+                });
+                
+            const newUser = userResponse.json();
+            if(!newUser.message)
+            {
+            await auth.loginAction({
+                username: newUser.username,
+                password: newUser.password,
+                token: newUser.role,
+            });
+            
+            window.location.reload();
+            }
+            else
+            {
+                setErrorUser('User is not unique choose a different one');
+                return;
+            }
+          
+            }
+            } catch (error) {
+                console.log(error);
+                console.error(error);
+            }
+        }
     };
+
     const handleLogin = async (event) => {
         const saltRounds = 10;
         event.preventDefault();
@@ -75,7 +142,9 @@ const LoginPage = () => {
         if(loginData.message){
             setIncorrect(true);
         } else {
-            auth.loginAction({username: loginData.username, password: loginData.password, token: loginData.roles});
+            await auth.loginAction({username: loginData.username, password: loginData.password, token: loginData.roles});
+            navigate('/homepage');
+            window.location.reload();
         }
         };
         
@@ -93,10 +162,10 @@ const LoginPage = () => {
                             <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
                         </label>
                         {incorrect === true && (
-                            <a>Incorrect Username or Password</a>
+                            <a className='error'>Incorrect Username or Password</a>
                         )}
                         <button type="submit">Submit</button>
-                        <a onClick={() => moveToRegister()}>Register</a>
+                        <a className='switch' onClick={() => moveToRegister()}>Register here</a>
                     </form>
                     ) : (
                     <form onSubmit={handleRegister}>
@@ -104,19 +173,19 @@ const LoginPage = () => {
                             Username:
                             <input type="text" value={username} onChange={(e) => setUsername(e.target.value)}/>
                         </label>
+                            <a className='error'>{errorUser}</a>
                         <label>
                             Password:
                             <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
                         </label>
+                            <a className='error'>{errorPass}</a>
                         <label>
                             UserKey:
                             <input type="text" value={userKey} onChange={(e) => setUserKey(e.target.value)} />
                         </label>
-                        {incorrect === true && (
-                            <a>Incorrect Key</a>
-                        )}
+                            <a>{errorKey}</a>
                         <button type="submit">Submit</button>
-                        <a onClick={() => moveToLogin()}>Login</a>
+                        <a className='switch' onClick={() => moveToLogin()}>Back to Login</a>
                     </form>
                     )}
                 </div>

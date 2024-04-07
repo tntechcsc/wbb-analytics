@@ -18,4 +18,4 @@ const keySchema = new Schema({
 
 keySchema.index({ expireAt: 1 }, { expireAfterSeconds: 0 });
 
-const keyModel = mongoose.model('Key', keySchema);
+module.exports = mongoose.model('Key', keySchema);

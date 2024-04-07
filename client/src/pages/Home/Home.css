@@ -81,23 +81,50 @@ footer {
   transition: background-color 0.3s ease-in-out;
   transition: transform 0.3s ease-in-out; /* Transition added here */
 }
-.Linkish-Button1 {
+.Linkish-Button:hover {
+  background-color: #EECF08 !important;
+  transform: scale(1.1); /* Transform effect on hover */
+}
+.Reg-Button, .Linkish-Button1 {
   background-color: #FFDD00 !important;
   color: #000000 !important;
   text-decoration: none;
   font-weight: bold;
   border: none;
-  margin-top: 10%;
-  width: 100vw;
+  width: 50%;
   padding: 30px;
   text-align: center;
   opacity: 0.9;
-  width: 50%;
   background-color: #A955C2;
   border-radius: 10px;
-  transition: background-color 0.3s ease-in-out;
-  transition: transform 0.3s ease-in-out; /* Transition added here */
+  transition: background-color 0.3s ease-in-out, transform 0.3s ease-in-out; /* Combine transitions */
 }
+
+.Reg-Button:hover, .Linkish-Button1:hover {
+  background-color: #EECF08 !important;
+  transform: scale(1.1); /* Transform effect on hover */
+}
+
+
+.Reg-Button {
+  position: relative; /* Set position to relative */
+  top: 55%; /* Position at the bottom */
+  transform: translateY(0); /* Reset transform */
+}
+
+.Reg-Button:hover {
+  transform-origin: bottom center; /* Set transform origin to bottom center */
+}
+
+.Linkish-Button1 {
+  position: relative; /* Set position to relative */
+  top: 30%; /* Position at the top */
+}
+
+.Linkish-Button1:hover {
+  transform-origin: top center; /* Set transform origin to top center */
+}
+
 .Linkish-Button2 {
   background-color: #FFDD00 !important;
   color: #000000 !important;
@@ -115,14 +142,7 @@ footer {
   transition: background-color 0.3s ease-in-out;
   transition: transform 0.3s ease-in-out; /* Transition added here */
 }
-.Linkish-Button:hover {
-  background-color: #EECF08 !important;
-  transform: scale(1.1); /* Transform effect on hover */
-}
-.Linkish-Button1:hover {
-  background-color: #EECF08 !important;
-  transform: scale(1.1); /* Transform effect on hover */
-}
+
 .Linkish-Button2:hover {
   background-color: #EECF08 !important;
   transform: scale(1.1); /* Transform effect on hover */
@@ -180,4 +200,13 @@ transition: opacity .5s ease !important; /* Smooth transition for opacity */
 }
 .close-button:hover {
   color: grey !important;
+}
+
+.submit-button  {
+  margin-top: 10px;
+  background-color: #FFDD00 !important;
+}
+.submit-button:hover {
+  background-color: #EECF08 !important;
+
 }
