@@ -84,7 +84,23 @@
 .menu-item:focus {
     color: #61dafb; /* Hover color taken from HomePage button focus */
 }
+.menu-item-button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    color: #FFDD00;
+    display: block;
+    padding: 0.5em 0;
+    padding-left: 0.5em;
+    font-size: 20px;
+    font-weight: 500;
+}
 
+.menu-item-button:hover,
+.menu-item-button:focus {
+    color: #4f2984; /* Hover color taken from HomePage button focus */
+    text-decoration: none;
+}
 /* Additional styling for a cohesive look */
 .bm-overlay {
     background: rgba(0, 0, 0, 0.3); /* Semi-transparent overlay to match HomePage style */

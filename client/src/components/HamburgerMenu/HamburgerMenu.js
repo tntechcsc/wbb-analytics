@@ -73,11 +73,11 @@ const fetchPracticesForDate = async (date) => {
         Home
       </a>
       {  sessionStorage.getItem('site') === 'Admin' && (
-      <button className="menu-item" onClick={() => setRegistration(true)}>
+      <button className="menu-item-button" onClick={() => setRegistration(true)}>
         Register A New User
       </button>
       )}
-      <button className="menu-item" onClick={() => setShowDatePicker(!showDatePicker)}>
+      <button className="menu-item-button" onClick={() => setShowDatePicker(!showDatePicker)}>
         Open Session
       </button>
       
