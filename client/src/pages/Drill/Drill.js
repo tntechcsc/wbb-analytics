@@ -15,6 +15,7 @@ import basketballCourtVector from './components/basketball-court-vector.jpg';
 import ExtraStats from './components/ExtraStats';
 import { Button } from 'react-bootstrap';
 import { set } from 'mongoose';
+import AvgTempoDisplay from './components/AvgTempo';
 
 
 function TempoPage() {
@@ -23,8 +24,11 @@ function TempoPage() {
     const [resetTimer, setResetTimer] = useState(false);
     const [currentTempo, setCurrentTempo] = useState(0);
     const [recordedTempo, setRecordedTempo] = useState(null);
-    const [lastTempo, setLastTempo] = useState(null);
+    const [lastTempo, setLastTempo] = useState(0);
     const [tempoType, setTempoType] = useState(null);
+    const [avgTempo, setAvgTempo] = useState(0);
+    const [tempoCount, setTempoCount] = useState(1);
+    const [totalTempo, setTotalTempo] = useState(0);
 
     const [playersOnCourt, setPlayersOnCourt] = useState([]);
     const [allPlayers, setAllPlayers] = useState([]);
@@ -92,6 +96,9 @@ function TempoPage() {
         console.log(`Starting ${type} tempo`);
         if (recordedTempo) {
             setLastTempo(recordedTempo.toFixed(2));
+            setTempoCount(tempoCount + 1);
+            setTotalTempo(totalTempo + recordedTempo);
+            setAvgTempo(((recordedTempo + totalTempo)/tempoCount).toFixed(2));
         }
         setCurrentTempo(0);
         setResetTimer(true);
@@ -367,6 +374,8 @@ function TempoPage() {
                             setCurrentTime={setCurrentTempo}
                         />
                         <LastTempoDisplay lastTempo={lastTempo} />
+                        <AvgTempoDisplay avgTempo={avgTempo} />
+                        
                         <CancelButton
                             onCancel={cancelTempo}
                             className={!isTiming ? 'disabled' : ''}
