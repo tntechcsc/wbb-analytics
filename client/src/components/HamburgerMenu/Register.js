@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './Home.css';
+import './HamburgerMenu';
 const Register = ({ isOpen, onClose }) => {
     const [giveRole, setGiveRole] = useState(false);
     const [role, setRole] = useState('');
