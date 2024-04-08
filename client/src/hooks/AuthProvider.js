@@ -7,15 +7,18 @@ const AuthProvider = ({ children }) => {
     const [result, setRes] = useState([]);
     const [token,setToken] = useState(sessionStorage.getItem("site") || "");
     const navigate = useNavigate();
-
     const loginAction = async (data) => {
         try {
             
             if (data) {
                 setUser(data.username);
+                console.log(data.username);
+                console.log(data.token);
                 setToken(data.token);
+
                 sessionStorage.setItem("site", data.token);
-                
+
+                console.log(token); // Use token here instead of data.token
             }
             else{
             throw new Error(data.message);

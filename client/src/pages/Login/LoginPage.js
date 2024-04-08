@@ -94,27 +94,27 @@ const LoginPage = () => {
                     password: password,
                     role: data.role
                 };
-
+                
                 console.log(userData);
 
-                const userResponse = await fetch(serverUrl + '/api/users', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(userData),
-                });
+            const userResponse = await fetch(serverUrl + '/api/users', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(userData),
+            });
                 
-            const newUser = userResponse.json();
+            const newUser = await userResponse.json();
             if(!newUser.message)
             {
-            await auth.loginAction({
+            auth.loginAction({
                 username: newUser.username,
                 password: newUser.password,
                 token: newUser.role,
             });
-            
-            window.location.reload();
+            console.log(auth.token);
+            navigate('/homepage');
             }
             else
             {
@@ -142,9 +142,9 @@ const LoginPage = () => {
         if(loginData.message){
             setIncorrect(true);
         } else {
-            await auth.loginAction({username: loginData.username, password: loginData.password, token: loginData.roles});
+            auth.loginAction({username: loginData.username, password: loginData.password, token: loginData.role});
+            console.log(auth.token);
             navigate('/homepage');
-            window.location.reload();
         }
         };
         
