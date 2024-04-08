@@ -13,7 +13,6 @@ const LoginPage = () => {
     const [errorUser,setErrorUser] = useState('');
     const [errorPass,setErrorPass] = useState('');
     const [errorKey,setErrorKey] = useState('');
-    const [error,setError] = useState(false);
     const [userKey, setUserKey] = useState('');
     const [incorrect,setIncorrect] = useState(false);
     const [isRegistering,setIsRegistering] = useState(false);
@@ -39,7 +38,7 @@ const LoginPage = () => {
     };
     const handleRegister = async (event) => {
 
-        setError(false);
+        var error = false;
         setErrorUser('');
         setErrorPass('');
         setErrorKey('');
@@ -48,54 +47,44 @@ const LoginPage = () => {
         const saltRounds = 10;
         event.preventDefault();
         const regex = /[!@#$%^&*()]/;
-        const cap = /QWERTYUIOPASDFGHJKLZXCVBNM/;
+        const cap = /[A-Z]/;
+        const low = /[a-z]/;
         if(username.length < 8)
         {
             console.log("visited");
             setErrorUser('Username is too short!');
-            setError(true);
+            error = true;
         }
         console.log(username.length);
-        console.log(error);
         if(password.length < 8)
         {
             setErrorPass('Password is too short!');
-            setError(true);
+            error = true;
         }
-        else if (!regex.test(password) && !cap.test(password)) {
+        else if (!regex.test(password) || !cap.test(password) || !low.test(password)) {
+            console.log(!regex.test(password));
+            console.log(!cap.test(password));
             setErrorPass('Password does not contain characters like !?/& and/or a capital letter');
-            setError(true);
+            error = true;
 
         }
         if(userKey === '')
         {
             setErrorKey('You need to enter a key');
-            setError(true);
+            error = true;
 
         }
-        if(!error)
+        if(error === false)
         {
             try {
-            const keyResponse = await fetch(serverUrl + '/api/keys/' + userKey, 
-            {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
-            const data = await keyResponse.json();
-            console.log(data);
-            if (data.message) {
-                setErrorKey(data.message);
-                return;
-            } else {
-                const userData = {
-                    username: username,
-                    password: password,
-                    role: data.role
-                };
+            
+            const userData = {
+                username: username,
+                password: password,
+                key: userKey
+            };
                 
-                console.log(userData);
+            console.log(userData);
 
             const userResponse = await fetch(serverUrl + '/api/users', {
                 method: 'POST',
@@ -118,11 +107,23 @@ const LoginPage = () => {
             }
             else
             {
-                setErrorUser('User is not unique choose a different one');
+                if(newUser.user)
+                {
+                    setErrorUser(newUser.message);
+                }
+                else if(newUser.key)
+                {
+                    setErrorKey(newUser.message);
+                }
+                else
+                {
+                    setErrorUser(newUser.message0);
+                    setErrorKey(newUser.message);
+                }
                 return;
             }
           
-            }
+            
             } catch (error) {
                 console.log(error);
                 console.error(error);
@@ -183,7 +184,7 @@ const LoginPage = () => {
                             UserKey:
                             <input type="text" value={userKey} onChange={(e) => setUserKey(e.target.value)} />
                         </label>
-                            <a>{errorKey}</a>
+                            <a className='error'>{errorKey}</a>
                         <button type="submit">Submit</button>
                         <a className='switch' onClick={() => moveToLogin()}>Back to Login</a>
                     </form>

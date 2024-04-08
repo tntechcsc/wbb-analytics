@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 const User = require('../models/users'); // Adjust the path to your model
+const Key = require('../models/key');
 const bcrypt = require('bcryptjs');
 const Joi = require('joi');
 /*
@@ -31,23 +32,36 @@ router.get('/', async (req, res) => {
 
 router.post('/', async (req, res) => {
   const saltRounds = 10;
-  const {username,password,role} = req.body;
-  console.log('hello im here');
+  const {username,password,key} = req.body;
+  console.log(key + '!');
   try {
+  
   const existingUser = await User.findOne({ username });
   if (existingUser) {
-      return res.status(400).json({ message: 'Username is already taken' });
+    const keyFound = await Key.findOne({ key });
+    console.log(keyFound);
+    if (!keyFound)
+    {
+      return res.status(400).json({ both: true, message: 'Could not find the userKey', message0: 'Username is already taken'  });
+    }
+    else
+    {
+      return res.status(400).json({ user: true, message: 'Username is already taken' });
+    }
   }
-  console.log('we are about to hash');
+  const keyFound = await Key.findOneAndDelete({ key });
+  if (!keyFound)
+  {
+    return res.status(400).json({ key: true, message: 'Could not find the userKey' });
+  }
   const hashedPassword = await bcrypt.hash(password, saltRounds);
-  console.log('Hashed password:', hashedPassword);
+  
   const newUser = new User({
     _id: new mongoose.Types.ObjectId(),
     username,
     password: hashedPassword,
-    role
+    role: keyFound.role
   });
-  console.log(newUser);
   
     await newUser.save();
     res.status(201).json(newUser);
