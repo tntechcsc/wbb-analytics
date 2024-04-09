@@ -18,6 +18,7 @@ import { set } from 'mongoose';
 import AvgTempoDisplay from './components/AvgTempo';
 
 
+
 function TempoPage() {
     // State for timing control
     const [isTiming, setIsTiming] = useState(false);
@@ -43,7 +44,8 @@ function TempoPage() {
     const [selectedZone, setSelectedZone] = useState(null);
     const [isPlayer, setIsPlayer] = useState(false);
 
-    const [isRebound, setIsRebound] = useState(false);
+    const [isORebound, setIsORebound] = useState(false);
+    const [isDRebound, setIsDRebound] = useState(false);
     const [isAssist, setIsAssist] = useState(false);
     const [isTurnover, setIsTurnover] = useState(false);
     const [isSteal, setIsSteal] = useState(false);
@@ -203,12 +205,20 @@ function TempoPage() {
         setIsSub(true); // Assuming `isSub` is used to distinguish between different actions
       };
 
-    const handleReboud = (player) => {
-        alert(`Player ${player.number} got the rebound`);
+    const handleOffRebound = (player) => {
+        alert(`Player ${player.number} got the offensive rebound`);
         //Push rebound to db
-        setIsRebound(false);
+        setIsORebound(false);
         setIsPlayerSelectedforShot(false);
-    };
+        //rebound popup
+    }
+
+    const handleDRebound = (player) => {
+        alert(`Player ${player.number} got the defensive rebound`);
+        //Push rebound to db
+        setIsDRebound(false);
+        setIsPlayerSelectedforShot(false);
+    }
 
     const handleAssist = (player) => {
         alert(`Player ${player.number} got the assist`);
@@ -306,12 +316,18 @@ function TempoPage() {
             </div>
             <div className="MiddleContainer">
                 <ExtraStats
-                    className="Rebound"
-                    onClick={() => setIsRebound(true)}
-                    
+                    className="Offensive Rebound"
+                    onClick={() => setIsORebound(true)}
                 />
-                {isRebound && isPlayerSelectedforShot && (
-                    handleReboud(player)
+                {isORebound && isPlayerSelectedforShot && (
+                    handleOffRebound(player)
+                )}
+                <ExtraStats
+                    className="Defensive Rebound"
+                    onClick={() => setIsDRebound(true)}
+                />
+                {isDRebound && isPlayerSelectedforShot && (
+                    handleDRebound(player)
                 )}
                 <ExtraStats
                     className="Assist"
@@ -341,21 +357,9 @@ function TempoPage() {
                 {isBlock && isPlayerSelectedforShot && (
                     handleBlock(player)
                 )}
-                <ExtraStats
-                    className="Foul"
-                    onClick={() => setIsFoul(true)}
-                />
-                {isFoul && isPlayerSelectedforShot && (
-                    handleFoul(player)
-                )}
-                <ExtraStats
-                    className="Charge"
-                    onClick={() => setIsCharge(true)}
-                />
-                {isCharge && isPlayerSelectedforShot && (
-                    handleCharge(player)
-                )}
+
             </div>
+
             <div className="BottomContainer">
                 <div className="TempoControls">
                     <TempoButton
