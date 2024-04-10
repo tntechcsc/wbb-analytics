@@ -30,6 +30,16 @@
     height: 67vh; /* 2/3 of the viewport height */
 }
 
+.MiddleContainer
+{
+    display: flex;
+    height: 33vh; /* 1/3 of the viewport height */
+    /*takes up all the width*/
+    width: 100%;
+    background-color: yellow;
+
+}
+
 .PlayerListContainer, .RightComponent {
     flex: 1; /* Each takes up half of the .TopContainer width */
     display: flex;

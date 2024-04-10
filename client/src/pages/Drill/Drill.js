@@ -8,10 +8,15 @@ import TempoButton from './components/TempoButton'
 import SubstitutionPopup from './components/SubstitutionPopup'
 import ShotPopup from './components/ShotPopup'
 
-import area from './components/Court';
+
 
 import ImageMapper from "react-img-mapper";
 import basketballCourtVector from './components/basketball-court-vector.jpg';
+import ExtraStats from './components/ExtraStats';
+import { Button } from 'react-bootstrap';
+import { set } from 'mongoose';
+import AvgTempoDisplay from './components/AvgTempo';
+
 
 
 function TempoPage() {
@@ -20,8 +25,11 @@ function TempoPage() {
     const [resetTimer, setResetTimer] = useState(false);
     const [currentTempo, setCurrentTempo] = useState(0);
     const [recordedTempo, setRecordedTempo] = useState(null);
-    const [lastTempo, setLastTempo] = useState(null);
+    const [lastTempo, setLastTempo] = useState(0);
     const [tempoType, setTempoType] = useState(null);
+    const [avgTempo, setAvgTempo] = useState(0);
+    const [tempoCount, setTempoCount] = useState(1);
+    const [totalTempo, setTotalTempo] = useState(0);
 
     const [playersOnCourt, setPlayersOnCourt] = useState([]);
     const [allPlayers, setAllPlayers] = useState([]);
@@ -35,6 +43,16 @@ function TempoPage() {
     const [isShotPopupOpen, setIsShotPopupOpen] = useState(false);
     const [selectedZone, setSelectedZone] = useState(null);
     const [isPlayer, setIsPlayer] = useState(false);
+
+    const [isORebound, setIsORebound] = useState(false);
+    const [isDRebound, setIsDRebound] = useState(false);
+    const [isAssist, setIsAssist] = useState(false);
+    const [isTurnover, setIsTurnover] = useState(false);
+    const [isSteal, setIsSteal] = useState(false);
+    const [isBlock, setIsBlock] = useState(false);
+    const [isFoul, setIsFoul] = useState(false);
+    const [isCharge, setIsCharge] = useState(false);
+
     const serverUrl = process.env.REACT_APP_SERVER_URL;
     useEffect(() => {
         
@@ -80,6 +98,9 @@ function TempoPage() {
         console.log(`Starting ${type} tempo`);
         if (recordedTempo) {
             setLastTempo(recordedTempo.toFixed(2));
+            setTempoCount(tempoCount + 1);
+            setTotalTempo(totalTempo + recordedTempo);
+            setAvgTempo(((recordedTempo + totalTempo)/tempoCount).toFixed(2));
         }
         setCurrentTempo(0);
         setResetTimer(true);
@@ -184,6 +205,63 @@ function TempoPage() {
         setIsSub(true); // Assuming `isSub` is used to distinguish between different actions
       };
 
+    const handleOffRebound = (player) => {
+        alert(`Player ${player.number} got the offensive rebound`);
+        //Push rebound to db
+        setIsORebound(false);
+        setIsPlayerSelectedforShot(false);
+        //rebound popup
+    }
+
+    const handleDRebound = (player) => {
+        alert(`Player ${player.number} got the defensive rebound`);
+        //Push rebound to db
+        setIsDRebound(false);
+        setIsPlayerSelectedforShot(false);
+    }
+
+    const handleAssist = (player) => {
+        alert(`Player ${player.number} got the assist`);
+        //Push assist to db
+        setIsPlayerSelectedforShot(false);
+        setIsAssist(false);
+    }
+
+    const handleTurnover = (player) => {
+        alert(`Player ${player.number} got the turnover`);
+        //Push turnover to db
+        setIsPlayerSelectedforShot(false);
+        setIsTurnover(false);
+    }
+
+    const handleSteal = (player) => {
+        alert(`Player ${player.number} got the steal`);
+        //Push steal to db
+        setIsPlayerSelectedforShot(false);
+        setIsSteal(false);
+    }
+
+    const handleBlock = (player) => {
+        alert(`Player ${player.number} got the block`);
+        //Push block to db
+        setIsPlayerSelectedforShot(false);
+        setIsBlock(false);
+    }
+
+    const handleFoul = (player) => {
+        alert(`Player ${player.number} got the foul`);
+        //Push foul to db
+        setIsPlayerSelectedforShot(false);
+        setIsFoul(false);
+    }
+
+    const handleCharge = (player) => {
+        alert(`Player ${player.number} got the charge`);
+        //Push charge to db
+        setIsPlayerSelectedforShot(false);
+        setIsCharge(false);
+    }
+
 
       return (
         <div className="TempoPage">
@@ -236,6 +314,52 @@ function TempoPage() {
                     </div>
                 </div>
             </div>
+            <div className="MiddleContainer">
+                <ExtraStats
+                    className="Offensive Rebound"
+                    onClick={() => setIsORebound(true)}
+                />
+                {isORebound && isPlayerSelectedforShot && (
+                    handleOffRebound(player)
+                )}
+                <ExtraStats
+                    className="Defensive Rebound"
+                    onClick={() => setIsDRebound(true)}
+                />
+                {isDRebound && isPlayerSelectedforShot && (
+                    handleDRebound(player)
+                )}
+                <ExtraStats
+                    className="Assist"
+                    onClick={() => setIsAssist(true)}
+                />
+                {isAssist && isPlayerSelectedforShot && (
+                    handleAssist(player)
+                )}
+                <ExtraStats
+                    className="Turnover"
+                    onClick={() => setIsTurnover(true)}
+                />
+                {isTurnover && isPlayerSelectedforShot && (
+                    handleTurnover(player)
+                )}
+                <ExtraStats
+                    className="Steal"
+                    onClick={() => setIsSteal(true)}
+                />
+                {isSteal && isPlayerSelectedforShot && (
+                    handleSteal(player)
+                )}
+                <ExtraStats
+                    className="Block"
+                    onClick={() => setIsBlock(true)}
+                />
+                {isBlock && isPlayerSelectedforShot && (
+                    handleBlock(player)
+                )}
+
+            </div>
+
             <div className="BottomContainer">
                 <div className="TempoControls">
                     <TempoButton
@@ -254,6 +378,8 @@ function TempoPage() {
                             setCurrentTime={setCurrentTempo}
                         />
                         <LastTempoDisplay lastTempo={lastTempo} />
+                        <AvgTempoDisplay avgTempo={avgTempo} />
+                        
                         <CancelButton
                             onCancel={cancelTempo}
                             className={!isTiming ? 'disabled' : ''}
