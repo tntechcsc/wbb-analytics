@@ -58,7 +58,7 @@ function TeamStats() {
   const [TwoPointPercentage, setTwoPointPercentage] = useState(0);
   const [shotClockData, setShotClockData] = useState([]);
 
-  const sectionLabels = ["20-30", "10-20", "0-10"]; //This is for the shot clock data
+  const sectionLabels = ["0-10", "10-20", "20-30"]; //This is for the shot clock data
 
   // Initial state for bar chart data, with dummy values replaced later
   const [barChartData, setBarChartData] = useState({
@@ -400,18 +400,19 @@ function TeamStats() {
           <TempoCard title="Avg Offensive Tempo" tempo={avgOffensiveTempo} />
           <TempoCard title="Avg Defensive Tempo" tempo={avgDefensiveTempo} />
         </div>
-        <div className="heatmap">
-          <Bar
-            data={barChartData}
-            options={chartOptions}
-          />
+        <div className="charts-container">
+          <div className='bar-container'>
+            <Bar
+              data={barChartData}
+              options={chartOptions}
+            />
+          </div>
+          <div className='shotClock'>
+            {shotClockData.map((section, index) => (
+              <ShotsByClock key={index} made={section[0]} total={section[1]} section={sectionLabels[index]} />
+            ))}
+          </div>
         </div>
-        <div className='shotClock'>
-          {shotClockData.map((section, index) => (
-            <ShotsByClock key={index} made={section[0]} total={section[1]} section={sectionLabels[index]} />
-          ))}
-        </div>
-
       </div>
 
       <div className="stats-overview">
