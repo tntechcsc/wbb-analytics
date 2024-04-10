@@ -102,6 +102,7 @@ function TeamStats() {
       const response = await fetch(serverUrl + `/api/drills/practice/${practiceID}`);
       const data = await response.json();
       setDrills(data);
+      console.log(data);
     } catch (error) {
       console.error('Failed to fetch drills:', error);
     }
@@ -404,13 +405,13 @@ function TeamStats() {
             data={barChartData}
             options={chartOptions}
           />
+        </div>
+        <div className='shotClock'>
           {shotClockData.map((section, index) => (
             <ShotsByClock key={index} made={section[0]} total={section[1]} section={sectionLabels[index]} />
           ))}
-
-
-
         </div>
+
       </div>
 
       <div className="stats-overview">
