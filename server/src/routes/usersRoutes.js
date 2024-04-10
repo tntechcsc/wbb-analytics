@@ -39,7 +39,6 @@ router.post('/', async (req, res) => {
   const existingUser = await User.findOne({ username });
   if (existingUser) {
     const keyFound = await Key.findOne({ key });
-    console.log(keyFound);
     if (!keyFound)
     {
       return res.status(400).json({ both: true, message: 'Could not find the userKey', message0: 'Username is already taken'  });
@@ -70,10 +69,10 @@ router.post('/', async (req, res) => {
   }
 });
 // fetch user by username and password, give incorrect password error if searching fails
-router.get('/userCheck/:username/:password', async (req, res) => {
-  try {
-    const username = req.params.username;
-    const password = req.params.password; 
+router.post('/userCheck', async (req, res) => {
+  try { 
+    const username = req.body.username;
+    const password = req.body.password; 
     const user = await User.findOne({ username: username});
     if (!user) {
       return res.status(404).json({ message: 'Incorrect username' })

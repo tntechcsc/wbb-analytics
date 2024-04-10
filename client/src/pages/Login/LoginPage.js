@@ -46,7 +46,7 @@ const LoginPage = () => {
 
         const saltRounds = 10;
         event.preventDefault();
-        const regex = /[!@#$%^&*()]/;
+        const regex = /[!?@#$%^&*()]/;
         const cap = /[A-Z]/;
         const low = /[a-z]/;
         if(username.length < 8)
@@ -55,7 +55,6 @@ const LoginPage = () => {
             setErrorUser('Username is too short!');
             error = true;
         }
-        console.log(username.length);
         if(password.length < 8)
         {
             setErrorPass('Password is too short!');
@@ -84,7 +83,6 @@ const LoginPage = () => {
                 key: userKey
             };
                 
-            console.log(userData);
 
             const userResponse = await fetch(serverUrl + '/api/users', {
                 method: 'POST',
@@ -102,7 +100,6 @@ const LoginPage = () => {
                 password: newUser.password,
                 token: newUser.role,
             });
-            console.log(auth.token);
             navigate('/homepage');
             }
             else
@@ -136,15 +133,21 @@ const LoginPage = () => {
         event.preventDefault();
 
         
-        const loginResponse = await fetch(serverUrl + '/api/users/userCheck/' + username + '/' + password);
-        const loginData = await loginResponse.json();    
-        console.log(loginResponse);
-        console.log(loginData);
+        const loginResponse = await fetch(serverUrl + '/api/users/userCheck',
+    {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({username: username, password: password}),
+
+    })
+    
+        const loginData = await loginResponse.json();   
         if(loginData.message){
             setIncorrect(true);
         } else {
             auth.loginAction({username: loginData.username, password: loginData.password, token: loginData.role});
-            console.log(auth.token);
             navigate('/homepage');
         }
         };

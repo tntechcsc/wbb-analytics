@@ -12,13 +12,11 @@ const AuthProvider = ({ children }) => {
             
             if (data) {
                 setUser(data.username);
-                console.log(data.username);
-                console.log(data.token);
                 setToken(data.token);
 
                 sessionStorage.setItem("site", data.token);
 
-                console.log(token); // Use token here instead of data.token
+                // Use token here instead of data.token
             }
             else{
             throw new Error(data.message);
