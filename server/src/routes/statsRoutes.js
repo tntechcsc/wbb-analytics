@@ -15,16 +15,12 @@ const isAuthenticated = (req, res, next) => {
 const statsSchema = Joi.object({
     drill_id: Joi.string().regex(/^[0-9a-fA-F]{24}$/).required(),
     player_id: Joi.string().regex(/^[0-9a-fA-F]{24}$/).required(),
-    shots: Joi.array().items(Joi.string().regex(/^[0-9a-fA-F]{24}$/)),
-    tempos: Joi.array().items(Joi.string().regex(/^[0-9a-fA-F]{24}$/)),
     offensive_rebounds: Joi.number().required(),
     defensive_rebounds: Joi.number().required(),
-    total_rebounds: Joi.number().required(),
     assists: Joi.number().required(),
     steals: Joi.number().required(),
     blocks: Joi.number().required(),
     turnovers: Joi.number().required(),
-    personal_fouls: Joi.number().required()
 });
 
 // GET all stats without pagination

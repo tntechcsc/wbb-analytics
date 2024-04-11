@@ -224,27 +224,49 @@ function DrillPage() {
         setIsSub(true); // Assuming `isSub` is used to distinguish between different actions
     };
 
-    const recordStats = (player, stat) => {
-        console.log(`Recording ${stat} for player ${player.number}`);
-
-        // Example: Submit the stat to the server
-        const statData = {
-            player_id: player.id,
-            gameOrDrill_id: drillID,
-            stat_type: stat,
-            timestamp: new Date()
-        };
-
-        fetch(serverUrl + '/api/stats', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(statData)
-        })
-            .then(response => response.json())
-            .then(data => console.log('Stat submitted:', data))
-            .catch(error => console.error('Error submitting stat:', error));
+    const recordStats = async (player, stat) => {
+        console.log('Player:', player, 'Stat:', stat);
+    
+        // Fetch the player's stats from the server
+        const statResponse = await fetch(`${serverUrl}/api/stats/byPlayer/${player.id}`);
+        if (!statResponse.ok) {
+            console.error(`Failed to fetch player stats: HTTP Error: ${statResponse.status}`);
+            return;
+        }
+        const playerStatsArray = await statResponse.json();
+    
+        if (!playerStatsArray.length) {
+            console.error('No stats found for player:', player.id);
+            return; // Exit if no stats found
+        }
+    
+        // Assuming the first object is the one we want to update
+        const playerStats = playerStatsArray[0];
+    
+        console.log('Player stats:', playerStats);
+    
+        // Ensure the stat exists and is a number, then increment
+        const updatedValue = (playerStats[stat] || 0) + 1;
+    
+        console.log(`Updated ${stat}:`, updatedValue);
+    
+        // Submit the updated stats to the server
+        try {
+            const response = await fetch(`${serverUrl}/api/stats/${playerStats._id}`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ [stat]: updatedValue }) // Corrected to send only the updated field
+            });
+            if (!response.ok) {
+                throw new Error(`HTTP Error: ${response.status}`);
+            }
+            const updatedStats = await response.json();
+            console.log('Stats updated:', updatedStats);
+        } catch (error) {
+            console.error('Error updating stats:', error);
+        }
     };
 
 
@@ -300,27 +322,27 @@ function DrillPage() {
             <div className="extra-stats-container">
                 <ExtraStats
                     className="Offensive Rebound"
-                    onClick={() => recordStats(player, 'Offensive Rebound')}
+                    onClick={() => recordStats(player, 'offensive_rebounds')}
                 />
                 <ExtraStats
                     className="Assist"
-                    onClick={() => recordStats(player, 'Assist')}
+                    onClick={() => recordStats(player, 'assists')}
                 />
                 <ExtraStats
                     className="Steal"
-                    onClick={() => recordStats(player, 'Steal')}
+                    onClick={() => recordStats(player, 'steals')}
                 />
                 <ExtraStats
                     className="Defensive Rebound"
-                    onClick={() => recordStats(player, 'Defensive Rebound')}
+                    onClick={() => recordStats(player, 'defensive_rebounds')}
                 />
                 <ExtraStats
                     className="Block"
-                    onClick={() => recordStats(player, 'Block')}
+                    onClick={() => recordStats(player, 'blocks')}
                 />
                 <ExtraStats
                     className="Turnover"
-                    onClick={() => recordStats(player, 'Turnover')}
+                    onClick={() => recordStats(player, 'turnovers')}
                 />
             </div>
             <div className="tempo-container">
