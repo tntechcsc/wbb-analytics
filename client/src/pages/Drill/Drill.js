@@ -45,7 +45,8 @@ function DrillPage() {
 
     // Fetch players from the server on component mount
     useEffect(() => {
-        fetch(`${serverUrl}/api/players`)
+
+        fetch(serverUrl + '/api/players')
             .then(response => response.json())
             .then(data => {
                 const playersData = data.map(player => ({
@@ -190,7 +191,7 @@ function DrillPage() {
         setSelectedPlayerForSub(player); // Set the player selected for substitution
         setIsPopupOpen(true); // Open the substitution popup
         setIsSub(true); // Assuming `isSub` is used to distinguish between different actions
-      };
+    };
 
     const recordStats = (player, stat) => {
         console.log(`Recording ${stat} for player ${player.number}`);
@@ -216,10 +217,10 @@ function DrillPage() {
     };
 
 
-      return (
-        <div className="TempoPage">
-            <div className="TopContainer">
-                <div className="PlayerListContainer">
+    return (
+        <div className="drill-container">
+            <div className="player-and-court-container">
+                <div className="player-container">
                     <PlayerList
                         players={playersOnCourt}
                         onPlayerSelectForShot={onPlayerSelectForShot}
@@ -238,96 +239,63 @@ function DrillPage() {
                         </>
                     )}
                 </div>
-                <div className="RightComponent">
-                    <div className="CourtContainer">
-                        <div style={{ position: "relative" }}>
-                            <ImageMapper
-                                src={basketballCourtVector}
-                                map={MAP2}
-                                width={600}
-                                height={550}
-                                lineWidth={5}
-                                strokeColor={"white"}
-                                onClick={courtClicked}
-                            />
-                            {isShotPopupOpen && isPlayerSelectedforShot && (
-                                <>
-                                    <div className="Overlay" onClick={handleCourtOverlayClick}></div>
-                                    <ShotPopup
-                                        isOpen={isShotPopupOpen}
-                                        onClose={() => handleShotPopupClose()}
-                                        gameOrDrill_id={drillID}
-                                        onModel="Drill"
-                                        player_id={player.id}
-                                        zone={selectedZone}
-                                    />
-                                </>
-                            )}
-                        </div>
+                <div className="court-container">
+                    <div style={{ position: "relative", width: '100%', height: '100%' }}>
+                        <ImageMapper
+                            src={basketballCourtVector}
+                            map={MAP2}
+                            width={600}
+                            height={550}
+                            lineWidth={5}
+                            strokeColor={"white"}
+                            onClick={courtClicked}
+                        />
+                        {isShotPopupOpen && isPlayerSelectedforShot && (
+                            <>
+                                <div className="Overlay" onClick={handleCourtOverlayClick}></div>
+                                <ShotPopup
+                                    isOpen={isShotPopupOpen}
+                                    onClose={() => handleShotPopupClose()}
+                                    gameOrDrill_id={null}
+                                    onModel="Drill"
+                                    player_id={player.id}
+                                    zone={selectedZone}
+                                />
+                            </>
+                        )}
                     </div>
                 </div>
             </div>
-            <div className="MiddleContainer">
-                <ExtraStats
-                    className="Offensive Rebound"
-                    onClick={() => recordStats(player, 'offensive_rebound')}
+            <div className="tempo-container">
+                <TempoButton
+                    tempoType="Defensive"
+                    className={`TempoButton ${isTiming && tempoType !== 'defensive' ? 'disabled' : ''} ${isTiming && tempoType === 'defensive' ? 'stop' : 'start'}`}
+                    isTiming={isTiming && tempoType === 'defensive'}
+                    onClick={() => isTiming && tempoType === 'defensive' ? handleStopTempo('defensive') : startTempo('defensive')}
+                    disabled={isTiming && tempoType !== 'defensive'}
                 />
-                <ExtraStats
-                    className="Defensive Rebound"
-                    onClick={() => recordStats(player, 'defensive_rebound')}
-                />
-                <ExtraStats
-                    className="Assist"
-                    onClick={() => recordStats(player, 'assist')}
-                />
-                <ExtraStats
-                    className="Turnover"
-                    onClick={() => recordStats(player, 'turnover')}
-                />
-                <ExtraStats
-                    className="Steal"
-                    onClick={() => recordStats(player, 'steal')}
-                />
-                <ExtraStats
-                    className="Block"
-                    onClick={() => recordStats(player, 'block')}
-                />
-            </div>
-
-            <div className="BottomContainer">
-                <div className="TempoControls">
-                    <TempoButton
-                        tempoType="Defensive"
-                        className={`TempoButton ${isTiming && tempoType !== 'defensive' ? 'disabled' : ''} ${isTiming && tempoType === 'defensive' ? 'stop' : 'start'}`}
-                        isTiming={isTiming && tempoType === 'defensive'}
-                        onClick={() => isTiming && tempoType === 'defensive' ? handleStopTempo('defensive') : startTempo('defensive')}
-                        disabled={isTiming && tempoType !== 'defensive'}
+                <div className="TimerAndLastTempo">
+                    <TempoTimer
+                        isTiming={isTiming}
+                        resetTimer={resetTimer}
+                        setResetTimer={setResetTimer}
+                        currentTime={currentTempo}
+                        setCurrentTime={setCurrentTempo}
                     />
-                    <div className="TimerAndLastTempo">
-                        <TempoTimer
-                            isTiming={isTiming}
-                            resetTimer={resetTimer}
-                            setResetTimer={setResetTimer}
-                            currentTime={currentTempo}
-                            setCurrentTime={setCurrentTempo}
-                        />
-                        <LastTempoDisplay lastTempo={lastTempo} />
-                        <AvgTempoDisplay avgTempo={avgTempo} />
-                        
-                        <CancelButton
-                            onCancel={cancelTempo}
-                            className={!isTiming ? 'disabled' : ''}
-                            disabled={!isTiming}
-                        />
-                    </div>
-                    <TempoButton
-                        tempoType="Offensive"
-                        className={`TempoButton ${isTiming && tempoType === 'offensive' ? 'stop' : 'start'} ${isTiming && tempoType !== 'offensive' ? 'disabled' : ''}`}
-                        isTiming={isTiming && tempoType === 'offensive'}
-                        onClick={() => isTiming && tempoType === 'offensive' ? handleStopTempo('offensive') : startTempo('offensive')}
-                        disabled={isTiming && tempoType !== 'offensive'}
+                    <LastTempoDisplay lastTempo={lastTempo} />
+                    <CancelButton
+                        onCancel={cancelTempo}
+                        className={!isTiming ? 'disabled' : ''}
+                        disabled={!isTiming}
                     />
                 </div>
+                <TempoButton
+                    tempoType="Offensive"
+                    className={`TempoButton ${isTiming && tempoType === 'offensive' ? 'stop' : 'start'} ${isTiming && tempoType !== 'offensive' ? 'disabled' : ''}`}
+                    isTiming={isTiming && tempoType === 'offensive'}
+                    onClick={() => isTiming && tempoType === 'offensive' ? handleStopTempo('offensive') : startTempo('offensive')}
+                    disabled={isTiming && tempoType !== 'offensive'}
+                />
             </div>
         </div>
     );
