@@ -12,7 +12,8 @@ const tempoRoutes = require('./routes/tempoRoutes');
 const shotRoutes = require('./routes/shotRoutes');
 const gameRoutes = require('./routes/gameRoutes');
 const userRoutes = require('./routes/usersRoutes');
-const statRoutes = require('./routes/statRoutes');
+const statsRoutes = require('./routes/statsRoutes');
+const keyRoutes = require('./routes/keyRoutes');
 
 const app = express();
 
@@ -50,10 +51,11 @@ app.use('/api/seasons', seasonRoutes);
 app.use('/api/practices', practiceRoutes);
 app.use('/api/drills', drillRoutes);
 app.use('/api/tempos', tempoRoutes);
+app.use('/api/keys', keyRoutes);
 app.use('/api/shots', shotRoutes);
 app.use('/api/games', gameRoutes);
 app.use('/api/users', userRoutes);
-app.use('/api/stats', statRoutes);
+app.use('/api/stats', statsRoutes);
 
 const port = process.env.PORT || 3001; // Use environment variable or default to 3001
 // Start the server on a single port
