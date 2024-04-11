@@ -103,12 +103,10 @@
 /* Tempo Container */
 .tempo-container {
     display: flex;
-    justify-content: space-around;
-    align-items: center;
-    padding: 20px;
-    background: var(--header-color);
-    color: var(--text-color-light);
+    justify-content: space-between; /* Space out the buttons evenly */
+    padding: 20px; /* Add padding to the container */
 }
+
 
 /* Tempo Timer */
 .TempoTimer {
@@ -124,63 +122,116 @@
     text-align: center;
 }
 
-/* Tempo Button */
 .TempoButton {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: calc(45% - 40px);
-    height: calc(100% - 40px);
-    font-size: 2em;
-    text-align: center;
-    border: none;
-    border-radius: 10px;
-    background-color: green;
-    color: white;
+    padding: 15px 30px; /* Adjust padding to give more space inside the button */
+    font-size: 1.5em; /* Adjust font size for better readability */
+    margin: 0 10px; /* Add some margin between buttons */
+    border-radius: 8px; /* Match border-radius to other elements like the player-container */
+    background-color: var(--primary-color); /* Use the primary purple color */
+    color: var(--text-color-light); /* Use the light color for text */
     cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.3s ease;
+    box-shadow: var(--box-shadow); /* Use the same box-shadow for consistency */
+    transition: background-color 0.2s ease; /* Smooth transition for hover effects */
+    border: none; /* Remove any borders */
+    width: auto; /* Allow the width to be determined by content and padding */
+    flex-grow: 1; /* Allow the buttons to grow to fill the space */
+    /* Additional styles for interaction states */
+}
+
+.TempoButton:hover {
+    background-color: var(--hover-color); /* Change background color on hover */
 }
 
 .TempoButton.start {
-    background-color: green;
-    color: white;
+    background-color: #4CAF50; /* Use a green color for starting the tempo */
 }
 
 .TempoButton.stop {
-    background-color: red;
-    color: white;
+    background-color: #f44336; /* Use a red color for stopping the tempo */
 }
 
 .TempoButton:active {
-    transform: scale(0.95);
+    transform: scale(0.98); /* Slightly reduce the scale for a press effect */
 }
 
 .TempoButton.disabled, 
 .TempoButton:disabled {
-    background-color: grey;
+    background-color: #ccc; /* Gray color for disabled state */
+    color: #666; /* Darker gray for text in disabled state */
     cursor: not-allowed;
-    pointer-events: none;
+    opacity: 0.5; /* Reduce opacity for disabled state */
+    pointer-events: none; /* Disable pointer events for disabled state */
+}
+
+/* Last Tempo Display */
+.LastTempoDisplay {
+    font-size: 1.5em; /* Adjust font size to match TempoButton */
+    color: var(--text-color-dark); /* Use the dark text color for readability */
+    margin: 10px 0; /* Standardize margin around the display */
+    padding: 10px; /* Provide some padding */
+    background-color: var(--card-bg-color); /* Use the card background color */
+    border-radius: 8px; /* Round the corners to match the design */
+    text-align: center; /* Center the text */
+    width: auto; /* Adjust width to content */
+    box-shadow: var(--box-shadow); /* Apply consistent box-shadow */
+}
+
+/* Container for the Cancel button */
+.cancel-button-container {
+    display: flex;
+    justify-content: center; /* Centers the button horizontally */
+    align-items: center; /* Aligns the button vertically */
+    width: 100%; /* Takes full width of its parent container */
+    margin-top: 20px; /* Adds some space above the button */
 }
 
 /* Cancel Button */
 .CancelButton {
-    padding: 10px 20px;
-    font-size: 1em;
-    background-color: orange;
-    color: white;
-    border: none;
-    border-radius: 20px;
+    padding: 15px 30px; /* Increase padding for a larger button */
+    font-size: 1.5em; /* Increase font size for visibility */
+    background-color: #d49b46; /* A consistent red color for cancel actions */
+    color: var(--text-color-light); /* White text for better contrast */
+    border-radius: 8px; /* Match border-radius to other elements */
+    margin: 10px 5px; /* Consistent margin with TempoButton */
+    width: auto; /* Adjust width to content and padding */
     cursor: pointer;
-    width: 200px;
-    height: 100px;
-    margin: 0 auto;
-    display: block;
+    transition: background-color 0.2s ease; /* Smooth transition for hover effects */
+    border: none; /* Remove the border */
+    box-shadow: var(--box-shadow); /* Consistent shadow with other elements */
+}
+
+.CancelButton:hover {
+    background-color: #d32f2f; /* Darken the red on hover for feedback */
+}
+
+.CancelButton:active {
+    transform: scale(0.98); /* Press effect */
 }
 
 .CancelButton.disabled {
-    background-color: #ccc;
+    background-color: #ccc; /* Greyed out for disabled state */
     color: #666;
     cursor: not-allowed;
+    opacity: 0.5;
+}
+
+/* Adjusting the container for these elements */
+.tempo-controls-container {
+    display: flex;
+    flex-direction: column; /* Stack elements vertically */
+    align-items: center; /* Center items horizontally */
+    justify-content: space-around; /* Even spacing */
+    width: 100%; /* Full width of the parent container */
+    padding: 20px; /* Padding inside the container */
+}
+
+/* Specific container for the Cancel button and Last Tempo to group them */
+.cancel-and-last-tempo-container {
+    display: flex;
+    justify-content: space-between; /* Space out the elements inside */
+    align-items: center;
+    width: 100%; /* Ensure they take full width of their container */
+    margin-top: 10px; /* Extra margin on top for spacing */
 }
 
 /* Popup Overlay */

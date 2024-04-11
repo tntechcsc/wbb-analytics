@@ -10,7 +10,6 @@ import ShotPopup from './components/ShotPopup';
 import ImageMapper from "react-img-mapper";
 import basketballCourtVector from './components/basketball-court-vector.jpg';
 import ExtraStats from './components/ExtraStats';
-import AvgTempoDisplay from './components/AvgTempo';
 
 function DrillPage() {
     // State hooks for timing and tempo tracking
@@ -19,6 +18,7 @@ function DrillPage() {
     const [currentTempo, setCurrentTempo] = useState(0);
     const [recordedTempo, setRecordedTempo] = useState(null);
     const [lastTempo, setLastTempo] = useState(0);
+    const [lastSubmittedTempo, setLastSubmittedTempo] = useState(0);
     const [tempoType, setTempoType] = useState(null);
     const [avgTempo, setAvgTempo] = useState(0);
     const [tempoCount, setTempoCount] = useState(1);
@@ -41,6 +41,7 @@ function DrillPage() {
     // Extracting practice and drill IDs from the URL query parameters
     const urlParams = new URLSearchParams(window.location.search);
     const drillID = urlParams.get('DrillID');
+    const practiceID = urlParams.get('PracticeID');
 
 
     // Fetch players from the server on component mount
@@ -61,8 +62,7 @@ function DrillPage() {
     }, [serverUrl]);
 
     // Function to submit tempo
-    const submitTempo = (isOffensive, playersOnCourtIds, timeValue) => {
-
+    const submitTempo = async (isOffensive, playersOnCourtIds, timeValue) => {
         const tempoData = {
             gameOrDrill_id: drillID,
             player_ids: playersOnCourtIds,
@@ -71,18 +71,49 @@ function DrillPage() {
             transition_time: timeValue.toFixed(2),
             timestamp: new Date()
         };
+    
+        try {
+            // Add 'await' here to wait for the fetch call to resolve
+            const response = await fetch(serverUrl + '/api/tempos', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(tempoData)
+            });
+            const submitTempo = await response.json();
+            console.log('Tempo submitted:', submitTempo);
 
-        fetch(serverUrl + '/api/tempos', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(tempoData)
-        })
-            .then(response => response.json())
-            .then(data => console.log('Tempo submitted:', data))
-            .catch(error => console.error('Error submitting tempo:', error));
+            try {
+
+                // Fetch drill to get data to update
+                const drillResponse = await fetch(serverUrl + `/api/drills/${drillID}`);
+                const drillData = await drillResponse.json();
+                drillData.tempo_events.push(submitTempo._id);
+
+                // Remove _id and __v from drillData
+                delete drillData._id;
+                delete drillData.__v;
+
+                // Update the drill with the new tempo event
+                const response = await fetch(serverUrl + `/api/drills/${drillID}`, {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(drillData)
+                });
+                const updatedDrill = await response.json();
+                console.log('Drill updated:', updatedDrill);
+    
+            } catch (error) {
+                console.error('Error updating drill:', error);
+            }
+        } catch (error) {
+            console.error('Error submitting tempo:', error);
+        }
     };
+    
 
     // Start timing for tempo (offensive or defensive)
     const startTempo = (type) => {
@@ -256,7 +287,7 @@ function DrillPage() {
                                 <ShotPopup
                                     isOpen={isShotPopupOpen}
                                     onClose={() => handleShotPopupClose()}
-                                    gameOrDrill_id={null}
+                                    gameOrDrill_id={drillID}
                                     onModel="Drill"
                                     player_id={player.id}
                                     zone={selectedZone}
@@ -309,11 +340,13 @@ function DrillPage() {
                         setCurrentTime={setCurrentTempo}
                     />
                     <LastTempoDisplay lastTempo={lastTempo} />
-                    <CancelButton
-                        onCancel={cancelTempo}
-                        className={!isTiming ? 'disabled' : ''}
-                        disabled={!isTiming}
-                    />
+                    <div className="cancel-button-container">
+                        <CancelButton
+                            onCancel={cancelTempo}
+                            className={!isTiming ? 'disabled' : ''}
+                            disabled={!isTiming}
+                        />
+                    </div>
                 </div>
                 <TempoButton
                     tempoType="Offensive"
