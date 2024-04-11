@@ -91,7 +91,7 @@ function DrillPage() {
             setLastTempo(recordedTempo.toFixed(2));
             setTempoCount(tempoCount + 1);
             setTotalTempo(totalTempo + recordedTempo);
-            setAvgTempo(((recordedTempo + totalTempo)/tempoCount).toFixed(2));
+            setAvgTempo(((recordedTempo + totalTempo) / tempoCount).toFixed(2));
         }
         setCurrentTempo(0);
         setResetTimer(true);
@@ -265,6 +265,32 @@ function DrillPage() {
                         )}
                     </div>
                 </div>
+            </div>
+            <div className="extra-stats-container">
+                <ExtraStats
+                    className="Offensive Rebound"
+                    onClick={() => recordStats(player, 'Offensive Rebound')}
+                />
+                <ExtraStats
+                    className="Assist"
+                    onClick={() => recordStats(player, 'Assist')}
+                />
+                <ExtraStats
+                    className="Steal"
+                    onClick={() => recordStats(player, 'Steal')}
+                />
+                <ExtraStats
+                    className="Defensive Rebound"
+                    onClick={() => recordStats(player, 'Defensive Rebound')}
+                />
+                <ExtraStats
+                    className="Block"
+                    onClick={() => recordStats(player, 'Block')}
+                />
+                <ExtraStats
+                    className="Turnover"
+                    onClick={() => recordStats(player, 'Turnover')}
+                />
             </div>
             <div className="tempo-container">
                 <TempoButton
