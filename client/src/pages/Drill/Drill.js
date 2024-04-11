@@ -4,23 +4,16 @@ import CancelButton from './components/CancelButton';
 import LastTempoDisplay from './components/LastTempoDisplay';
 import PlayerList from './components/PlayerList';
 import TempoTimer from './components/TempoTimer';
-import TempoButton from './components/TempoButton'
-import SubstitutionPopup from './components/SubstitutionPopup'
-import ShotPopup from './components/ShotPopup'
-
-
-
+import TempoButton from './components/TempoButton';
+import SubstitutionPopup from './components/SubstitutionPopup';
+import ShotPopup from './components/ShotPopup';
 import ImageMapper from "react-img-mapper";
 import basketballCourtVector from './components/basketball-court-vector.jpg';
 import ExtraStats from './components/ExtraStats';
-import { Button } from 'react-bootstrap';
-import { set } from 'mongoose';
 import AvgTempoDisplay from './components/AvgTempo';
 
-
-
-function TempoPage() {
-    // State for timing control
+function DrillPage() {
+    // State hooks for timing and tempo tracking
     const [isTiming, setIsTiming] = useState(false);
     const [resetTimer, setResetTimer] = useState(false);
     const [currentTempo, setCurrentTempo] = useState(0);
@@ -31,32 +24,28 @@ function TempoPage() {
     const [tempoCount, setTempoCount] = useState(1);
     const [totalTempo, setTotalTempo] = useState(0);
 
+    // State hooks for player and popup management
     const [playersOnCourt, setPlayersOnCourt] = useState([]);
     const [allPlayers, setAllPlayers] = useState([]);
-
     const [isSub, setIsSub] = useState(false);
-
     const [isPlayerSelectedforShot, setIsPlayerSelectedforShot] = useState(false);
     const [player, setPlayer] = useState(null);
     const [isPopupOpen, setIsPopupOpen] = useState(false);
     const [selectedPlayerForSub, setSelectedPlayerForSub] = useState(null);
     const [isShotPopupOpen, setIsShotPopupOpen] = useState(false);
     const [selectedZone, setSelectedZone] = useState(null);
-    const [isPlayer, setIsPlayer] = useState(false);
 
-    const [isORebound, setIsORebound] = useState(false);
-    const [isDRebound, setIsDRebound] = useState(false);
-    const [isAssist, setIsAssist] = useState(false);
-    const [isTurnover, setIsTurnover] = useState(false);
-    const [isSteal, setIsSteal] = useState(false);
-    const [isBlock, setIsBlock] = useState(false);
-    const [isFoul, setIsFoul] = useState(false);
-    const [isCharge, setIsCharge] = useState(false);
-
+    // Server URL from environment variables for API requests
     const serverUrl = process.env.REACT_APP_SERVER_URL;
+
+    // Extracting practice and drill IDs from the URL query parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    const drillID = urlParams.get('DrillID');
+
+
+    // Fetch players from the server on component mount
     useEffect(() => {
-        
-        fetch(serverUrl + '/api/players')
+        fetch(`${serverUrl}/api/players`)
             .then(response => response.json())
             .then(data => {
                 const playersData = data.map(player => ({
@@ -65,19 +54,20 @@ function TempoPage() {
                     number: player.jersey_number
                 }));
                 setAllPlayers(playersData);
-                // Set players on court based on your logic, e.g., first five players
-                setPlayersOnCourt(playersData.slice(0, 5));
+                setPlayersOnCourt(playersData.slice(0, 5)); // Example: Set the first five players as on court
             })
             .catch(error => console.error('Failed to fetch players:', error));
-    }, []);
+    }, [serverUrl]);
 
     // Function to submit tempo
     const submitTempo = (isOffensive, playersOnCourtIds, timeValue) => {
+
         const tempoData = {
+            gameOrDrill_id: drillID,
             player_ids: playersOnCourtIds,
             onModel: 'Drill',
             tempo_type: isOffensive,
-            transition_time: timeValue,
+            transition_time: timeValue.toFixed(2),
             timestamp: new Date()
         };
 
@@ -194,73 +184,36 @@ function TempoPage() {
     const onPlayerSelectForShot = (player) => {
         setIsPlayerSelectedforShot(true);
         setPlayer(player);
-        // Further logic to handle shot selection
     };
 
     const onPlayerSelectForSub = (player) => {
         setSelectedPlayerForSub(player); // Set the player selected for substitution
         setIsPopupOpen(true); // Open the substitution popup
-        // Note: You might not need `isSub` if it's solely for controlling the popup state.
-        // But if it serves additional logic, set it accordingly
         setIsSub(true); // Assuming `isSub` is used to distinguish between different actions
       };
 
-    const handleOffRebound = (player) => {
-        alert(`Player ${player.number} got the offensive rebound`);
-        //Push rebound to db
-        setIsORebound(false);
-        setIsPlayerSelectedforShot(false);
-        //rebound popup
-    }
+    const recordStats = (player, stat) => {
+        console.log(`Recording ${stat} for player ${player.number}`);
 
-    const handleDRebound = (player) => {
-        alert(`Player ${player.number} got the defensive rebound`);
-        //Push rebound to db
-        setIsDRebound(false);
-        setIsPlayerSelectedforShot(false);
-    }
+        // Example: Submit the stat to the server
+        const statData = {
+            player_id: player.id,
+            gameOrDrill_id: drillID,
+            stat_type: stat,
+            timestamp: new Date()
+        };
 
-    const handleAssist = (player) => {
-        alert(`Player ${player.number} got the assist`);
-        //Push assist to db
-        setIsPlayerSelectedforShot(false);
-        setIsAssist(false);
-    }
-
-    const handleTurnover = (player) => {
-        alert(`Player ${player.number} got the turnover`);
-        //Push turnover to db
-        setIsPlayerSelectedforShot(false);
-        setIsTurnover(false);
-    }
-
-    const handleSteal = (player) => {
-        alert(`Player ${player.number} got the steal`);
-        //Push steal to db
-        setIsPlayerSelectedforShot(false);
-        setIsSteal(false);
-    }
-
-    const handleBlock = (player) => {
-        alert(`Player ${player.number} got the block`);
-        //Push block to db
-        setIsPlayerSelectedforShot(false);
-        setIsBlock(false);
-    }
-
-    const handleFoul = (player) => {
-        alert(`Player ${player.number} got the foul`);
-        //Push foul to db
-        setIsPlayerSelectedforShot(false);
-        setIsFoul(false);
-    }
-
-    const handleCharge = (player) => {
-        alert(`Player ${player.number} got the charge`);
-        //Push charge to db
-        setIsPlayerSelectedforShot(false);
-        setIsCharge(false);
-    }
+        fetch(serverUrl + '/api/stats', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(statData)
+        })
+            .then(response => response.json())
+            .then(data => console.log('Stat submitted:', data))
+            .catch(error => console.error('Error submitting stat:', error));
+    };
 
 
       return (
@@ -303,7 +256,7 @@ function TempoPage() {
                                     <ShotPopup
                                         isOpen={isShotPopupOpen}
                                         onClose={() => handleShotPopupClose()}
-                                        gameOrDrill_id={null}
+                                        gameOrDrill_id={drillID}
                                         onModel="Drill"
                                         player_id={player.id}
                                         zone={selectedZone}
@@ -317,47 +270,28 @@ function TempoPage() {
             <div className="MiddleContainer">
                 <ExtraStats
                     className="Offensive Rebound"
-                    onClick={() => setIsORebound(true)}
+                    onClick={() => recordStats(player, 'offensive_rebound')}
                 />
-                {isORebound && isPlayerSelectedforShot && (
-                    handleOffRebound(player)
-                )}
                 <ExtraStats
                     className="Defensive Rebound"
-                    onClick={() => setIsDRebound(true)}
+                    onClick={() => recordStats(player, 'defensive_rebound')}
                 />
-                {isDRebound && isPlayerSelectedforShot && (
-                    handleDRebound(player)
-                )}
                 <ExtraStats
                     className="Assist"
-                    onClick={() => setIsAssist(true)}
+                    onClick={() => recordStats(player, 'assist')}
                 />
-                {isAssist && isPlayerSelectedforShot && (
-                    handleAssist(player)
-                )}
                 <ExtraStats
                     className="Turnover"
-                    onClick={() => setIsTurnover(true)}
+                    onClick={() => recordStats(player, 'turnover')}
                 />
-                {isTurnover && isPlayerSelectedforShot && (
-                    handleTurnover(player)
-                )}
                 <ExtraStats
                     className="Steal"
-                    onClick={() => setIsSteal(true)}
+                    onClick={() => recordStats(player, 'steal')}
                 />
-                {isSteal && isPlayerSelectedforShot && (
-                    handleSteal(player)
-                )}
                 <ExtraStats
                     className="Block"
-                    onClick={() => setIsBlock(true)}
+                    onClick={() => recordStats(player, 'block')}
                 />
-                {isBlock && isPlayerSelectedforShot && (
-                    handleBlock(player)
-                )}
-
             </div>
 
             <div className="BottomContainer">
@@ -399,4 +333,4 @@ function TempoPage() {
     );
 }
 
-export default TempoPage;
+export default DrillPage;

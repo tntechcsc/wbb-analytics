@@ -15,7 +15,6 @@ function ShotPopup({ isOpen, onClose, gameOrDrill_id, onModel, player_id, zone }
             shot_clock_time: shotClockTime,
             timestamp: new Date()
         };
-        console.log('Submitting shot:', shotData);
 
         fetch( serverUrl + '/api/shots', {
             method: 'POST',
@@ -40,7 +39,6 @@ function ShotPopup({ isOpen, onClose, gameOrDrill_id, onModel, player_id, zone }
     const handleClockTimeSelection = (timeMapping) => {
         if (shotOutcome) {
             submitShot(shotOutcome === 'made', timeMapping);
-            console.log('Shot submitted:', shotOutcome, timeMapping);
         }
     };
 

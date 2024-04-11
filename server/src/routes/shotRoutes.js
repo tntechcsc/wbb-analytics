@@ -13,7 +13,7 @@ const isAuthenticated = (req, res, next) => {
 // Define Joi schema for shot validation
 const shotSchema = Joi.object({
     gameOrDrill_id: Joi.string().regex(/^[0-9a-fA-F]{24}$/).required(),
-    onModel: Joi.string().required().valid('Game', 'Practice'),
+    onModel: Joi.string().required().valid('Game', 'Drill'),
     player_id: Joi.string().regex(/^[0-9a-fA-F]{24}$/).required(),
     made: Joi.boolean().required(),
     zone: Joi.string().required(),
