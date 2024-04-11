@@ -81,6 +81,10 @@ footer {
   transition: background-color 0.3s ease-in-out;
   transition: transform 0.3s ease-in-out; /* Transition added here */
 }
+.Linkish-Button:hover {
+  background-color: #EECF08 !important;
+  transform: scale(1.1); /* Transform effect on hover */
+}
 .Linkish-Button1 {
   background-color: #FFDD00 !important;
   color: #000000 !important;
@@ -98,6 +102,14 @@ footer {
   transition: background-color 0.3s ease-in-out;
   transition: transform 0.3s ease-in-out; /* Transition added here */
 }
+
+.Linkish-Button1:hover {
+  background-color: #EECF08 !important;
+  transform: scale(1.1); /* Transform effect on hover */
+}
+
+
+
 .Linkish-Button2 {
   background-color: #FFDD00 !important;
   color: #000000 !important;
@@ -115,14 +127,7 @@ footer {
   transition: background-color 0.3s ease-in-out;
   transition: transform 0.3s ease-in-out; /* Transition added here */
 }
-.Linkish-Button:hover {
-  background-color: #EECF08 !important;
-  transform: scale(1.1); /* Transform effect on hover */
-}
-.Linkish-Button1:hover {
-  background-color: #EECF08 !important;
-  transform: scale(1.1); /* Transform effect on hover */
-}
+
 .Linkish-Button2:hover {
   background-color: #EECF08 !important;
   transform: scale(1.1); /* Transform effect on hover */
@@ -180,4 +185,13 @@ transition: opacity .5s ease !important; /* Smooth transition for opacity */
 }
 .close-button:hover {
   color: grey !important;
+}
+
+.submit-button  {
+  margin-top: 10px;
+  background-color: #FFDD00 !important;
+}
+.submit-button:hover {
+  background-color: #EECF08 !important;
+
 }

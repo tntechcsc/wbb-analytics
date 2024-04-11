@@ -54,13 +54,17 @@ form {
   form p {
     margin-top: 20px;
   }
-  form a {
-    color: #ff0000 !important;
-  }
-  form a:hover{
-    color: #ff0000 !important;
-  }
   .error {
     color: #ff0000;
-    
+}
+.error:hover {
+  color: #ff0000;
+}
+.switch {
+  text-align: left !important;
+  color: #0000FF;
+}
+.switch:hover {
+  color: #0000FF;
+  text-decoration: underline;
 }
