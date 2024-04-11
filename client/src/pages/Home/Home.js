@@ -8,6 +8,7 @@ import './Home.css';
 const HomePage = () => {
   let navigate = useNavigate();
   const [isModalOpen, setModalOpen] = useState(false);
+  const [isModalOpenReg, setModalOpenReg] = useState(false);
   
   const gotoStats = () => {
     navigate('/teamstats');
@@ -21,7 +22,7 @@ const HomePage = () => {
           <button onClick={() => gotoStats()} className="Linkish-Button2">
             Stats
           </button>
-
+          
         <section className="about">
         </section>
         <SessionOption isOpen={isModalOpen} onClose={() => setModalOpen(false)}/>

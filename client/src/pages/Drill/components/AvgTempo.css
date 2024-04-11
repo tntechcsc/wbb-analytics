@@ -1,0 +1,6 @@
+.AvgTempoDisplay {
+    font-size: 1.5em;
+    text-align: center;
+    width: 100%; /* Make sure it spans the full width */
+    margin: 10px 0;
+  }

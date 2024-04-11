@@ -13,6 +13,7 @@ const shotRoutes = require('./routes/shotRoutes');
 const gameRoutes = require('./routes/gameRoutes');
 const userRoutes = require('./routes/usersRoutes');
 const statsRoutes = require('./routes/statsRoutes');
+const keyRoutes = require('./routes/keyRoutes');
 
 const app = express();
 
@@ -50,6 +51,7 @@ app.use('/api/seasons', seasonRoutes);
 app.use('/api/practices', practiceRoutes);
 app.use('/api/drills', drillRoutes);
 app.use('/api/tempos', tempoRoutes);
+app.use('/api/keys', keyRoutes);
 app.use('/api/shots', shotRoutes);
 app.use('/api/games', gameRoutes);
 app.use('/api/users', userRoutes);
