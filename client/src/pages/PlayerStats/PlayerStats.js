@@ -7,7 +7,6 @@ import StatsTable from '../TeamStats/components/StatsTable';
 
 import ShotsByClock from './components/ShotsByClock';
 import './PlayerStats.css';
-import shot from '../../models/shot';
 
 function PlayerStats() {
   /* 
@@ -29,6 +28,8 @@ function PlayerStats() {
   const [shotClockData, setShotClockData] = useState([]); //
   const [shotPointData, setShotPointData] = useState([]); //[2][2] array where the first index is the number of made shots and the second index is the total number of shots attempted
   const [shotPoints, setShotPoints] = useState(0); //This is the total number of points scored in the drill
+  const [allStats, setAllStats] = useState([]); //This is the data for the player's stats
+  const [statsData, setStatsData] = useState([]); //This is the data for the player's stats
   const [selectedSession, setSelectedSession] = useState('');
   const [selectedDrill, setSelectedDrill] = useState(''); //This is a numerical ID, not an object
 
@@ -186,6 +187,9 @@ useEffect(() => {
     //Immediately filter tempos for the newly selected drill
     updateTempoData();
     updateShotData();
+    const drillStats = allStats.find(stats => stats.drill_id === newDrillId);
+    setStatsData(drillStats);
+    console.log(drillStats)
   };
 
   /*
@@ -226,7 +230,7 @@ useEffect(() => {
     It filters the shot data for a given player by the selected drill and then updates the shot clock data for the player.
   */
   const updateShotData = () => {
-    var time = performance.now()
+    //var time = performance.now()
     const shotsForDrill = allShots.filter(shot => shot.gameOrDrill_id === selectedDrill);
     setFilteredShots(shotsForDrill);
     //console.log(selectedDrill)
@@ -275,8 +279,8 @@ useEffect(() => {
     setShotPointData(shotPointDat);
     setShotPoints(shotPoints);
 
-    var end = performance.now()
-    console.log("Time to update shot data: " + (end - time))
+    //var end = performance.now()
+    //console.log("Time to update shot data: " + (end - time))
   };
 
   const fetchPlayerData = async (playerID) => {
@@ -306,14 +310,22 @@ useEffect(() => {
     try {
       const shotsResponse = await fetch('http://localhost:3001/api/shots');//byPlayer/' + playerID);
       const shotsData = await shotsResponse.json(); //This is not programmed to get shots by player yet; the route does not cooperate
-      const shotsResponse2 = await fetch('http://localhost:3001/api/shots/byPlayer/' + playerID);
-      const shotsData2 = await shotsResponse2.json();
-      console.log("These are not(?) shots:", shotsData2)
+      const filteredShotsData = shotsData.filter(shot => shot.player_ids === playerID);
       //console.log("These are shots:")
-      //console.log(shotsData);
-      setAllShots(shotsData);
+      //console.log(filteredShotsData);
+      setAllShots(filteredShotsData);
     } catch (error) {
       console.error("Failed to fetch shot data:", error);
+    }
+    try {
+      const statsResponse = await fetch('http://localhost:3001/api/stats/byPlayer/' + playerID);
+      const statsData = await statsResponse.json();
+      //console.log("These are stats:")
+      //console.log(statsData);
+      setAllStats(statsData);
+      //console.log(statsData)
+    } catch (error) {
+      console.error("Failed to fetch stats data:", error);
     }
   };
   
@@ -362,7 +374,14 @@ useEffect(() => {
           <StatCard key={index} title={pointSectionLabels[index]} value={(section[0]/section[1] * 100).toFixed(2)} />
         ))}
       </div>
-
+      <div className="stat-cards">
+        <StatCard title="Total Rebounds" value={statsData.total_rebounds || 0} />
+        <StatCard title="Assists" value={statsData.assists || 0} />
+        <StatCard title="Steals" value={statsData.steals || 0} />
+        <StatCard title="Blocks" value={statsData.blocks || 0} />
+        <StatCard title="Turnovers" value={statsData.turnovers || 0} />
+        <StatCard title="Personal Fouls" value={statsData.personal_fouls || 0} />
+      </div>
       <div className='stats-table-container'>
       <h2>Player Stats</h2>
         <div className="stats-table">
