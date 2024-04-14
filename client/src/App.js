@@ -11,6 +11,7 @@ import MainLayout from './layouts/MainLayout';
 import ExportPage from './pages/ExportPage';
 import LoginPage from './pages/Login/LoginPage';
 import PrivateRoute from './private/privateRoute';
+import Game from './pages/Game/Game';
 
 
 
@@ -28,6 +29,7 @@ const App = () => {
               <Route path="/practice" element={<Practice />} />
               <Route path="/drill" element={<Drill />} />
               <Route path="/export" element={<ExportPage />} />
+              <Route path="/game" element={<Game />} />
             </Route>
             </Route>
           </Routes>
