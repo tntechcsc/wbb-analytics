@@ -66,10 +66,8 @@
 .cancel-button {
     color: #d49b46;
     padding: 10px 20px;
-    margin: 10px 0;
     border: none;
     border-radius: 4px;
-    cursor: pointer;
 }
 
 .submit-button {
@@ -83,6 +81,46 @@
 
 .submit-button:hover {
     background-color: white !important;
+}
+
+.ShotPopup {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 1500px;
+    padding: 20px;
+    border-radius: 100px;
+    margin-top: 300px;
+}
+
+.ShotOutcomeSelection, .ClockTimeSelection {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+  
+.MadeButton {
+    background-color: #4CAF50;
+    color: white;
+}
+  
+.MissedButton {
+    background-color: #f44336;
+    color: white;
+}
+  
+.ClockButton1, .ClockButton2, .ClockButton3 {
+    background-color: #607d8b;
+    white-space: nowrap;
+    min-width: 120px;
+    color: white;
+    display: none; /* Initially hidden; displayed based on state in JS */
 }
 
 .overlay {
