@@ -71,7 +71,7 @@ function DrillPage() {
             transition_time: timeValue.toFixed(2),
             timestamp: new Date()
         };
-    
+
         try {
             // Add 'await' here to wait for the fetch call to resolve
             const response = await fetch(serverUrl + '/api/tempos', {
@@ -105,7 +105,7 @@ function DrillPage() {
                 });
                 const updatedDrill = await response.json();
                 console.log('Drill updated:', updatedDrill);
-    
+
             } catch (error) {
                 console.error('Error updating drill:', error);
             }
@@ -113,7 +113,7 @@ function DrillPage() {
             console.error('Error submitting tempo:', error);
         }
     };
-    
+
 
     // Start timing for tempo (offensive or defensive)
     const startTempo = (type) => {
@@ -225,47 +225,49 @@ function DrillPage() {
     };
 
     const recordStats = async (player, stat) => {
-        console.log('Player:', player, 'Stat:', stat);
-    
-        // Fetch the player's stats from the server
-        const statResponse = await fetch(`${serverUrl}/api/stats/byPlayer/${player.id}`);
-        if (!statResponse.ok) {
-            console.error(`Failed to fetch player stats: HTTP Error: ${statResponse.status}`);
-            return;
-        }
-        const playerStatsArray = await statResponse.json();
-    
-        if (!playerStatsArray.length) {
-            console.error('No stats found for player:', player.id);
-            return; // Exit if no stats found
-        }
-    
-        // Assuming the first object is the one we want to update
-        const playerStats = playerStatsArray[0];
-    
-        console.log('Player stats:', playerStats);
-    
-        // Ensure the stat exists and is a number, then increment
-        const updatedValue = (playerStats[stat] || 0) + 1;
-    
-        console.log(`Updated ${stat}:`, updatedValue);
-    
-        // Submit the updated stats to the server
-        try {
-            const response = await fetch(`${serverUrl}/api/stats/${playerStats._id}`, {
-                method: 'PATCH',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ [stat]: updatedValue }) // Corrected to send only the updated field
-            });
-            if (!response.ok) {
-                throw new Error(`HTTP Error: ${response.status}`);
+        if (isPlayerSelectedforShot) {
+            console.log('Player:', player, 'Stat:', stat);
+
+            // Fetch the player's stats from the server
+            const statResponse = await fetch(`${serverUrl}/api/stats/byPlayer/${player.id}`);
+            if (!statResponse.ok) {
+                console.error(`Failed to fetch player stats: HTTP Error: ${statResponse.status}`);
+                return;
             }
-            const updatedStats = await response.json();
-            console.log('Stats updated:', updatedStats);
-        } catch (error) {
-            console.error('Error updating stats:', error);
+            const playerStatsArray = await statResponse.json();
+
+            if (!playerStatsArray.length) {
+                console.error('No stats found for player:', player.id);
+                return; // Exit if no stats found
+            }
+
+            // Assuming the first object is the one we want to update
+            const playerStats = playerStatsArray[0];
+
+            console.log('Player stats:', playerStats);
+
+            // Ensure the stat exists and is a number, then increment
+            const updatedValue = (playerStats[stat] || 0) + 1;
+
+            console.log(`Updated ${stat}:`, updatedValue);
+
+            // Submit the updated stats to the server
+            try {
+                const response = await fetch(`${serverUrl}/api/stats/${playerStats._id}`, {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ [stat]: updatedValue }) // Corrected to send only the updated field
+                });
+                if (!response.ok) {
+                    throw new Error(`HTTP Error: ${response.status}`);
+                }
+                const updatedStats = await response.json();
+                console.log('Stats updated:', updatedStats);
+            } catch (error) {
+                console.error('Error updating stats:', error);
+            }
         }
     };
 
