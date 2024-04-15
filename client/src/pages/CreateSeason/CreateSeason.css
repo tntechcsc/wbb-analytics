@@ -1,0 +1,100 @@
+.create-season {
+  display: flex;
+  justify-content: start;
+  align-items: flex-start;
+  gap: 20px;
+  margin: auto;
+  padding: 20px;
+  background-color: #f4f4f4; /* Consider changing if it washes out the purple text */
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  max-width: 1200px;
+  color: #5d3c8a; /* Set the default text color to Tennessee Tech Purple */
+}
+
+.create-season h1,
+.create-season label,
+.create-season small,
+.create-season input,
+.create-season button,
+.player-list-item {
+  color: #5d3c8a; /* Ensure all text is Tennessee Tech Purple */
+}
+
+.create-season input::placeholder {
+  color: #333; /* Darker color for placeholder text for contrast */
+  opacity: 1; /* Make placeholder fully visible */
+}
+
+.form-container {
+  flex-basis: 50%;
+}
+
+.player-list-container {
+  flex-basis: 50%;
+  border-left: 2px solid #ddd;
+  padding-left: 20px;
+}
+
+.player-list-item {
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.player-input label,
+.player-input input,
+.player-input button {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.player-input {
+  margin-bottom: 15px;
+  background: #fff;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.create-season input[type="text"],
+.create-season input[type="number"] {
+  width: 100%;
+  padding: 8px;
+  margin-top: 5px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+.create-season button {
+  padding: 10px 20px;
+  margin-top: 20px;
+  background-color: #007bff; /* Blue background for the button */
+  color: white; /* White text for contrast */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.create-season button:hover {
+  background-color: #0056b3;
+}
+
+/* Additional styles for delete and edit buttons for better visibility */
+.create-season .delete-button,
+.create-season .edit-button {
+  background-color: #ff0000; /* Red background for delete button */
+  color: white; /* White text for contrast */
+  padding: 5px 10px;
+  margin-left: 10px;
+}
+
+.create-season .edit-button {
+  background-color: #f0ad4e; /* Orange background for edit button */
+}
+
+.jersey-error {
+  color: #ff0000; /* Red color for error messages */
+  margin-top: 5px;
+  margin-bottom: 10px;
+}
