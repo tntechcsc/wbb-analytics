@@ -18,7 +18,6 @@ function DrillPage() {
     const [currentTempo, setCurrentTempo] = useState(0);
     const [recordedTempo, setRecordedTempo] = useState(null);
     const [lastTempo, setLastTempo] = useState(0);
-    const [lastSubmittedTempo, setLastSubmittedTempo] = useState(0);
     const [tempoType, setTempoType] = useState(null);
     const [avgTempo, setAvgTempo] = useState(0);
     const [tempoCount, setTempoCount] = useState(1);
@@ -27,7 +26,6 @@ function DrillPage() {
     // State hooks for player and popup management
     const [playersOnCourt, setPlayersOnCourt] = useState([]);
     const [allPlayers, setAllPlayers] = useState([]);
-    const [isSub, setIsSub] = useState(false);
     const [isPlayerSelectedforShot, setIsPlayerSelectedforShot] = useState(false);
     const [player, setPlayer] = useState(null);
     const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -162,13 +160,11 @@ function DrillPage() {
             p.number === selectedPlayerForSub.number ? newPlayer : p
         ));
         setIsPopupOpen(false);
-        setIsSub(false);
         setIsPlayerSelectedforShot(false);
     };
 
     const handleOverlayClick = () => {
         setIsPopupOpen(false);
-        setIsSub(false);
         setIsPlayerSelectedforShot(false);
     };
 
@@ -221,7 +217,6 @@ function DrillPage() {
     const onPlayerSelectForSub = (player) => {
         setSelectedPlayerForSub(player); // Set the player selected for substitution
         setIsPopupOpen(true); // Open the substitution popup
-        setIsSub(true); // Assuming `isSub` is used to distinguish between different actions
     };
 
     const recordStats = async (player, stat) => {
@@ -242,23 +237,31 @@ function DrillPage() {
             }
 
             // Assuming the first object is the one we want to update
-            const playerStats = playerStatsArray[0];
+            const filteredPlayerStatsArray = playerStatsArray.filter(array => array.drill_id === drillID);
 
-            console.log('Player stats:', playerStats);
+            const playerStats = filteredPlayerStatsArray[0];
+
+            console.log('Player stats:', filteredPlayerStatsArray[0]);
 
             // Ensure the stat exists and is a number, then increment
-            const updatedValue = (playerStats[stat] || 0) + 1;
+            //const updatedValue = (playerStats[stat] || 0) + 1;
 
-            console.log(`Updated ${stat}:`, updatedValue);
+            const updatedPlayerStats = { ...playerStats };
+
+            updatedPlayerStats[stat]++;
+            delete updatedPlayerStats._id;
+            delete updatedPlayerStats.__v;
+
+            console.log('Updated', updatedPlayerStats);
 
             // Submit the updated stats to the server
             try {
-                const response = await fetch(`${serverUrl}/api/stats/${playerStats._id}`, {
+                const response = await fetch(`${serverUrl}/api/stats//byPlayerAndDrill/${updatedPlayerStats.player_id}/${updatedPlayerStats.drill_id}`, {
                     method: 'PATCH',
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ [stat]: updatedValue }) // Corrected to send only the updated field
+                    body: JSON.stringify({ updatedPlayerStats }) // Corrected to send only the updated field
                 });
                 if (!response.ok) {
                     throw new Error(`HTTP Error: ${response.status}`);
