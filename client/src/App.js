@@ -9,6 +9,7 @@ import Practice from './pages/Practice/Practice';
 import Drill from './pages/Drill/Drill'
 import MainLayout from './layouts/MainLayout';
 import ExportPage from './pages/ExportPage';
+import SeasonPage from './pages/CreateSeason/CreateSeason';
 import LoginPage from './pages/Login/LoginPage';
 import PrivateRoute from './private/privateRoute';
 
@@ -28,6 +29,7 @@ const App = () => {
               <Route path="/practice" element={<Practice />} />
               <Route path="/drill" element={<Drill />} />
               <Route path="/export" element={<ExportPage />} />
+              <Route path="/season" element={<SeasonPage />} />
             </Route>
             </Route>
           </Routes>
