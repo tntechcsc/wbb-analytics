@@ -18,6 +18,8 @@ const Game = () => {
     const [isOpponentTeamOverlayVisible, setIsOpponentTeamOverlayVisible] = useState(true);
     const [shotOutcome, setShotOutcome] = useState(null);
     const [isSubmitClicked, setIsSubmitClicked] = useState(false);
+    const [tempoEvents, setTempoEvents] = useState([]);
+    const [shotEvents, setShotEvents] = useState([]);
     const serverUrl = process.env.REACT_APP_SERVER_URL;
 
     useEffect(() => {
@@ -39,13 +41,13 @@ const Game = () => {
         setTempoType(tempoType);
     };
 
-    const stopTempo = (tempoType) => {
+    const stopTempo = () => {
         setIsTiming(false);
         setTempoType(null);
-        setRecordedTempo(currentTempo);
-        setLastTempo(currentTempo);
-        setLastTempo(parseFloat(currentTempo.toFixed(2))); // Update the last tempo display with 2 decimal places
+        setLastTempo(parseFloat(currentTempo.toFixed(2)));
+        setTempoEvents((prevTempoEvents) => [...prevTempoEvents, parseFloat(currentTempo.toFixed(2))]);
         setCurrentTempo(0);
+        setRecordedTempo(currentTempo);
     };
 
     const cancelTempo = () => {
@@ -56,9 +58,9 @@ const Game = () => {
 
     const handleClockTimeSelection = (timeMapping) => {
         if (shotOutcome) {
-            submitGame(shotOutcome === 'made', timeMapping);
+            // submitShot(shotOutcome === 'made', timeMapping);
             console.log('Shot submitted:', shotOutcome, timeMapping);
-            setShotOutcome(null); // Reset shot outcome
+            setShotOutcome(null);
         }
     };
     
@@ -67,31 +69,44 @@ const Game = () => {
     };
 
     /*
-        post a shot with:
-        gameOrDrill_id: game_id
-        onModel: "Game"
-        player_ids: id of player who took the shot
-        made: true / false
-        shot_clock_time: selected shot clock time
-        timestamp: time player took shot
-
-        after shot is posted, we get an obj id -> (data._id probably), w that shot
+        after shot is posted, we get an obj id -> (shotData._id, probably), w that shot
         and append that shot to an array of shot_ids for shot_events
 
-        post to game with:
-        date: date
-        opponent: opponent team name
-        location: selected location
-        tempo_events: all recorded tempos
-        shot_events: all recorded shot_ids
+        submitGame will be posted w all the shot_ids in shotEvents and tempoEvents
 
-        submitGame is a partial mock submission to bypass errors for now, it will be updated 
-        later with the above information as everything is added and ready
-
-        shots need to be tied to a player so players still need to be implemented in this page,
-        also change tempo_events to be an array of all tempos taken, add tempo to array each time
+        players need to be implemented still, they will be tied to the shot and if it was
+        made or missed, this will be posted in submitShot
     */
 
+    /*
+    const submitShot = (isMade, shotClockTime) => {
+        const shotData = {
+            gameOrDrill_id: game_id,
+            onModel: "Game",
+            player_id: player_id,
+            made: isMade === 'made',
+            shot_clock_time: timeMapping,
+            timestamp: new Date()
+        };
+        console.log('Submitting shot:', shotData);
+
+        fetch( serverUrl + '/api/shots', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(shotData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Shot submitted:', data);
+            resetAndClose(); // Close the popup after submission
+        })
+        .catch(error => console.error('Error submitting shot:', error));
+    };
+    */
+
+    /*
     const submitGame = (shotClockTime) => {
         const currentDate = new Date();
         const date = `${currentDate.getFullYear()}-${(currentDate.getMonth() + 1).toString().padStart(2, '0')}-${currentDate.getDate().toString().padStart(2, '0')}`;
@@ -100,7 +115,7 @@ const Game = () => {
             date: date,
             opponent: opponentTeamInput,
             location: locationInput,
-            tempo_events: recordedTempo,
+            tempo_events: tempoEvents,
             shot_events: shotClockTime,
         };
         console.log('Submitting game data:', gameData);
@@ -118,6 +133,7 @@ const Game = () => {
         })
         .catch(error => console.error('Error submitting shot:', error));
     };
+    */
 
     return (
         <>
@@ -215,7 +231,6 @@ const Game = () => {
                         )}
                     </div>
                 </div>
-
             </div>
         </>
     );
