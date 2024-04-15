@@ -219,9 +219,8 @@ function DrillPage() {
         setIsPopupOpen(true); // Open the substitution popup
     };
 
-    const recordStats = async (player, stat) => {
+    const recordStats = async (player, route) => {
         if (isPlayerSelectedforShot) {
-            console.log('Player:', player, 'Stat:', stat);
 
             // Fetch the player's stats from the server
             const statResponse = await fetch(`${serverUrl}/api/stats/byPlayer/${player.id}`);
@@ -241,27 +240,13 @@ function DrillPage() {
 
             const playerStats = filteredPlayerStatsArray[0];
 
-            console.log('Player stats:', filteredPlayerStatsArray[0]);
-
-            // Ensure the stat exists and is a number, then increment
-            //const updatedValue = (playerStats[stat] || 0) + 1;
-
-            const updatedPlayerStats = { ...playerStats };
-
-            updatedPlayerStats[stat]++;
-            delete updatedPlayerStats._id;
-            delete updatedPlayerStats.__v;
-
-            console.log('Updated', updatedPlayerStats);
-
             // Submit the updated stats to the server
             try {
-                const response = await fetch(`${serverUrl}/api/stats//byPlayerAndDrill/${updatedPlayerStats.player_id}/${updatedPlayerStats.drill_id}`, {
+                const response = await fetch(`${serverUrl}/api/stats/${route}/${playerStats._id}`, {
                     method: 'PATCH',
                     headers: {
                         'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ updatedPlayerStats }) // Corrected to send only the updated field
+                    }
                 });
                 if (!response.ok) {
                     throw new Error(`HTTP Error: ${response.status}`);
@@ -327,27 +312,27 @@ function DrillPage() {
             <div className="extra-stats-container">
                 <ExtraStats
                     className="Offensive Rebound"
-                    onClick={() => recordStats(player, 'offensive_rebounds')}
+                    onClick={() => recordStats(player, 'offensiveRebound')}
                 />
                 <ExtraStats
                     className="Assist"
-                    onClick={() => recordStats(player, 'assists')}
+                    onClick={() => recordStats(player, 'assist')}
                 />
                 <ExtraStats
                     className="Steal"
-                    onClick={() => recordStats(player, 'steals')}
+                    onClick={() => recordStats(player, 'steal')}
                 />
                 <ExtraStats
                     className="Defensive Rebound"
-                    onClick={() => recordStats(player, 'defensive_rebounds')}
+                    onClick={() => recordStats(player, 'defensiveRebound')}
                 />
                 <ExtraStats
                     className="Block"
-                    onClick={() => recordStats(player, 'blocks')}
+                    onClick={() => recordStats(player, 'block')}
                 />
                 <ExtraStats
                     className="Turnover"
-                    onClick={() => recordStats(player, 'turnovers')}
+                    onClick={() => recordStats(player, 'turnover')}
                 />
             </div>
             <div className="tempo-container">
