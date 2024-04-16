@@ -4,11 +4,9 @@ import Heatmap from '../TeamStats/components/Heatmap';
 import TempoCard from '../TeamStats/components/TempoCard';
 import StatCard from '../TeamStats/components/StatsDisplay';
 import StatsTable from '../TeamStats/components/StatsTable';
-import NavagationHeader from '../TeamStats/components/NavigationHeader'
 
 import ShotsByClock from './components/ShotsByClock';
 import './PlayerStats.css';
-import { set } from 'mongoose';
 
 function PlayerStats() {
   /* 
@@ -28,6 +26,10 @@ function PlayerStats() {
   const [avgOffensiveTempo, setAvgOffensiveTempo] = useState(0);
   const [avgDefensiveTempo, setAvgDefensiveTempo] = useState(0);
   const [shotClockData, setShotClockData] = useState([]); //
+  const [shotPointData, setShotPointData] = useState([]); //[2][2] array where the first index is the number of made shots and the second index is the total number of shots attempted
+  const [shotPoints, setShotPoints] = useState(0); //This is the total number of points scored in the drill
+  const [allStats, setAllStats] = useState([]); //This is the data for the player's stats
+  const [statsData, setStatsData] = useState([]); //This is the data for the player's stats
   const [selectedSession, setSelectedSession] = useState('');
   const [selectedDrill, setSelectedDrill] = useState(''); //This is a numerical ID, not an object
 
@@ -39,7 +41,6 @@ function PlayerStats() {
   const serverUrl = process.env.REACT_APP_SERVER_URL;
 
 useEffect(() => {
-  console.log(serverUrl);
   const fetchInitialData = async () => {
     try {
       const playerResponse = await fetch(serverUrl + '/api/players/'); //Note to self: feetches as an ARRAY // Also should switch this to player ID at some point
@@ -49,7 +50,6 @@ useEffect(() => {
       label: `${player.name}`,
       value: player._id.toString(),
     })));
-      console.log(allPlayers);
       if (playerID) {
         //Find the player with the matching ID
         setSelectedPlayer(playerData.find(player => player._id === playerID))
@@ -58,12 +58,11 @@ useEffect(() => {
         setSelectedPlayer(playerData[0]); //What about jersey number that no exis?
         fetchPlayerData(playerData[0]._id);
       }
-      console.log(selectedPlayer);
+      //console.log(selectedPlayer);
     } catch (error){
       console.error("Failed to player data: ", error);
     }
     try{
-      
       const sessionResponse = await fetch(serverUrl + '/api/practices');
       const sessionData = await sessionResponse.json();
       //console.log(sessionData)
@@ -127,6 +126,7 @@ useEffect(() => {
     ]
   };
 
+  const pointSectionLabels = ["2 pt FG %", "3 pt FG %"]; //This is for the shot point data
   const sectionLabels = ["30-20", "20-10", "10-0"]; //This is for the shot clock data
 
   const handlePlayerChange = (event) => {
@@ -188,6 +188,9 @@ useEffect(() => {
     //Immediately filter tempos for the newly selected drill
     updateTempoData();
     updateShotData();
+    const drillStats = allStats.find(stats => stats.drill_id === newDrillId);
+    setStatsData(drillStats);
+    console.log(drillStats)
   };
 
   /*
@@ -228,40 +231,64 @@ useEffect(() => {
     It filters the shot data for a given player by the selected drill and then updates the shot clock data for the player.
   */
   const updateShotData = () => {
+    //var time = performance.now()
     const shotsForDrill = allShots.filter(shot => shot.gameOrDrill_id === selectedDrill);
     setFilteredShots(shotsForDrill);
     //console.log(selectedDrill)
     //console.log(shotsForDrill)
-    var shotDat = [[0, 0], [0, 0], [0, 0]]; //This is a two-dimensional array that has the third in the first index, and the number of made shots and number of total shots in the second index. So, shotDat[0][0] is the shots *made* in the first third, and shotDat[0][1] is the shots attempted.
+    //FG = total # shots made over total # shots attempted
+    // 6 7 and 8 are 3-point
+    var shotClockDat = [[0, 0], [0, 0], [0, 0]]; //This is a two-dimensional array that has the third in the first index, and the number of made shots and number of total shots in the second index. So, shotDat[0][0] is the shots *made* in the first third, and shotDat[0][1] is the shots attempted.
+    var shotPointDat = [[0,0],[0,0]]; //This is a two-dimensional array that has the number of made # point shots in the first column and the total number of # point shots attempted in the second. The first row is 2-point shots and the second row is 3-point shots
+    var shotPoints = 0;
     for(var i = 0; i < shotsForDrill.length; i++){
+      if(shotsForDrill[i].zone < 6){
+        shotPointDat[0][1]++;
+        if(shotsForDrill[i].made){
+          shotPointDat[0][0]++;
+          shotPoints += 2;
+        }
+      }
+      else if(shotsForDrill[i].zone >= 6 && shotsForDrill[i].zone < 9){
+        shotPointDat[1][1]++;
+        if(shotsForDrill[i].made){
+          shotPointDat[1][0]++;
+          shotPoints += 3;
+        }
+      }
       switch(shotsForDrill[i].shot_clock_time){ //The options are "first_third", "second_third", and "final_third" for some reason
         case "first_third":
-          shotDat[0][1]++;
+          shotClockDat[0][1]++;
           if(shotsForDrill[i].made)
-            shotDat[0][0]++;
+            shotClockDat[0][0]++;
           break;
         case "second_third":
-          shotDat[1][1]++;
+          shotClockDat[1][1]++;
           if(shotsForDrill[i].made)
-            shotDat[1][0]++;
+            shotClockDat[1][0]++;
           break;
         case "final_third":
-          shotDat[2][1]++;
+          shotClockDat[2][1]++;
           if(shotsForDrill[i].made)
-            shotDat[2][0]++;
+            shotClockDat[2][0]++;
           break;
         default:
           console.log("Error: Shot clock time not recognized " + shotsForDrill[i].shot_clock_time);
       }
     }
-    setShotClockData(shotDat);
+    setShotClockData(shotClockDat);
+    setShotPointData(shotPointDat);
+    setShotPoints(shotPoints);
+
+    //var end = performance.now()
+    //console.log("Time to update shot data: " + (end - time))
   };
 
   const fetchPlayerData = async (playerID) => {
     try {
       const drillResponse = await fetch(serverUrl + '/api/drills/players/'+ playerID);
       const drillData = await drillResponse.json();
-      //console.log("These are the drills Maddie is in: ") 
+      //console.log("These are the drills Maddie is in: ")
       //console.log(drillData);
       setAllDrills(drillData);
       if (drillIdParam) {
@@ -282,13 +309,24 @@ useEffect(() => {
       console.error("Failed to fetch tempos from drill data:", error);
     }
     try {
-      const shotsResponse = await fetch(serverUrl + '/api/shots/');//byPlayer/' + playerData[0]._id);
+      const shotsResponse = await fetch(serverUrl + '/api/shots/');//byPlayer/' + playerID);
       const shotsData = await shotsResponse.json(); //This is not programmed to get shots by player yet; the route does not cooperate
+      const filteredShotsData = shotsData.filter(shot => shot.player_ids === playerID);
       //console.log("These are shots:")
-      //console.log(shotsData);
-      setAllShots(shotsData);
+      //console.log(filteredShotsData);
+      setAllShots(filteredShotsData);
     } catch (error) {
       console.error("Failed to fetch shot data:", error);
+    }
+    try {
+      const statsResponse = await fetch(serverUrl + '/api/stats/byPlayer/' + playerID);
+      const statsData = await statsResponse.json();
+      //console.log("These are stats:")
+      //console.log(statsData);
+      setAllStats(statsData);
+      //console.log(statsData)
+    } catch (error) {
+      console.error("Failed to fetch stats data:", error);
     }
   };
   
@@ -332,11 +370,19 @@ useEffect(() => {
       </div>
 
       <div className="stats-overview">
-        {statCardsData.map((card, index) => (
-          <StatCard key={index} title={card.title} value={card.value} />
+        <StatCard title="Total Points" value={shotPoints} />
+        {shotPointData.map((section, index) => (
+          <StatCard key={index} title={pointSectionLabels[index]} value={(section[0]/section[1] * 100).toFixed(2)} />
         ))}
       </div>
-
+      <div className="stat-cards">
+        <StatCard title="Total Rebounds" value={statsData.total_rebounds || 0} />
+        <StatCard title="Assists" value={statsData.assists || 0} />
+        <StatCard title="Steals" value={statsData.steals || 0} />
+        <StatCard title="Blocks" value={statsData.blocks || 0} />
+        <StatCard title="Turnovers" value={statsData.turnovers || 0} />
+        <StatCard title="Personal Fouls" value={statsData.personal_fouls || 0} />
+      </div>
       <div className='stats-table-container'>
       <h2>Player Stats</h2>
         <div className="stats-table">

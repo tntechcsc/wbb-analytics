@@ -49,11 +49,11 @@
     background-color: var(--card-color);
   }
   
-  .stats-overview {
+  .stats-overview,
+  .stat-cards {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
-    padding: 1rem;
     background-color: var(--card-bg-color);
   }
 
