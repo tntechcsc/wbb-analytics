@@ -1,15 +1,16 @@
 :root {
-  --bg-color: #FAFAFA;
-  --header-color: #6758A0;
+  --bg-color: #f4f4f9;
+  --header-color: #503291;
   --card-bg-color: #ffffff;
-  --text-color-light: #cec3c3;
-  --text-color-dark: #000000;
+  --text-color-light: #f7f7f7;
+  --text-color-dark: #333333;
   --card-color: #6758A0;
-  --primary-color: #6758A0;
+  --primary-color: #503291;
   --stat-card-bg: #FFD700;
-  --stat-card-text-color: #444444;
-  --accent-color: #E6B800;
-  --hover-color: #50497C;
+  --stat-card-text-color: #333333;
+  --accent-color: #FFD700;
+  --hover-color: #3d2671;
+  --box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
 }
 
 * {
@@ -19,86 +20,126 @@
 body, html {
   height: 100%;
   margin: 0;
-  font-family: 'Arial', sans-serif;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background-color: var(--bg-color);
-  color: var(--text-color-dark); /* Improved readability */
+  color: var(--text-color-dark);
 }
 
 .team-stats-container {
   display: flex;
   flex-direction: column;
-  height: 100vh; /* Full viewport height */
-  overflow: hidden; /* Prevents unnecessary scrolling */
-}
-
-.team-header {
-  background-color: var(--header-color);
-  color: var(--text-color-light); /* Ensure text is visible on the header background */
+  min-height: 100vh;
   padding: 20px;
-  text-align: center;
-}
-
-.selectors, .detailed-stats, .stats-overview {
-  padding: 20px;
-  display: flex;
-  justify-content: space-around; /* Distribute space around items */
-  flex-wrap: wrap; /* Allows items to wrap as needed */
 }
 
 .selectors {
-  background-color: var(--card-color);
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  background-color: var(--header-color);
+  color: var(--text-color-light);
+  border-radius: 8px;
+  box-shadow: var(--box-shadow);
 }
+
+.detailed-stats, .stats-overview {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.card, .tempo-cards, .bar-container, .shotClock, .stat-card {
+  background-color: var(--card-bg-color);
+  border-radius: 8px;
+  box-shadow: var(--box-shadow);
+  padding: 15px;
+  font-size: 0.9em;
+}
+
+.card-header {
+  background-color: var(--primary-color);
+  color: var(--text-color-light);
+  padding: 8px;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  font-size: 1.1em;
+}
+
 
 .detailed-stats {
-  flex-grow: 1; /* Allows detailed-stats to fill available space */
-  gap: 20px; /* Adds space between children */
-}
-
-.tempo-cards, .heatmap {
-  flex: 1; /* Allows these components to grow and fill available space equally */
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 20px;
   padding: 20px;
-  border-radius: 8px; /* Rounded corners */
+  height: 70%;
 }
 
-.heatmap {
+.tempo-cards-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: calc(50% - 10px); /* Adjusts the width to take up half of the container, accounting for the gap */
+}
+
+.charts-container {
+  flex: 2; /* Takes the remaining space */
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: calc(70% - 10px); /* Adjusts the width to take up the other half of the container */
+  /* Add height or flex-basis if you want a specific height */
+}
+
+.bar-container {
   background-color: var(--primary-color);
+  padding: 15px;
+  flex: 1; /* Grow to use available space */
+  min-height: 50%; /* Example fixed minimum height */
+}
+
+.shotClock {
+  display: flex;
+  justify-content: space-between;
+  flex: 0.5; /* Takes half the space of bar-container, adjust as needed */
+  /* Again, specify a height or min-height for a specific size */
+  min-height: 15%; /* Example fixed minimum height */
+}
+
+.card-content {
+  padding: 15px;
+}
+
+.shotClock div {
+  flex: 1;
+  text-align: center;
 }
 
 .stats-overview {
-  background-color: var(--card-bg-color);
-  justify-content: space-between; /* Distributes space between components */
+  justify-content: space-between;
 }
 
-.stat-card {
-  flex-basis: calc(33.333% - 40px); /* Three items per row with padding */
-  margin: 10px;
-  background-color: var(--stat-card-bg);
-  color: var(--stat-card-text-color);
-  padding: 20px;
-  border-radius: 8px;
-}
+@media (max-width: 1200px) {
+  .selectors {
+    flex-direction: column;
+    align-items: center;
+  }
 
-.stats-table-container, .stats-table {
-  width: 100%; /* Ensures table fills container */
-  overflow-x: auto; /* Enables horizontal scrolling for smaller screens */
-}
-
-.stats-table th, .stats-table td {
-  padding: 12px 15px;
-}
-
-.stats-table th {
-  background-color: var(--header-color);
-  color: var(--text-color-light);
+  .selectors > * {
+    width: 100%;
+    margin-bottom: 10px;
+  }
 }
 
 @media (max-width: 768px) {
-  .selectors, .detailed-stats, .stats-overview {
+  .detailed-stats, .stats-overview {
     flex-direction: column;
   }
 
-  .stat-card, .tempo-cards, .heatmap {
-    width: 100%; /* Full width for smaller screens */
-    margin: 10px 0; /* Adjust margin for vertical layout */
+  .tempo-cards, .bar-container, .shotClock, .stat-card {
+    width: 100%;
   }
 }

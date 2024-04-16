@@ -5,6 +5,7 @@ import { random } from 'lodash'; // Utility for generating random values (used f
 import NavigationHeader from './components/NavigationHeader'; // Custom component for navigation header
 import Selector from './components/Selector'; // Custom component for selection dropdowns
 import TempoCard from './components/TempoCard'; // Displays tempo stats
+import ShotsByClock from './components/ShotsByClock';
 import StatCard from './components/StatsDisplay'; // Displays various statistics
 import './TeamStats.css'; // Stylesheet for the TeamStats component
 
@@ -55,6 +56,9 @@ function TeamStats() {
   const [TotalPoints, setTotalPoints] = useState(0);
   const [ThreePointPercentage, setThreePointPercentage] = useState(0);
   const [TwoPointPercentage, setTwoPointPercentage] = useState(0);
+  const [shotClockData, setShotClockData] = useState([]);
+
+  const sectionLabels = ["0-10", "10-20", "20-30"]; //This is for the shot clock data
 
   // Initial state for bar chart data, with dummy values replaced later
   const [barChartData, setBarChartData] = useState({
@@ -65,7 +69,6 @@ function TeamStats() {
         backgroundColor: 'rgba(255, 215, 0, 0.6)',
         borderColor: 'rgba(0,0,0,1)',
         borderWidth: 1,
-        data: Array(8).fill(0).map(() => random(0, 100)), // Dummy data for chart initialization
       },
     ],
   });
@@ -99,6 +102,7 @@ function TeamStats() {
       const response = await fetch(serverUrl + `/api/drills/practice/${practiceID}`);
       const data = await response.json();
       setDrills(data);
+      console.log(data);
     } catch (error) {
       console.error('Failed to fetch drills:', error);
     }
@@ -112,7 +116,7 @@ function TeamStats() {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const tempoData = await response.json();
-      
+
       calculateAvgTempo(tempoData);
     } catch (error) {
       console.error('Failed to fetch tempos:', error);
@@ -133,7 +137,7 @@ function TeamStats() {
 
     setAvgOffensiveTempo(offensiveTempoAvg.toFixed(2));
     setAvgDefensiveTempo(defensiveTempoAvg.toFixed(2));
-};
+  };
 
   // Fetch all shots
   const fetchShots = async (gameOrDrillId) => {
@@ -180,6 +184,34 @@ function TeamStats() {
       setTwoPointPercentage(twoPointPercentage.toFixed(2));
 
       processShotsForChart(filteredShots);
+
+
+
+      // Calculate shot clock data
+      var shotClockData = [[0, 0], [0, 0], [0, 0]]; // Initialize counters for each section of the shot clock
+
+      filteredShots.forEach(shot => {
+        if (shot.shot_clock_time == 'final_third') {
+          shotClockData[0][1] += 1;
+          if (shot.made) {
+            shotClockData[0][0] += 1;
+          }
+        } else if (shot.shot_clock_time == 'first_third') {
+          shotClockData[1][1] += 1;
+          if (shot.made) {
+            shotClockData[1][0] += 1;
+          }
+        } else {
+          shotClockData[2][1] += 1;
+          if (shot.made) {
+            shotClockData[2][0] += 1;
+          }
+        }
+      });
+
+      console.log(shotClockData);
+
+      setShotClockData(shotClockData);
 
     } catch (error) {
       console.error('Failed to fetch shots:', error);
@@ -337,10 +369,6 @@ function TeamStats() {
 
   return (
     <div className="team-stats-container">
-      <header className="team-header">
-        <NavigationHeader />
-      </header>
-
       <div className="selectors">
         <Selector
           options={seasons.map(season => ({ label: `Season: ${season.year}`, value: season._id }))}
@@ -359,7 +387,7 @@ function TeamStats() {
           disabled={!selectedSeason} // Disable if no season is selected
         />
         <Selector
-          options={drills.map(drill => ({ label: drill.name, value: drill._id }))}
+          options={drills.map(drill => ({ label: `Drill: ${drill.name}`, value: drill._id }))}
           onChange={handleDrillChange}
           label="Drill"
           value={selectedDrill}
@@ -372,11 +400,18 @@ function TeamStats() {
           <TempoCard title="Avg Offensive Tempo" tempo={avgOffensiveTempo} />
           <TempoCard title="Avg Defensive Tempo" tempo={avgDefensiveTempo} />
         </div>
-        <div className="heatmap">
-          <Bar
-            data={barChartData}
-            options={chartOptions}
-          />
+        <div className="charts-container">
+          <div className='bar-container'>
+            <Bar
+              data={barChartData}
+              options={chartOptions}
+            />
+          </div>
+          <div className='shotClock'>
+            {shotClockData.map((section, index) => (
+              <ShotsByClock key={index} made={section[0]} total={section[1]} section={sectionLabels[index]} />
+            ))}
+          </div>
         </div>
       </div>
 
