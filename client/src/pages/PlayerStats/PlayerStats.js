@@ -288,7 +288,7 @@ useEffect(() => {
     try {
       const drillResponse = await fetch(serverUrl + '/api/drills/players/'+ playerID);
       const drillData = await drillResponse.json();
-      //console.log("These are the drills Maddie is in: ")
+      //console.log("These are the drills Maddie is in: ") 
       //console.log(drillData);
       setAllDrills(drillData);
       if (drillIdParam) {

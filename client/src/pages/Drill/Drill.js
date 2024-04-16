@@ -4,40 +4,49 @@ import CancelButton from './components/CancelButton';
 import LastTempoDisplay from './components/LastTempoDisplay';
 import PlayerList from './components/PlayerList';
 import TempoTimer from './components/TempoTimer';
-import TempoButton from './components/TempoButton'
-import SubstitutionPopup from './components/SubstitutionPopup'
-import ShotPopup from './components/ShotPopup'
-
-import area from './components/Court';
-
+import TempoButton from './components/TempoButton';
+import SubstitutionPopup from './components/SubstitutionPopup';
+import ShotPopup from './components/ShotPopup';
 import ImageMapper from "react-img-mapper";
 import basketballCourtVector from './components/basketball-court-vector.jpg';
+import ExtraStats from './components/ExtraStats';
 
-
-function TempoPage() {
-    // State for timing control
+function DrillPage() {
+    // State hooks for timing and tempo tracking
     const [isTiming, setIsTiming] = useState(false);
     const [resetTimer, setResetTimer] = useState(false);
     const [currentTempo, setCurrentTempo] = useState(0);
     const [recordedTempo, setRecordedTempo] = useState(null);
-    const [lastTempo, setLastTempo] = useState(null);
+    const [lastTempo, setLastTempo] = useState(0);
+    const [lastSubmittedTempo, setLastSubmittedTempo] = useState(0);
     const [tempoType, setTempoType] = useState(null);
+    const [avgTempo, setAvgTempo] = useState(0);
+    const [tempoCount, setTempoCount] = useState(1);
+    const [totalTempo, setTotalTempo] = useState(0);
 
+    // State hooks for player and popup management
     const [playersOnCourt, setPlayersOnCourt] = useState([]);
     const [allPlayers, setAllPlayers] = useState([]);
-
     const [isSub, setIsSub] = useState(false);
-
     const [isPlayerSelectedforShot, setIsPlayerSelectedforShot] = useState(false);
     const [player, setPlayer] = useState(null);
     const [isPopupOpen, setIsPopupOpen] = useState(false);
     const [selectedPlayerForSub, setSelectedPlayerForSub] = useState(null);
     const [isShotPopupOpen, setIsShotPopupOpen] = useState(false);
     const [selectedZone, setSelectedZone] = useState(null);
-    const [isPlayer, setIsPlayer] = useState(false);
+
+    // Server URL from environment variables for API requests
     const serverUrl = process.env.REACT_APP_SERVER_URL;
+
+    // Extracting practice and drill IDs from the URL query parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    const drillID = urlParams.get('DrillID');
+    const practiceID = urlParams.get('PracticeID');
+
+
+    // Fetch players from the server on component mount
     useEffect(() => {
-        
+
         fetch(serverUrl + '/api/players')
             .then(response => response.json())
             .then(data => {
@@ -47,39 +56,73 @@ function TempoPage() {
                     number: player.jersey_number
                 }));
                 setAllPlayers(playersData);
-                // Set players on court based on your logic, e.g., first five players
-                setPlayersOnCourt(playersData.slice(0, 5));
+                setPlayersOnCourt(playersData.slice(0, 5)); // Example: Set the first five players as on court
             })
             .catch(error => console.error('Failed to fetch players:', error));
-    }, []);
+    }, [serverUrl]);
 
     // Function to submit tempo
-    const submitTempo = (isOffensive, playersOnCourtIds, timeValue) => {
+    const submitTempo = async (isOffensive, playersOnCourtIds, timeValue) => {
         const tempoData = {
+            gameOrDrill_id: drillID,
             player_ids: playersOnCourtIds,
             onModel: 'Drill',
             tempo_type: isOffensive,
-            transition_time: timeValue,
+            transition_time: timeValue.toFixed(2),
             timestamp: new Date()
         };
+    
+        try {
+            // Add 'await' here to wait for the fetch call to resolve
+            const response = await fetch(serverUrl + '/api/tempos', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(tempoData)
+            });
+            const submitTempo = await response.json();
+            console.log('Tempo submitted:', submitTempo);
 
-        fetch(serverUrl + '/api/tempos', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(tempoData)
-        })
-            .then(response => response.json())
-            .then(data => console.log('Tempo submitted:', data))
-            .catch(error => console.error('Error submitting tempo:', error));
+            try {
+
+                // Fetch drill to get data to update
+                const drillResponse = await fetch(serverUrl + `/api/drills/${drillID}`);
+                const drillData = await drillResponse.json();
+                drillData.tempo_events.push(submitTempo._id);
+
+                // Remove _id and __v from drillData
+                delete drillData._id;
+                delete drillData.__v;
+
+                // Update the drill with the new tempo event
+                const response = await fetch(serverUrl + `/api/drills/${drillID}`, {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(drillData)
+                });
+                const updatedDrill = await response.json();
+                console.log('Drill updated:', updatedDrill);
+    
+            } catch (error) {
+                console.error('Error updating drill:', error);
+            }
+        } catch (error) {
+            console.error('Error submitting tempo:', error);
+        }
     };
+    
 
     // Start timing for tempo (offensive or defensive)
     const startTempo = (type) => {
         console.log(`Starting ${type} tempo`);
         if (recordedTempo) {
             setLastTempo(recordedTempo.toFixed(2));
+            setTempoCount(tempoCount + 1);
+            setTotalTempo(totalTempo + recordedTempo);
+            setAvgTempo(((recordedTempo + totalTempo) / tempoCount).toFixed(2));
         }
         setCurrentTempo(0);
         setResetTimer(true);
@@ -173,22 +216,42 @@ function TempoPage() {
     const onPlayerSelectForShot = (player) => {
         setIsPlayerSelectedforShot(true);
         setPlayer(player);
-        // Further logic to handle shot selection
     };
 
     const onPlayerSelectForSub = (player) => {
         setSelectedPlayerForSub(player); // Set the player selected for substitution
         setIsPopupOpen(true); // Open the substitution popup
-        // Note: You might not need `isSub` if it's solely for controlling the popup state.
-        // But if it serves additional logic, set it accordingly
         setIsSub(true); // Assuming `isSub` is used to distinguish between different actions
-      };
+    };
+
+    const recordStats = (player, stat) => {
+        console.log(`Recording ${stat} for player ${player.number}`);
+
+        // Example: Submit the stat to the server
+        const statData = {
+            player_id: player.id,
+            gameOrDrill_id: drillID,
+            stat_type: stat,
+            timestamp: new Date()
+        };
+
+        fetch(serverUrl + '/api/stats', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(statData)
+        })
+            .then(response => response.json())
+            .then(data => console.log('Stat submitted:', data))
+            .catch(error => console.error('Error submitting stat:', error));
+    };
 
 
-      return (
-        <div className="TempoPage">
-            <div className="TopContainer">
-                <div className="PlayerListContainer">
+    return (
+        <div className="drill-container">
+            <div className="player-and-court-container">
+                <div className="player-container">
                     <PlayerList
                         players={playersOnCourt}
                         onPlayerSelectForShot={onPlayerSelectForShot}
@@ -207,70 +270,94 @@ function TempoPage() {
                         </>
                     )}
                 </div>
-                <div className="RightComponent">
-                    <div className="CourtContainer">
-                        <div style={{ position: "relative" }}>
-                            <ImageMapper
-                                src={basketballCourtVector}
-                                map={MAP2}
-                                width={600}
-                                height={550}
-                                lineWidth={5}
-                                strokeColor={"white"}
-                                onClick={courtClicked}
-                            />
-                            {isShotPopupOpen && isPlayerSelectedforShot && (
-                                <>
-                                    <div className="Overlay" onClick={handleCourtOverlayClick}></div>
-                                    <ShotPopup
-                                        isOpen={isShotPopupOpen}
-                                        onClose={() => handleShotPopupClose()}
-                                        gameOrDrill_id={null}
-                                        onModel="Drill"
-                                        player_id={player.id}
-                                        zone={selectedZone}
-                                    />
-                                </>
-                            )}
-                        </div>
+                <div className="court-container">
+                    <div style={{ position: "relative", width: '100%', height: '100%' }}>
+                        <ImageMapper
+                            src={basketballCourtVector}
+                            map={MAP2}
+                            width={600}
+                            height={550}
+                            lineWidth={5}
+                            strokeColor={"white"}
+                            onClick={courtClicked}
+                        />
+                        {isShotPopupOpen && isPlayerSelectedforShot && (
+                            <>
+                                <div className="Overlay" onClick={handleCourtOverlayClick}></div>
+                                <ShotPopup
+                                    isOpen={isShotPopupOpen}
+                                    onClose={() => handleShotPopupClose()}
+                                    gameOrDrill_id={drillID}
+                                    onModel="Drill"
+                                    player_id={player.id}
+                                    zone={selectedZone}
+                                />
+                            </>
+                        )}
                     </div>
                 </div>
             </div>
-            <div className="BottomContainer">
-                <div className="TempoControls">
-                    <TempoButton
-                        tempoType="Defensive"
-                        className={`TempoButton ${isTiming && tempoType !== 'defensive' ? 'disabled' : ''} ${isTiming && tempoType === 'defensive' ? 'stop' : 'start'}`}
-                        isTiming={isTiming && tempoType === 'defensive'}
-                        onClick={() => isTiming && tempoType === 'defensive' ? handleStopTempo('defensive') : startTempo('defensive')}
-                        disabled={isTiming && tempoType !== 'defensive'}
+            <div className="extra-stats-container">
+                <ExtraStats
+                    className="Offensive Rebound"
+                    onClick={() => recordStats(player, 'Offensive Rebound')}
+                />
+                <ExtraStats
+                    className="Assist"
+                    onClick={() => recordStats(player, 'Assist')}
+                />
+                <ExtraStats
+                    className="Steal"
+                    onClick={() => recordStats(player, 'Steal')}
+                />
+                <ExtraStats
+                    className="Defensive Rebound"
+                    onClick={() => recordStats(player, 'Defensive Rebound')}
+                />
+                <ExtraStats
+                    className="Block"
+                    onClick={() => recordStats(player, 'Block')}
+                />
+                <ExtraStats
+                    className="Turnover"
+                    onClick={() => recordStats(player, 'Turnover')}
+                />
+            </div>
+            <div className="tempo-container">
+                <TempoButton
+                    tempoType="Defensive"
+                    className={`TempoButton ${isTiming && tempoType !== 'defensive' ? 'disabled' : ''} ${isTiming && tempoType === 'defensive' ? 'stop' : 'start'}`}
+                    isTiming={isTiming && tempoType === 'defensive'}
+                    onClick={() => isTiming && tempoType === 'defensive' ? handleStopTempo('defensive') : startTempo('defensive')}
+                    disabled={isTiming && tempoType !== 'defensive'}
+                />
+                <div className="TimerAndLastTempo">
+                    <TempoTimer
+                        isTiming={isTiming}
+                        resetTimer={resetTimer}
+                        setResetTimer={setResetTimer}
+                        currentTime={currentTempo}
+                        setCurrentTime={setCurrentTempo}
                     />
-                    <div className="TimerAndLastTempo">
-                        <TempoTimer
-                            isTiming={isTiming}
-                            resetTimer={resetTimer}
-                            setResetTimer={setResetTimer}
-                            currentTime={currentTempo}
-                            setCurrentTime={setCurrentTempo}
-                        />
-                        <LastTempoDisplay lastTempo={lastTempo} />
+                    <LastTempoDisplay lastTempo={lastTempo} />
+                    <div className="cancel-button-container">
                         <CancelButton
                             onCancel={cancelTempo}
                             className={!isTiming ? 'disabled' : ''}
                             disabled={!isTiming}
                         />
                     </div>
-                    <TempoButton
-                        tempoType="Offensive"
-                        className={`TempoButton ${isTiming && tempoType === 'offensive' ? 'stop' : 'start'} ${isTiming && tempoType !== 'offensive' ? 'disabled' : ''}`}
-                        isTiming={isTiming && tempoType === 'offensive'}
-                        onClick={() => isTiming && tempoType === 'offensive' ? handleStopTempo('offensive') : startTempo('offensive')}
-                        disabled={isTiming && tempoType !== 'offensive'}
-                    />
                 </div>
+                <TempoButton
+                    tempoType="Offensive"
+                    className={`TempoButton ${isTiming && tempoType === 'offensive' ? 'stop' : 'start'} ${isTiming && tempoType !== 'offensive' ? 'disabled' : ''}`}
+                    isTiming={isTiming && tempoType === 'offensive'}
+                    onClick={() => isTiming && tempoType === 'offensive' ? handleStopTempo('offensive') : startTempo('offensive')}
+                    disabled={isTiming && tempoType !== 'offensive'}
+                />
             </div>
         </div>
     );
 }
 
-export default TempoPage;
+export default DrillPage;
