@@ -90,7 +90,7 @@ router.patch('/:id', isAuthenticated, async (req, res) => {
     }
 
     try {
-        const updatedPlayer = await Player.findByIdAndUpdate(req.params.id, value, { new: true }).populate('seasons');
+        const updatedPlayer = await Player.findByIdAndUpdate(req.params.id, value, { new: true });
         if (!updatedPlayer) {
             return res.status(404).json({ message: 'Player not found' });
         }
