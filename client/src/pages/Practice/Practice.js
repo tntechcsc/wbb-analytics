@@ -204,7 +204,6 @@ const Practice = () => {
                                 />
 
                                 <div className='session-inputs'>
-                                    {/*<h3> Opponent Team: {opponentTeam}</h3>*/}
                                     <h3> Date: {date}</h3>
                                 </div>
                             </>
