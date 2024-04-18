@@ -101,6 +101,19 @@ router.get('/:id/practicesDate', async (req, res) => {
     }
 });
 
+// Get practices by season
+router.get('/:seasonId/practices', async (req, res) => {
+    try {
+        const { seasonId } = req.params;
+        const season = await Season.findById(seasonId).populate('practices');
+        if (!season) {
+            return res.status(404).send('Season not found');
+        }
+        res.json(season.practices);
+    } catch (error) {
+        res.status(500).send({ message: 'Error retrieving practices', error: error.toString() });
+    }
+});
 
 
 // GET practices from a season by season ID

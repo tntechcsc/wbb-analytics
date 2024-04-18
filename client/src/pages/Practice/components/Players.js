@@ -95,7 +95,7 @@ const Players = ({ listA, setListA, listB, setListB, playerData, setPlayerData }
     return (
         <>
         <div className="list">
-            <h2 style={{ color: 'white' }}>Team A</h2>
+            <h2 style={{ color: 'white' }}>Team Purple</h2>
             <ul>
             {listA.map((player, index) => (
                 <li key={index}>
@@ -125,7 +125,7 @@ const Players = ({ listA, setListA, listB, setListB, playerData, setPlayerData }
         </div>
 
         <div className="list">
-            <h2 style={{ color: 'white' }}>Team B</h2>    
+            <h2 style={{ color: 'white' }}>Team Gold</h2>    
             <ul>
             {listB.map((player, index) => (
                 <li key={index}>
