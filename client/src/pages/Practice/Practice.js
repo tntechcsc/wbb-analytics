@@ -180,11 +180,6 @@ const Practice = () => {
         <>
             <div className="create-sessions-container">
                 <div className="drills-column">
-                    <View style={{ flexDirection: 'row' }}>
-                        <TabButton text={"Drills"} onPress={() => handleTabClick('Drills')} active={activeTab === 'Drills'} />
-                        <TabButton text={"Session Information"} onPress={() => handleTabClick('Session Information')} active={activeTab === "Session Information"} />
-                    </View>
-
                     <div className="drill-buttons">
                             <>
                                 <h2>Drills</h2>

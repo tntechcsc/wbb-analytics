@@ -1,15 +1,16 @@
-// src/layouts/MainLayout.js
 import React from 'react';
 import HamburgerMenu from '../components/HamburgerMenu/HamburgerMenu.js';
-import './MainLayout.css'; // Optional: If you have specific styles for the layout
-import { Outlet} from 'react-router-dom'
-const MainLayout = ({ children }) => {
+import './MainLayout.css';
+import { Outlet } from 'react-router-dom';
+
+const MainLayout = () => {
   return (
     <div className="main-layout">
-      <HamburgerMenu />
+      <header className="main-layout-header">
+        <HamburgerMenu />
+      </header>
       <div className="page-content">
-        {children} {/* This is where the content of your pages will be rendered */}
-        <Outlet />
+        <Outlet /> {/* This component renders the matched child route component */}
       </div>
     </div>
   );

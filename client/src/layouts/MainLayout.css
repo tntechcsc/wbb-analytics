@@ -1,26 +1,32 @@
 /* MainLayout.css */
 :root {
-    --gold: #FFDD00; /* Adjust to the exact shade of gold you're using */
+    --gold: #ecd852; /* Adjust to the exact shade of gold you're using */
     --purple: #4f2984; /* Adjust to the exact shade of purple you're using */
 }
 
 .main-layout {
     display: flex;
     flex-direction: column;
-    min-height: 100vh;
+    min-height: 100vh; /* Full viewport height */
     background-color: var(--purple);
     color: var(--gold);
 }
 
 .main-layout-header {
-    background-color: var(--gold);
+    background-color: var(--purple);
     color: var(--purple);
-    padding: 20px;
+    padding: 10px 20px; /* Adjusted padding */
     text-align: center;
-    font-size: 24px;
-    font-weight: bold;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    display: flex; /* Ensures flexible layout */
+    justify-content: center; /* Centers children horizontally */
+    align-items: center; /* Centers children vertically */
+    height: 60px; /* Adjust the height as needed */
 }
-
 .main-layout-footer {
     background-color: var(--gold);
     color: var(--purple);
@@ -29,9 +35,11 @@
     margin-top: auto; /* Pushes the footer to the bottom */
 }
 
-.main-layout-content {
+.page-content {
     flex: 1;
     padding: 20px;
+    padding-top: 80px; /* Adds padding at the top to account for the fixed header */
+    height: 100vh;
 }
 
 .menu-item, a {
