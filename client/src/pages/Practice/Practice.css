@@ -68,7 +68,7 @@
     border: none;
     border-radius: 4px;
     font-size: 0.9em;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
 }
 
 .create-session-button {
@@ -210,34 +210,52 @@
 }
 
 .drill-card {
-    background-color: var(--card-bg-color);
     padding: 10px;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 100%;
 }
 
-.drill-button, .delete-drill-button {
-    padding: 8px 16px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.2s;
+.drill-card:focus {
+    border-color: #503291;
+    box-shadow: 0 0 5px rgba(80, 50, 145, 0.5);
+}
+
+
+.delete-drill-button, .edit-drill-button {
+    width: auto;
+    padding: 8px 10px;
     font-size: 0.9em;
+    margin-left: 10px;
+    border-radius: 15%;
+    vertical-align: middle;
+    color: white;
 }
 
 .drill-button {
     background-color: var(--primary-color);
     color: var(--text-color-light);
-    flex-grow: 1; /* Makes the drill button expand to fill the space */
-    margin-right: 8px; /* Adds some space between the buttons */
+    padding: 20px 30px; /* Increase padding for larger button size */
+    font-size: 1.5em; /* Increase font size for better readability */
+    border: none;
+    border-radius: 8px; /* Rounded corners */
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-bottom: 10px; /* Space between buttons */
+    width: 100%; /* Full width to utilize space */
+    box-shadow: var(--box-shadow); /* Consistent with theme shadows */
+    display: flex; /* Flex display to align text properly */
+    justify-content: center; /* Center text horizontally */
+    align-items: center; /* Center text vertically */
+    height: 80px; /* Set a fixed height to ensure uniformity */
+}
+
+.edit-drill-button {
+    background-color: #ebcf55; /* Yellow for edit actions */
 }
 
 .delete-drill-button {
     background-color: #e74c3c; /* Red for delete actions */
-    color: white;
 }
 
 .add-drill-button {
@@ -389,6 +407,37 @@
 .create-session-button:active {
     transform: translateY(1px);
     box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* SessionButtons.css */
+.input-field {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 100%;
+}
+
+.input-field:focus {
+    border-color: #503291;
+    box-shadow: 0 0 5px rgba(80, 50, 145, 0.5);
+}
+
+.add-button {
+    background-color: #503291;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.add-button:hover {
+    background-color: #3d2671;
+}
+
+.input-icon {
+    margin-right: 5px;
 }
 
 /* Responsive styles for smaller screens */

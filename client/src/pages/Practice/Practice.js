@@ -199,10 +199,6 @@ const Practice = () => {
                                     setOpponentTeam={setOpponentTeam}
                                     setDate={setDate}
                                 />
-
-                                <div className='session-inputs'>
-                                    <h3> Date: {date}</h3>
-                                </div>
                             </>
                     </div>
                 </div>

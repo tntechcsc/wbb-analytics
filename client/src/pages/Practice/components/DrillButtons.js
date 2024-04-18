@@ -59,7 +59,10 @@ const DrillButtons = ({ setDrills, onAddDrill, practiceID }) => {
                                 {drill.name}
                             </button>
                             <button className="delete-drill-button" onClick={() => handleDeleteDrill(index)}>
-                                Delete
+                                <i className="fas fa-trash"></i>
+                            </button>
+                            <button className="edit-drill-button">
+                                Edit <i className="fas fa-edit"></i>
                             </button>
                         </div>
                     </li>
@@ -70,7 +73,7 @@ const DrillButtons = ({ setDrills, onAddDrill, practiceID }) => {
                     </button>
                 </li>
             </ul>
-    
+
             <DrillModal isOpen={isModalOpen} onClose={() => setModalOpen(false)} onAddDrill={handleNewDrill} />
         </div>
     );
