@@ -115,6 +115,22 @@ router.get('/:seasonId/practices', async (req, res) => {
     }
 });
 
+// GET season by end year assuming season is in format "startYear-endYear"
+router.get('/endYear/:endYear', async (req, res) => {
+    console.log(req.params.endYear);
+    try {
+        // Assuming year is stored as "startYear-endYear"
+        const endYearPattern = `-${req.params.endYear}`;
+        console.log(endYearPattern);
+        const season = await Season.findOne({ year: { $regex: endYearPattern } });
+        if (!season) {
+            return res.status(404).json({ message: 'Season not found for the given year' });
+        }
+        res.json(season);
+    } catch (err) {
+        res.status(500).json({ message: 'Internal server error', error: err.message });
+    }
+});
 
 // GET practices from a season by season ID
 router.get('/:id/practices', async (req, res) => {

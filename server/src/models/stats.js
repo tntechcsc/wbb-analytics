@@ -9,7 +9,7 @@ const statsSchema = new Schema({
     assists: { type: Number, required: true, default: 0 },
     steals: { type: Number, required: true, default: 0 },
     blocks: { type: Number, required: true, default: 0 },
-    turnovers: { type: Number, required: true, default: 0 }
+    turnovers: { type: Number, required: true, default: 0 },
 });
 
 module.exports = mongoose.model('Stats', statsSchema);

@@ -18,7 +18,6 @@ function DrillPage() {
     const [currentTempo, setCurrentTempo] = useState(0);
     const [recordedTempo, setRecordedTempo] = useState(null);
     const [lastTempo, setLastTempo] = useState(0);
-    const [lastSubmittedTempo, setLastSubmittedTempo] = useState(0);
     const [tempoType, setTempoType] = useState(null);
     const [avgTempo, setAvgTempo] = useState(0);
     const [tempoCount, setTempoCount] = useState(1);
@@ -27,7 +26,6 @@ function DrillPage() {
     // State hooks for player and popup management
     const [playersOnCourt, setPlayersOnCourt] = useState([]);
     const [allPlayers, setAllPlayers] = useState([]);
-    const [isSub, setIsSub] = useState(false);
     const [isPlayerSelectedforShot, setIsPlayerSelectedforShot] = useState(false);
     const [player, setPlayer] = useState(null);
     const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -71,7 +69,7 @@ function DrillPage() {
             transition_time: timeValue.toFixed(2),
             timestamp: new Date()
         };
-    
+
         try {
             // Add 'await' here to wait for the fetch call to resolve
             const response = await fetch(serverUrl + '/api/tempos', {
@@ -105,7 +103,7 @@ function DrillPage() {
                 });
                 const updatedDrill = await response.json();
                 console.log('Drill updated:', updatedDrill);
-    
+
             } catch (error) {
                 console.error('Error updating drill:', error);
             }
@@ -113,7 +111,7 @@ function DrillPage() {
             console.error('Error submitting tempo:', error);
         }
     };
-    
+
 
     // Start timing for tempo (offensive or defensive)
     const startTempo = (type) => {
@@ -162,13 +160,11 @@ function DrillPage() {
             p.number === selectedPlayerForSub.number ? newPlayer : p
         ));
         setIsPopupOpen(false);
-        setIsSub(false);
         setIsPlayerSelectedforShot(false);
     };
 
     const handleOverlayClick = () => {
         setIsPopupOpen(false);
-        setIsSub(false);
         setIsPlayerSelectedforShot(false);
     };
 
@@ -221,30 +217,46 @@ function DrillPage() {
     const onPlayerSelectForSub = (player) => {
         setSelectedPlayerForSub(player); // Set the player selected for substitution
         setIsPopupOpen(true); // Open the substitution popup
-        setIsSub(true); // Assuming `isSub` is used to distinguish between different actions
     };
 
-    const recordStats = (player, stat) => {
-        console.log(`Recording ${stat} for player ${player.number}`);
+    const recordStats = async (player, route) => {
+        if (isPlayerSelectedforShot) {
 
-        // Example: Submit the stat to the server
-        const statData = {
-            player_id: player.id,
-            gameOrDrill_id: drillID,
-            stat_type: stat,
-            timestamp: new Date()
-        };
+            // Fetch the player's stats from the server
+            const statResponse = await fetch(`${serverUrl}/api/stats/byPlayer/${player.id}`);
+            if (!statResponse.ok) {
+                console.error(`Failed to fetch player stats: HTTP Error: ${statResponse.status}`);
+                return;
+            }
+            const playerStatsArray = await statResponse.json();
 
-        fetch(serverUrl + '/api/stats', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(statData)
-        })
-            .then(response => response.json())
-            .then(data => console.log('Stat submitted:', data))
-            .catch(error => console.error('Error submitting stat:', error));
+            if (!playerStatsArray.length) {
+                console.error('No stats found for player:', player.id);
+                return; // Exit if no stats found
+            }
+
+            // Assuming the first object is the one we want to update
+            const filteredPlayerStatsArray = playerStatsArray.filter(array => array.drill_id === drillID);
+
+            const playerStats = filteredPlayerStatsArray[0];
+
+            // Submit the updated stats to the server
+            try {
+                const response = await fetch(`${serverUrl}/api/stats/${route}/${playerStats._id}`, {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                if (!response.ok) {
+                    throw new Error(`HTTP Error: ${response.status}`);
+                }
+                const updatedStats = await response.json();
+                console.log('Stats updated:', updatedStats);
+            } catch (error) {
+                console.error('Error updating stats:', error);
+            }
+        }
     };
 
 
@@ -300,27 +312,27 @@ function DrillPage() {
             <div className="extra-stats-container">
                 <ExtraStats
                     className="Offensive Rebound"
-                    onClick={() => recordStats(player, 'Offensive Rebound')}
+                    onClick={() => recordStats(player, 'offensiveRebound')}
                 />
                 <ExtraStats
                     className="Assist"
-                    onClick={() => recordStats(player, 'Assist')}
+                    onClick={() => recordStats(player, 'assist')}
                 />
                 <ExtraStats
                     className="Steal"
-                    onClick={() => recordStats(player, 'Steal')}
+                    onClick={() => recordStats(player, 'steal')}
                 />
                 <ExtraStats
                     className="Defensive Rebound"
-                    onClick={() => recordStats(player, 'Defensive Rebound')}
+                    onClick={() => recordStats(player, 'defensiveRebound')}
                 />
                 <ExtraStats
                     className="Block"
-                    onClick={() => recordStats(player, 'Block')}
+                    onClick={() => recordStats(player, 'block')}
                 />
                 <ExtraStats
                     className="Turnover"
-                    onClick={() => recordStats(player, 'Turnover')}
+                    onClick={() => recordStats(player, 'turnover')}
                 />
             </div>
             <div className="tempo-container">

@@ -19,16 +19,12 @@ const isAuthenticated = (req, res, next) => {
 const statsSchema = Joi.object({
     drill_id: Joi.string().regex(/^[0-9a-fA-F]{24}$/).required(),
     player_id: Joi.string().regex(/^[0-9a-fA-F]{24}$/).required(),
-    shots: Joi.array().items(Joi.string().regex(/^[0-9a-fA-F]{24}$/)),
-    tempos: Joi.array().items(Joi.string().regex(/^[0-9a-fA-F]{24}$/)),
     offensive_rebounds: Joi.number().required(),
     defensive_rebounds: Joi.number().required(),
-    total_rebounds: Joi.number().required(),
     assists: Joi.number().required(),
     steals: Joi.number().required(),
     blocks: Joi.number().required(),
     turnovers: Joi.number().required(),
-    personal_fouls: Joi.number().required()
 });
 
 // GET all stats without pagination
@@ -309,6 +305,84 @@ router.patch('/:id', isAuthenticated, async (req, res) => {
             return res.status(404).json({ message: 'Stats not found' });
         }
         res.json(updatedStats);
+    } catch (err) {
+        res.status(500).json({ message: 'Internal server error', error: err.message });
+    }
+});
+
+// PATCH to update offensive rebounds by one
+router.patch('/offensiveRebound/:id', isAuthenticated, async (req, res) => {
+    try {
+        const stats = await Stats.findByIdAndUpdate(req.params.id, { $inc: { offensive_rebounds: 1 } }, { new: true });
+        if (!stats) {
+            return res.status(404).json({ message: 'Stats not found' });
+        }
+        res.json(stats);
+    } catch (err) {
+        res.status(500).json({ message: 'Internal server error', error: err.message });
+    }
+});
+
+// PATCH to update defensive rebounds by one
+router.patch('/defensiveRebound/:id', isAuthenticated, async (req, res) => {
+    try {
+        const stats = await Stats.findByIdAndUpdate(req.params.id, { $inc: { defensive_rebounds: 1 } }, { new: true });
+        if (!stats) {
+            return res.status(404).json({ message: 'Stats not found' });
+        }
+        res.json(stats);
+    } catch (err) {
+        res.status(500).json({ message: 'Internal server error', error: err.message });
+    }
+});
+ 
+// PATCH to update assists by one
+router.patch('/assist/:id', isAuthenticated, async (req, res) => {
+    try {
+        const stats = await Stats.findByIdAndUpdate(req.params.id, { $inc: { assists: 1 } }, { new: true });
+        if (!stats) {
+            return res.status(404).json({ message: 'Stats not found' });
+        }
+        res.json(stats);
+    } catch (err) {
+        res.status(500).json({ message: 'Internal server error', error: err.message });
+    }
+});
+ 
+// PATCH to update steals by one
+router.patch('/steal/:id', isAuthenticated, async (req, res) => {
+    try {
+        const stats = await Stats.findByIdAndUpdate(req.params.id, { $inc: { steals: 1 } }, { new: true });
+        if (!stats) {
+            return res.status(404).json({ message: 'Stats not found' });
+        }
+        res.json(stats);
+    } catch (err) {
+        res.status(500).json({ message: 'Internal server error', error: err.message });
+    }
+});
+ 
+// PATCH to update blocks by one
+router.patch('/block/:id', isAuthenticated, async (req, res) => {
+    try {
+        const stats = await Stats.findByIdAndUpdate(req.params.id, { $inc: { blocks: 1 } }, { new: true });
+        if (!stats) {
+            return res.status(404).json({ message: 'Stats not found' });
+        }
+        res.json(stats);
+    } catch (err) {
+        res.status(500).json({ message: 'Internal server error', error: err.message });
+    }
+});
+
+// PATCH to update blocks by one
+router.patch('/turnover/:id', isAuthenticated, async (req, res) => {
+    try {
+        const stats = await Stats.findByIdAndUpdate(req.params.id, { $inc: { turnovers: 1 } }, { new: true });
+        if (!stats) {
+            return res.status(404).json({ message: 'Stats not found' });
+        }
+        res.json(stats);
     } catch (err) {
         res.status(500).json({ message: 'Internal server error', error: err.message });
     }

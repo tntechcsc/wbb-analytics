@@ -1,0 +1,183 @@
+.main {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.opp-team {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.opp-team input {
+    padding: 5px 10px;
+    margin-top: 5px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+}
+
+.opp-team {
+    color: #fff;
+    width: calc(70% - 95px);
+    padding: 10px 20px;
+    margin-bottom: 12px;
+    border: none;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+    font-size: 1.2em;
+}
+
+.tempo-timer {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    padding: 20px;
+}
+
+.defensive-tempo-button {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    padding: 20px;
+}
+
+.offensive-tempo-button {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    padding: 20px;
+}
+
+.last-tempo {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    padding: 20px;
+}
+
+.cancel-button {
+    color: #d49b46;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+}
+
+.submit-button {
+    background-color: white !important;
+    padding: 10px 20px;
+    margin: 10px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.submit-button:hover {
+    background-color: white !important;
+}
+
+.ShotPopup {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 1500px;
+    padding: 20px;
+    border-radius: 100px;
+    margin-top: 300px;
+}
+
+.ShotOutcomeSelection, .ClockTimeSelection {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+  
+.MadeButton {
+    background-color: #4CAF50;
+    color: white;
+}
+  
+.MissedButton {
+    background-color: #f44336;
+    color: white;
+}
+  
+.ClockButton1, .ClockButton2, .ClockButton3 {
+    background-color: #607d8b;
+    white-space: nowrap;
+    min-width: 120px;
+    color: white;
+    display: none; /* Initially hidden; displayed based on state in JS */
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Ensure the overlay is above other elements */
+}
+
+.overlay-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.overlay h3 {
+    color: #4f2984;
+}
+
+.overlay input {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    margin-bottom: 20px;
+    border-radius: 3px;
+    border: 1px solid #ccc;
+}
+
+.overlay button {
+    padding: 8px 16px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 7px;
+    cursor: pointer;
+    margin-top: 5px;
+    margin-right: 5px;
+    margin-left: 5px;
+    width: 50%;
+}
+
+.overlay button:hover {
+    background-color: #0056b3;
+}
+
+.overlay-content button {
+    opacity: 1; /* Reset opacity for all buttons */
+}
+
+.overlay-content button.disabled {
+    opacity: 0.35; /* Reduce opacity to visually indicate disabled state */
+    cursor: pointer; /* Change cursor to pointer to indicate clickable */
+}

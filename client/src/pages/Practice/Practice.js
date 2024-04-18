@@ -32,17 +32,17 @@ const Practice = () => {
             } catch (error) {
                 console.error('Error fetching season data:', error);
             }
-    
+
             const currentDate = new Date();
             const newDate = `${currentDate.getFullYear()}-${(currentDate.getMonth() + 1).toString().padStart(2, '0')}-${currentDate.getDate().toString().padStart(2, '0')}`;
             setDate(newDate); // This ensures that the `date` state is updated correctly.
-    
+
             // Since SeasonData might not be populated yet, defer this operation until after the state is set.
         };
-    
+
         handleCreatePractice();
     }, []);
-    
+
     useEffect(() => {
         // This effect depends on SeasonData and date, so it runs after they are set.
         if (SeasonData.length > 0 && date) {
@@ -53,7 +53,7 @@ const Practice = () => {
                     season_id: seasonByDate._id,
                     date: date,
                 };
-    
+
                 const createPracticeSession = async () => {
                     console.log(serverUrl);
                     try {
@@ -70,7 +70,7 @@ const Practice = () => {
                         console.error('Error creating practice:', error);
                     }
                 };
-    
+
                 createPracticeSession();
             }
         }
@@ -134,9 +134,40 @@ const Practice = () => {
             const newDrill = await response.json();
             setDrills(currentDrills => [...currentDrills, newDrill]);
             console.log('Drill added successfully:', newDrill);
+
+            const players = listA.concat(listB);
+            players.forEach(async player => {
+                const statsData = {
+                    drill_id: newDrill._id,
+                    player_id: player._id,
+                    offensive_rebounds: 0,
+                    defensive_rebounds: 0,
+                    assists: 0,
+                    steals: 0,
+                    blocks: 0,
+                    turnovers: 0,
+                };
+
+                try {
+                    const response = await fetch(serverUrl + '/api/stats', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(statsData),
+                    });
+                    if (!response.ok) throw new Error('Network response was not ok');
+                    const newStats = await response.json();
+                    console.log('Stats added successfully:', newStats);
+                } catch (error) {
+                    console.error('Failed to add stats:', error);
+                }
+            });
+
         } catch (error) {
             console.error('Failed to add drill:', error);
         }
+
     };
 
 
@@ -173,7 +204,6 @@ const Practice = () => {
                                 />
 
                                 <div className='session-inputs'>
-                                    {/*<h3> Opponent Team: {opponentTeam}</h3>*/}
                                     <h3> Date: {date}</h3>
                                 </div>
                             </>
