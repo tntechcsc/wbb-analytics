@@ -14,38 +14,34 @@
     --box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
 }
 
-/* Layout containers */
+/* 
+
+Layout containers 
+
+*/
 .create-sessions-container {
     display: flex;
-    height: 100vh;
+    height: calc(100vh - 100px);  /* Adjust based on header/footer height */
     justify-content: space-between;
-    padding: 10px;
     box-sizing: border-box;
     overflow: hidden;
-}
-
-.drills-column, .lists-column {
-    display: flex;
-    flex-direction: column;
-    overflow-y: auto;
-    overflow-x: hidden;
 }
 
 .drills-column {
     display: flex;
     flex-direction: column;
-    justify-content: space-between; /* This will push the session information to the bottom */
-    height: 100%; /* Full height to align items properly */
+    height: 100%;
     width: 30%;
     background-color: var(--card-color);
     padding: 10px;
     border-radius: 8px;
     box-shadow: var(--box-shadow);
-    overflow: hidden; /* Prevents overflow and enables the use of 'space-between' */
 }
 
+/* Ensures that the session information stays at the bottom */
 .session-information {
-    margin-top: auto; /* Ensures it sticks to the bottom */
+    margin-top: auto;
+    padding-bottom: 10px; /* Optional padding for spacing */
 }
 
 .lists-column {
@@ -60,7 +56,14 @@
     box-shadow: var(--box-shadow);
 }
 
-/* Styling for session inputs and buttons */
+
+
+
+/* 
+
+Session Information
+
+*/
 .session-inputs, .add-session-info, .date, .create-session-button {
     background-color: var(--primary-color);
     color: var(--text-color-light);
@@ -96,24 +99,44 @@
     box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
 }
 
-.tab-list {
-    border-bottom: 1px solid #ccc;
-    padding-left: 0;
+/* SessionButtons.css */
+.input-field {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 100%;
 }
 
-.tab-list-item {
-    display: inline-block;
-    list-style: none;
-    margin-bottom: -1px;
-    padding: 0.5rem 0.75rem;
+.input-field:focus {
+    border-color: #503291;
+    box-shadow: 0 0 5px rgba(80, 50, 145, 0.5);
 }
 
-.tab-list-active {
-    background-color: var(--card-bg-color);
-    border: solid #ccc;
-    border-width: 1px 1px 0 1px;
+.add-button {
+    background-color: #503291;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background-color 0.3s;
 }
 
+.add-button:hover {
+    background-color: #3d2671;
+}
+
+.input-icon {
+    margin-right: 5px;
+}
+
+
+
+/*
+
+Team Selection Lists
+    
+*/
 .list {
     width: 50%; /* Adjusted for side-by-side layout */
     background-color: #fff;
@@ -199,7 +222,16 @@
     background-color: #219952;
 }
 
-/* Drills list styling */
+
+
+
+/* Drill List */
+.drill-list {
+    flex-grow: 1;  /* Allows drill list to use available space */
+    overflow-y: auto; /* Makes only the drill list scrollable */
+    max-height: calc(100%); /* Adjust based on your session-information height */
+}
+
 .drill-list ul {
     padding: 0; /* Removes padding */
 }
@@ -221,7 +253,7 @@
     box-shadow: 0 0 5px rgba(80, 50, 145, 0.5);
 }
 
-
+/* Drill Buttons */
 .delete-drill-button, .edit-drill-button {
     width: auto;
     padding: 8px 10px;
@@ -247,7 +279,7 @@
     display: flex; /* Flex display to align text properly */
     justify-content: center; /* Center text horizontally */
     align-items: center; /* Center text vertically */
-    height: 80px; /* Set a fixed height to ensure uniformity */
+    height: calc((100% - 20px) / 5); /* Set a fixed height to ensure uniformity */
 }
 
 .edit-drill-button {
@@ -261,7 +293,7 @@
 .add-drill-button {
     background-color: var(--accent-color);
     color: white;
-    width: 100%; /* Full width for consistency */
+    width: 100%;
     margin-top: 10px;
 }
 
@@ -269,8 +301,7 @@
     background-color: var(--hover-color);
 }
 
-.drill-button:hover,
-.add-drill-button:hover {
+.drill-button:hover, .add-drill-button:hover {
     background-color: var(--hover-color);
 }
 
@@ -278,7 +309,7 @@
     background-color: #c0392b; /* Darker shade for hover on delete button */
 }
 
-/* Drill Buttons and Session Information */
+/* Drill Cards and Session Information Styling */
 .drill-buttons, .session-information {
     padding: 20px;
     background-color: var(--card-color);
@@ -287,29 +318,26 @@
     box-shadow: var(--box-shadow);
 }
 
-/* Specific styles for buttons within drill sections */
 .add-drill-button {
-    background-color: var(--primary-color); /* Primary theme color */
-    color: white; /* Text color for visibility */
-    padding: 12px 20px; /* Comfortable padding */
-    font-size: 1.2em; /* Larger font size for readability */
-    border: none; /* No borders */
-    border-radius: 8px; /* Rounded corners for aesthetic */
-    cursor: pointer; /* Cursor to indicate clickable */
-    display: block; /* Block display to take full width */
-    width: auto; /* Auto width to fit content */
-    margin-top: 10px; /* Space above the button */
-    transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+    background-color: var(--primary-color);
+    color: white; 
+    padding: 12px 20px;
+    font-size: 1.2em;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    display: block;
+    width: auto;
+    margin-top: 10px;
+    transition: background-color 0.3s ease;
 }
 
-/* Hover effect for interactivity */
 .add-drill-button:hover {
-    background-color: var(--hover-color); /* Slightly darker shade on hover */
-    transform: translateY(-2px); /* Lift effect to indicate action */
+    background-color: var(--hover-color);
+    transform: translateY(-2px);
 }
 
-/* DrillModal.css - Styles for the drill creation modal */
-
+/* Drill Modal Styling */
 .drill-modal-overlay {
     position: fixed;
     top: 0;
@@ -336,7 +364,7 @@
 
 .drill-modal-content h2 {
     font-size: 1.8em;
-    color: var(--header-color); /* Use the header color variable */
+    color: var(--header_color); /* Use the header color variable */
     margin-bottom: 20px;
 }
 
@@ -387,57 +415,27 @@
 .create-session-button {
     position: fixed;
     bottom: 20px;
-    right: 20px;
-    background-color: #3498db;
-    color: white;
+    right: 40px; /* Adjust this if it's too far to the right */
+    background-color: var(--primary-color); /* Using primary color variable */
+    color: var(--text-color-light); /* Using light text color variable for contrast */
     border: none;
     border-radius: 8px;
-    padding: 10px 20px;
+    padding: 12px 24px; /* Adjusted padding for a better proportion */
     font-size: 1.2em;
     cursor: pointer;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transition: background-color 0.3s ease, transform 0.1s ease;
+    box-shadow: var(--box-shadow); /* Using shadow variable for consistency */
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease; /* Added box-shadow to transition for a smoother effect */
 }
 
 .create-session-button:hover, .create-session-button:focus {
-    background-color: #2675ad;
-    transform: translateY(-2px);
+    background-color: var(--hover-color); /* Slightly darker on hover/focus */
+    transform: translateY(-3px); /* Increased the translateY effect slightly for more noticeable interaction */
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15); /* Enhanced shadow for elevated effect */
 }
 
 .create-session-button:active {
-    transform: translateY(1px);
-    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
-}
-
-/* SessionButtons.css */
-.input-field {
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    width: 100%;
-}
-
-.input-field:focus {
-    border-color: #503291;
-    box-shadow: 0 0 5px rgba(80, 50, 145, 0.5);
-}
-
-.add-button {
-    background-color: #503291;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    padding: 10px 20px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-.add-button:hover {
-    background-color: #3d2671;
-}
-
-.input-icon {
-    margin-right: 5px;
+    transform: translateY(1px); /* Mimic button press effect */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Deeper shadow to simulate being pressed down */
 }
 
 /* Responsive styles for smaller screens */
