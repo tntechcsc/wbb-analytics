@@ -186,16 +186,13 @@ const Practice = () => {
                     </View>
 
                     <div className="drill-buttons">
-                        {activeTab === 'Drills' && (
                             <>
                                 <h2>Drills</h2>
                                 <DrillButtons drills={drills} setDrills={setDrills} onAddDrill={addDrill} practiceID={SessionData._id} />
                             </>
-                        )}
                     </div>
 
                     <div className="session-information">
-                        {activeTab === 'Session Information' && (
                             <>
                                 <h2>Session Information</h2>
                                 <SessionButtons
@@ -207,7 +204,6 @@ const Practice = () => {
                                     <h3> Date: {date}</h3>
                                 </div>
                             </>
-                        )}
                     </div>
                 </div>
 

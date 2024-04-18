@@ -1,7 +1,4 @@
-/* Practice.css */
-
 /* Global colors and theming */
-
 :root {
     --bg-color: #f4f4f9;
     --header-color: #503291;
@@ -17,32 +14,46 @@
     --box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
 }
 
+/* Layout containers */
 .create-sessions-container {
     display: flex;
-    height: 100vh; /* Full viewport height */
+    height: 100vh;
     justify-content: space-between;
     padding: 10px;
-    box-sizing: border-box; /* Padding included in height */
-    overflow: hidden; /* Prevents any type of overflow */
+    box-sizing: border-box;
+    overflow: hidden;
 }
 
 .drills-column, .lists-column {
     display: flex;
     flex-direction: column;
-    overflow-y: auto; /* Allows vertical scrolling if necessary */
-    overflow-x: hidden; /* Prevents horizontal scrolling */
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .drills-column {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* This will push the session information to the bottom */
+    height: 100%; /* Full height to align items properly */
     width: 30%;
     background-color: var(--card-color);
     padding: 10px;
     border-radius: 8px;
     box-shadow: var(--box-shadow);
+    overflow: hidden; /* Prevents overflow and enables the use of 'space-between' */
+}
+
+.session-information {
+    margin-top: auto; /* Ensures it sticks to the bottom */
 }
 
 .lists-column {
-    width: 68%; /* Adjusts width to prevent overflow */
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: flex-start;
+    width: 68%;
     background-color: var(--card-color);
     padding: 10px;
     border-radius: 8px;
@@ -57,32 +68,32 @@
     border: none;
     border-radius: 4px;
     font-size: 0.9em;
-    margin-bottom: 10px; /* Consistent margin for layout */
+    margin-bottom: 10px;
 }
 
 .create-session-button {
-    position: fixed; /* Fixed positioning relative to the viewport */
-    bottom: 20px; /* 20 pixels from the bottom */
-    right: 20px; /* 20 pixels from the right */
-    background-color: #3498db; /* Blue background */
-    color: white; /* White text */
-    border: none; /* No border */
-    border-radius: 8px; /* Rounded corners */
-    padding: 10px 20px; /* Padding inside the button */
-    font-size: 1.2em; /* Larger text size */
-    cursor: pointer; /* Pointer cursor on hover */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
-    transition: background-color 0.3s ease, transform 0.1s ease; /* Smooth transition for hover effects */
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-size: 1.2em;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease, transform 0.1s ease;
 }
 
 .create-session-button:hover, .create-session-button:focus {
-    background-color: #2675ad; /* Darker blue on hover for feedback */
-    transform: translateY(-2px); /* Slight upward shift for a dynamic effect */
+    background-color: #2675ad;
+    transform: translateY(-2px);
 }
 
 .create-session-button:active {
-    transform: translateY(1px); /* Mimic button press effect */
-    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1); /* Shorter shadow on click */
+    transform: translateY(1px);
+    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
 }
 
 .tab-list {
@@ -104,23 +115,182 @@
 }
 
 .list {
-    text-align: center;
-    margin-right: 20px;
-    margin-bottom: 90%;
+    width: 50%; /* Adjusted for side-by-side layout */
+    background-color: #fff;
+    padding: 10px;
+    border-radius: 8px;
+    margin: 0 10px; /* Space between lists */
+    overflow-y: auto; /* Allow vertical scrolling */
+}
+
+.list h2 {
+    font-size: 1.5em;
     color: var(--text-color-dark);
+    margin-bottom: 15px;
 }
 
-.dropdown {
-    width: 100%;
-    margin-right: 20px;
+.player-selection {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
 }
 
-select {
+.dropdown, .remove-player-button {
+    flex-grow: 1;
+    margin-right: 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
     padding: 10px;
     width: 100%;
 }
+
+.add-dropdown-button, .remove-player-button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 0.9em;
+}
+
+.dropdown {
+    width: 100%;
+    padding: 12px 10px;
+    font-size: 1.2em;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 10px;
+}
+
+.dropdown select {
+    width: auto;
+    max-width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #fff;
+    color: var(--text-color-dark);
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.remove-player-button {
+    width: auto;
+    padding: 8px 10px;
+    font-size: 0.9em;
+    margin-left: 10px;
+    vertical-align: middle;
+    background-color: #ec2e19;
+    color: white;
+}
+
+.remove-player-button:hover {
+    background-color: #c0392b;
+    transform: scale(1.1);
+}
+
+.add-dropdown-button {
+    background-color: #27ae60;
+    color: white;
+}
+
+.add-dropdown-button:hover, .remove-player-button:hover {
+    background-color: #219952;
+}
+
+/* Drills list styling */
+.drill-list ul {
+    padding: 0; /* Removes padding */
+}
+
+.drill-list li {
+    list-style-type: none; /* Removes bullet points */
+    margin-bottom: 10px; /* Space between items */
+}
+
+.drill-card {
+    background-color: var(--card-bg-color);
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.drill-button, .delete-drill-button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    font-size: 0.9em;
+}
+
+.drill-button {
+    background-color: var(--primary-color);
+    color: var(--text-color-light);
+    flex-grow: 1; /* Makes the drill button expand to fill the space */
+    margin-right: 8px; /* Adds some space between the buttons */
+}
+
+.delete-drill-button {
+    background-color: #e74c3c; /* Red for delete actions */
+    color: white;
+}
+
+.add-drill-button {
+    background-color: var(--accent-color);
+    color: white;
+    width: 100%; /* Full width for consistency */
+    margin-top: 10px;
+}
+
+.add-drill-button:hover, .drill-button:hover, .delete-drill-button:hover {
+    background-color: var(--hover-color);
+}
+
+.drill-button:hover,
+.add-drill-button:hover {
+    background-color: var(--hover-color);
+}
+
+.delete-drill-button:hover {
+    background-color: #c0392b; /* Darker shade for hover on delete button */
+}
+
+/* Drill Buttons and Session Information */
+.drill-buttons, .session-information {
+    padding: 20px;
+    background-color: var(--card-color);
+    border-radius: 8px;
+    margin-bottom: 10px;
+    box-shadow: var(--box-shadow);
+}
+
+/* Specific styles for buttons within drill sections */
+.add-drill-button {
+    background-color: var(--primary-color); /* Primary theme color */
+    color: white; /* Text color for visibility */
+    padding: 12px 20px; /* Comfortable padding */
+    font-size: 1.2em; /* Larger font size for readability */
+    border: none; /* No borders */
+    border-radius: 8px; /* Rounded corners for aesthetic */
+    cursor: pointer; /* Cursor to indicate clickable */
+    display: block; /* Block display to take full width */
+    width: auto; /* Auto width to fit content */
+    margin-top: 10px; /* Space above the button */
+    transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+}
+
+/* Hover effect for interactivity */
+.add-drill-button:hover {
+    background-color: var(--hover-color); /* Slightly darker shade on hover */
+    transform: translateY(-2px); /* Lift effect to indicate action */
+}
+
+/* DrillModal.css - Styles for the drill creation modal */
 
 .drill-modal-overlay {
     position: fixed;
@@ -128,10 +298,10 @@ select {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.5); /* Semi-transparent overlay for focus */
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: center; /* Center the modal content vertically and horizontally */
 }
 
 .drill-modal-content {
@@ -140,56 +310,102 @@ select {
     border-radius: 8px;
     box-shadow: var(--box-shadow);
     max-width: 400px;
-    width: 100%;
+    width: 90%; /* Responsive width, max 400px */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .drill-modal-content h2 {
     font-size: 1.8em;
-    color: var(--text-color-dark);
+    color: var(--header-color); /* Use the header color variable */
     margin-bottom: 20px;
 }
 
-.drill-modal-content label,
-.drill-modal-content input,
-.drill-modal-content button {
-    width: 100%;
+.drill-modal-content label {
+    font-size: 1.2em;
     margin-bottom: 10px;
+    width: 100%; /* Full width for labels */
+    color: var(--text-color-dark); /* Dark color for text */
 }
 
-.drill-modal-content input,
-.drill-modal-content button {
+.drill-modal-content input[type="text"] {
     padding: 10px;
+    margin-bottom: 20px;
+    width: 100%; /* Full width for inputs */
+    border: 1px solid #ccc;
     border-radius: 4px;
+    font-size: 1em; /* Readable font size */
 }
 
-.drill-button,
-.add-drill-button,
-.delete-drill-button,
-.modify-drill-button {
+.drill-modal-content button {
+    padding: 10px 20px;
+    margin-top: 10px;
+    width: calc(70% - 20px); /* Half width minus padding */
     background-color: var(--primary-color);
     color: var(--text-color-light);
     border: none;
     border-radius: 4px;
-    padding: 10px 20px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s;
+    margin-right: 10px;
+    font-size: 1em;
+}
+
+.drill-modal-content button:hover {
+    background-color: var(--hover-color); /* Darker on hover */
+}
+
+/* Separate styling for the cancel button to differentiate it */
+.drill-modal-content button:last-child {
+    background-color: #e74c3c; /* Red for cancel */
+}
+
+.drill-modal-content button:last-child:hover {
+    background-color: #c0392b; /* Darker red on hover */
+}
+
+/* Save Session Button */
+.create-session-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
     font-size: 1.2em;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease, transform 0.1s ease;
 }
 
-.drill-button:hover,
-.add-drill-button:hover,
-.delete-drill-button:hover,
-.modify-drill-button:hover {
-    background-color: var(--hover-color);
+.create-session-button:hover, .create-session-button:focus {
+    background-color: #2675ad;
+    transform: translateY(-2px);
 }
 
-/* Add other component styles below using the same pattern */
+.create-session-button:active {
+    transform: translateY(1px);
+    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
+}
 
 /* Responsive styles for smaller screens */
 @media (max-width: 768px) {
-    /* Adjust layout and font sizes for tablet view */
+    .create-sessions-container, .drills-column, .lists-column {
+        flex-direction: column;
+    }
+
+    .drills-column, .lists-column {
+        width: 100%;
+        margin-top: 10px;
+    }
 }
 
 @media (max-width: 480px) {
-    /* Adjust layout and font sizes for mobile view */
+    .tab-list-item, .create-session-button, .drill-modal-content {
+        padding: 5px;
+        font-size: 0.8em;
+    }
 }

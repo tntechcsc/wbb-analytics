@@ -3,7 +3,12 @@ import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import './DrillButtons.css';
 import DrillModal from '../components/DrillModal'; // Adjust the import path as necessary
 
-const DrillButtons = ({ drills, setDrills, onAddDrill, practiceID }) => {
+const DrillButtons = ({ setDrills, onAddDrill, practiceID }) => {
+    const [drills, setLocalDrills] = useState([
+        { _id: 'drill1', name: 'Dribbling Basics' },
+        { _id: 'drill2', name: 'Shooting Practice' },
+        { _id: 'drill3', name: 'Defense Drills' }
+    ]);
     const [isModalOpen, setModalOpen] = useState(false);
     const navigate = useNavigate(); // Initialize useNavigate
     const serverUrl = process.env.REACT_APP_SERVER_URL;
@@ -45,16 +50,18 @@ const DrillButtons = ({ drills, setDrills, onAddDrill, practiceID }) => {
     };
 
     return (
-        <div>
+        <div className="drill-list">
             <ul>
                 {drills.map((drill, index) => (
                     <li key={drill._id || index}>
-                        <button className="drill-button" onClick={() => handleDrillClick(index)}>
-                            {drill.name}
-                        </button>
-                        <button className="delete-drill-button" onClick={() => handleDeleteDrill(index)}>
-                            Delete
-                        </button>
+                        <div className="drill-card">
+                            <button className="drill-button" onClick={() => handleDrillClick(index)}>
+                                {drill.name}
+                            </button>
+                            <button className="delete-drill-button" onClick={() => handleDeleteDrill(index)}>
+                                Delete
+                            </button>
+                        </div>
                     </li>
                 ))}
                 <li>
@@ -63,7 +70,7 @@ const DrillButtons = ({ drills, setDrills, onAddDrill, practiceID }) => {
                     </button>
                 </li>
             </ul>
-
+    
             <DrillModal isOpen={isModalOpen} onClose={() => setModalOpen(false)} onAddDrill={handleNewDrill} />
         </div>
     );
