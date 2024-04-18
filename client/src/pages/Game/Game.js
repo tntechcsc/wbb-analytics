@@ -5,6 +5,7 @@ import TempoButton from '../Drill/components/TempoButton';
 import LastTempoDisplay from '../Drill/components/LastTempoDisplay';
 import CancelButton from '../Drill/components/CancelButton';
 import ShotPopup from '../Drill/components/ShotPopup';
+import PlayerSelectionPopup from './components/PlayerSelectionPopup';
 
 const Game = () => {
     const [opponentTeamInput, setOpponentTeamInput] = useState('');
@@ -20,6 +21,7 @@ const Game = () => {
     const [isSubmitClicked, setIsSubmitClicked] = useState(false);
     const [tempoEvents, setTempoEvents] = useState([]);
     const [shotEvents, setShotEvents] = useState([]);
+    const [showPlayerSelection, setShowPlayerSelection] = useState(false);
     const serverUrl = process.env.REACT_APP_SERVER_URL;
 
     useEffect(() => {
@@ -61,8 +63,14 @@ const Game = () => {
             // submitShot(shotOutcome === 'made', timeMapping);
             console.log('Shot submitted:', shotOutcome, timeMapping);
             setShotOutcome(null);
+            setShowPlayerSelection(true);
         }
     };
+
+    const handlePlayerSelection = (selectedPlayerId) => {
+        console.log('Selected player:', selectedPlayerId);
+        setShowPlayerSelection(false);
+    }
     
     const handleShotOutcome = (outcome) => {
         setShotOutcome(outcome);
@@ -207,15 +215,20 @@ const Game = () => {
                     <LastTempoDisplay lastTempo={lastTempo}/>
                 </div>
 
-                <div className='cancel-button'>
-                    <CancelButton onCancel={cancelTempo} />
-                </div>
-
                 <div className="ShotPopup">
                     <ShotPopup
                         isOpen={isOpponentTeamOverlayVisible}
                         onClose={() => setIsOpponentTeamOverlayVisible(false)}
                     />
+
+                    {/* Move cancel button out of shot popup if ui gets changed and its not
+                        near the made / missed buttons if needed. The shot popup css is creating
+                        a large border or something of such and made the cancel button unclickable,
+                        unfortunately I cannot figure out the exact code that is doing this, so temp sol. */}
+                    <div className='cancel-button'>
+                        <CancelButton onCancel={cancelTempo} />
+                    </div>
+
                     <div className="ShotOutcomeSelection">
                         {!shotOutcome ? (
                             <>
@@ -231,6 +244,13 @@ const Game = () => {
                         )}
                     </div>
                 </div>
+
+                {showPlayerSelection && (
+                    <PlayerSelectionPopup
+                        onPlayerSelect={handlePlayerSelection}
+                    />
+                )}
+
             </div>
         </>
     );

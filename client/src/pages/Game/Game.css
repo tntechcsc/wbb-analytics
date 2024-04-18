@@ -66,8 +66,10 @@
 .cancel-button {
     color: #d49b46;
     padding: 10px 20px;
+    height: auto;
     border: none;
     border-radius: 4px;
+    z-index: 100;
 }
 
 .submit-button {
@@ -76,7 +78,6 @@
     margin: 10px 0;
     border: none;
     border-radius: 4px;
-    cursor: pointer;
 }
 
 .submit-button:hover {
