@@ -15,7 +15,6 @@ const Game = () => {
     const [isTiming, setIsTiming] = useState(false);
     const [resetTimer, setResetTimer] = useState(false);
     const [currentTempo, setCurrentTempo] = useState(0);
-    const [recordedTempo, setRecordedTempo] = useState(null);
     const [lastTempo, setLastTempo] = useState(null);
     const [tempoType, setTempoType] = useState(null);
     const [isOpponentTeamOverlayVisible, setIsOpponentTeamOverlayVisible] = useState(true);
@@ -24,13 +23,12 @@ const Game = () => {
     const [shotEvents, setShotEvents] = useState([]);
     const [shotOutcome, setShotOutcome] = useState(null);
     const [selectedPlayer, setSelectedPlayer] = useState(null);
-    const [selectedPlayerArray, setSelectedPlayerArray] = useState(['']);
     const [selectedClockTime, setSelectedClockTime] = useState(null);
     const [showPlayerSelection, setShowPlayerSelection] = useState(false);
     const [SeasonData, setSeasonData] = useState([]);
     const [gameData, setGameData] = useState('');
-    const [setTempoData, setSetTempoData] = useState('');
     const [tempoEventIds, setTempoEventIds] = useState([]);
+    const [tempoFlag, setTempoFlag] = useState(false);
     const serverUrl = process.env.REACT_APP_SERVER_URL;
 
     const currentDate = new Date();
@@ -44,12 +42,12 @@ const Game = () => {
     // Tempo requires an array, so set the player to an array and reset
     // the array afterwards, we only want 1 person per tempo, 1 element array
     useEffect(() => {
-        if (selectedPlayerArray[0] !== '') {
+        if (tempoFlag) {
             const latestTempo = tempoEvents[tempoEvents.length - 1]; 
             submitTempo(tempoType, parseFloat(latestTempo.toFixed(2)));
-            setSelectedPlayerArray(['']);
+            setTempoFlag(false);
         }
-    }, [selectedPlayer, tempoEvents]);
+    }, [tempoFlag, tempoEvents, tempoType]);
     
     useEffect(() => {
         const handleCreateGame = async () => {
@@ -68,7 +66,7 @@ const Game = () => {
     
     useEffect(() => {
         if (selectedPlayer !== null && shotOutcome !== null && selectedClockTime !== null) {
-            submitShot(selectedPlayer, selectedClockTime);
+            submitShot(shotOutcome, selectedClockTime);
             setSelectedPlayer(null);
             setShotOutcome(null);
             setSelectedClockTime(null);
@@ -138,6 +136,7 @@ const Game = () => {
     };
     
     const handleShotOutcome = (outcome) => {
+        console.log('Shot outcome:', outcome); 
         setShotOutcome(outcome);
     };
 
@@ -169,7 +168,6 @@ const Game = () => {
     
     const handlePlayerSelection = (selectedPlayerId) => {
         setSelectedPlayer(selectedPlayerId);
-        setSelectedPlayerArray([selectedPlayerId]);
         setShowPlayerSelection(false);
     }; 
     
@@ -178,21 +176,21 @@ const Game = () => {
         setLastTempo(parseFloat(currentTempo.toFixed(2)));
         setTempoEvents((prevTempoEvents) => [...prevTempoEvents, parseFloat(currentTempo.toFixed(2))]);
         setCurrentTempo(0);
-        setRecordedTempo(currentTempo);
-        setShowPlayerSelection(true);
+        setTempoFlag(true);
     };
+    
     
     /* 
         Some reason the timestamp in shot and tempo has an incorrect date, no matter
         what I do, even by specific time zone, it is incorrect. Game date is perfectly
         fine, even getSeasonByDate() returns perfectly fine, but the timestamp not.
     */
-    const submitShot = (isMade, shotClockTime) => {
+    const submitShot = (shotOutcome, shotClockTime) => {
         const shotData = {
             gameOrDrill_id: gameData,
             onModel: "Game",
             player_id: selectedPlayer,
-            made: isMade === 'made',
+            made: shotOutcome === 'made',
             shot_clock_time: shotClockTime,
             timestamp: new Date().toLocaleString()
         };
@@ -206,7 +204,10 @@ const Game = () => {
         })
         .then(response => response.json())
         .then(data => {
-            setShotEvents(prevShotEvents => [...prevShotEvents, data._id]);
+            if (data !== null) {
+                setShotEvents(prevShotEvents => [...prevShotEvents, data._id]);
+            }
+            console.log('Shot submitted:', data);
         })
         .catch(error => console.error('Error submitting shot:', error));
 
@@ -216,7 +217,6 @@ const Game = () => {
         const tempoData = {
             gameOrDrill_id: gameData,
             onModel: "Game",
-            player_ids: selectedPlayerArray,
             tempo_type: tempoType,
             transition_time: lastTempo,
             timestamp: new Date().toLocaleString()
@@ -231,8 +231,8 @@ const Game = () => {
         })
         .then(response => response.json())
         .then(data => {
-            setSetTempoData(data._id);
             setTempoEventIds(prevIds => [...prevIds, data._id]);
+            console.log('Tempo submitted:', data);
         })
         .catch(error => console.error('Error submitting tempo:', error));
     };
@@ -262,6 +262,11 @@ const Game = () => {
             }
             return response.json();
         })
+
+        .then(data => {
+            console.log('Game updated successfully:', data);
+        })
+
         .catch(error => {
             console.error('Error updating game:', error);
         });
