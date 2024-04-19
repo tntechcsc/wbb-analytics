@@ -6,8 +6,11 @@ const PlayerSelectionPopup = ({ onPlayerSelect }) => {
     const serverUrl = process.env.REACT_APP_SERVER_URL;
 
     const handlePlayerSelect = (playerId) => {
-        onPlayerSelect(playerId);
+        if (onPlayerSelect) {
+            onPlayerSelect(playerId);
+        }
     };
+    
 
     useEffect(() => {
         const fetchData = async () => {
@@ -15,7 +18,6 @@ const PlayerSelectionPopup = ({ onPlayerSelect }) => {
                 const response = await fetch(serverUrl + '/api/players');
                 const players = await response.json();
                 setPlayers(players);
-                console.log('Players:', players);
 
             } catch (error) {
                 console.error('Failed to fetch players:', error);
