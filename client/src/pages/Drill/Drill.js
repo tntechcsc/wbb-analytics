@@ -179,6 +179,9 @@ function DrillPage() {
             { name: "8", shape: "poly", coords: [160, 280, 0, 550, 600, 550, 445, 275, 410, 295, 360, 315, 300, 320, 245, 315, 195, 299], fillColor: "#4f2984", preFillColor: "rgba(52, 52, 52, 0.2)", strokeColor: "blue" },
             { name: "7", shape: "poly", coords: [0, 3, 45, 3, 53, 83, 70, 155, 80, 180, 90, 200, 100, 220, 110, 235, 120, 245, 130, 255, 140, 265, 160, 280, 0, 550], fillColor: "#4f2984", preFillColor: "rgba(52, 52, 52, 0.2)", strokeColor: "blue" },
             { name: "6", shape: "poly", coords: [600, 3, 553, 3, 545, 83, 534, 130, 520, 170, 490, 220, 445, 275, 600, 550], fillColor: "#4f2984", preFillColor: "rgba(52, 52, 52, 0.2)", strokeColor: "blue" },
+            
+            
+
 
         ]
     };
@@ -283,7 +286,7 @@ function DrillPage() {
                     )}
                 </div>
                 <div className="court-container">
-                    <div style={{ position: "relative", width: '100%', height: '100%' }}>
+                    {/* <div style={{ position: "relative", width: '100%', height: '100%' }}>
                         <ImageMapper
                             src={basketballCourtVector}
                             map={MAP2}
@@ -306,7 +309,7 @@ function DrillPage() {
                                 />
                             </>
                         )}
-                    </div>
+                    </div> */}
                 </div>
             </div>
             <div className="extra-stats-container">
