@@ -107,16 +107,28 @@ const Practice = () => {
 
     }
 
-    const getSeasonByDate = (date) => {
-        const splitDate = date.split("-");
-        const year = splitDate[0];
-        const seasonByDate = SeasonData.find(season => season.year === year)
+   // Gets the season based on the current date, 2023-2024, 2024-2025, etc.
+    const getSeasonByDate = () => {
+        let finalYear;
+        const currentDate = new Date();
+        const month = currentDate.getMonth() + 1;
+        const day = currentDate.getDate();
+        const year = currentDate.getFullYear();
 
-        return seasonByDate;
-    };
+        const year1 = year.toString();
+        const year2 = ((month < 8 || (month === 8 && day < 2)) ? year - 1 : year + 1).toString();
+        
+        if (month >= 8) {
+            finalYear = SeasonData.find(season => season.year === year1 + '-' + year2);
+
+        } else {
+            finalYear = SeasonData.find(season => season.year === year2 + '-' + year1);
+        }
+    
+    return finalYear;
+};
 
     const addDrill = async (drill) => {
-
         const drillData = {
             name: drill.name,
             practice_id: SessionData._id,
