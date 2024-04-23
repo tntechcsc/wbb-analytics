@@ -129,9 +129,6 @@ const Practice = () => {
 };
 
     const addDrill = async (drill) => {
-
-        console.log("Drill Name: ", drill.name, "Practice ID: ", SessionData._id);
-
         const drillData = {
             name: drill.name,
             practice_id: SessionData._id,
