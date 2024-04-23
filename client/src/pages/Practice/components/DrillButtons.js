@@ -4,13 +4,7 @@ import './DrillButtons.css';
 import DrillModal from '../components/DrillModal'; // Adjust the import path as necessary
 
 const DrillButtons = ({ setDrills, onAddDrill, practiceID }) => {
-    const [drills, setLocalDrills] = useState([
-        { _id: 'drill1', name: 'Dribbling Basics' },
-        { _id: 'drill2', name: 'Shooting Practice' },
-        { _id: 'drill3', name: 'Defense Drills' },
-        { _id: 'drill3', name: 'Offense Drills' },
-        
-    ]);
+    const [drills, setLocalDrills] = useState([]);
     const [isModalOpen, setModalOpen] = useState(false);
     const navigate = useNavigate(); // Initialize useNavigate
     const serverUrl = process.env.REACT_APP_SERVER_URL;
