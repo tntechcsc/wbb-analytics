@@ -35,7 +35,7 @@
 .PopupPlayerCircle {
     background: var(--card-color);
     border-radius: 8px;
-    padding: 15px;
+    padding: 4%;
     color: var(--text-color-dark);
 }
 
@@ -44,6 +44,7 @@
     display: flex;
     flex-direction: column;
     height: 100%;
+    width: 100%;
 }
 
 /* Player and Court Container */
@@ -52,7 +53,8 @@
     flex: 1;
     padding: 2%;
     gap: 2%;
-    height: 50%;
+    height: 100%;
+    width: auto;
 }
 
 /* Player Container */
@@ -71,6 +73,7 @@
     align-items: center;
     /* Take up 1/2 of the screen */
     width: 50%;
+    height: 100%;
     padding: 1%;
 }
 
@@ -267,13 +270,13 @@
     background-color: var(--card-bg-color); /* Light purple */
     border-radius: 8px;
     box-shadow: var(--box-shadow);
-    z-index: 100;
+    z-index: 10%;
     max-width: 80%; /* Adjusted to max-width for responsiveness */
-    padding: 20px;
+    padding: 2%;
     display: flex;
     flex-wrap: wrap; /* Allows items to wrap in rows */
     justify-content: center; /* Centers items horizontally */
-    gap: 20px; /* Spacing between player circles */
+    gap: 2%; /* Spacing between player circles */
     overflow-y: auto; /* Enables scrolling if content overflows vertically */
 }
 
@@ -328,16 +331,16 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    width: 1500px;
-    padding: 20px;
-    border-radius: 100px;
+    width: 1%;
+    padding: 1%;
+    border-radius: 1%;
 }
 
 .ShotOutcomeSelection, 
 .ClockTimeSelection {
     display: flex;
     justify-content: center;
-    gap: 20px;
+    gap: 50%;
 }
 
 .MadeButton,
@@ -346,15 +349,15 @@
 .ClockButton2,
 .ClockButton3,
 .SubmitShot {
-    margin: 100px 0;
-    padding: 100px 200px;
+    margin: 10% 0%;
+    padding: 10% 5%;
     border: none;
-    border-radius: 200px;
+    border-radius: 8px;
     font-size: 2em;
     font-weight: bold;
     cursor: pointer;
     transition: background-color 0.3s;
-    width: 80%;
+    width: 100%;
     text-align: center;
     flex: 1;
 }
