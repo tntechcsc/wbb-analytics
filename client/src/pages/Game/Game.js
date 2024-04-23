@@ -7,6 +7,11 @@ import CancelButton from '../Drill/components/CancelButton';
 import ShotPopup from '../Drill/components/ShotPopup';
 import PlayerSelectionPopup from './components/PlayerSelectionPopup';
 
+/*
+    work on compartamentalizing this code, there is too much
+    in this file, surely it can be split.
+*/
+
 const Game = () => {
     const [opponentTeamInput, setOpponentTeamInput] = useState('');
     const [opponentTeamInputValue, setOpponentTeamInputValue] = useState('');
@@ -58,7 +63,7 @@ const Game = () => {
                     setSeasonData(data);
                 }
             } catch (error) {
-                console.error('Error fetching season data:', error);
+                console.error('Error fetching season data line 62:', error);
             }
         };
         handleCreateGame();
@@ -75,49 +80,51 @@ const Game = () => {
 
     // Initialize an empty game so that we can have gameId for shots and tempos
     useEffect(() => {
+        const createGame = async () => {
         if (locationInput !== '' && opponentTeamInput !== '') {
             const seasonDate = getSeasonByDate();
-            
+
             const game = {
                 season_id: seasonDate._id,
                 date: date,
                 opponent: opponentTeamInput,
                 location: locationInput,
             };
-    
-            if (game) {
-                fetch(serverUrl + '/api/games', {
+
+            try {
+                const response = await fetch(`${serverUrl}/api/games`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify(game)
-                })
-                .then(response => response.json())
-                .then(data => {
-                    setGameData(data._id);
-                })
-                .catch(error => {
-                    console.error('Error:', error);
                 });
+
+                if (!response.ok) {
+                    throw new Error('Failed to create game. Please try again.');
+                }
+
+                const data = await response.json();
+                setGameData(data._id);
+            } catch (error) {
+                console.error('Error with game data, line 105:', error.message);
             }
         }
-    }, [opponentTeamInput, locationInput]);
+    };
+    
+    createGame();
+    }, [opponentTeamInput, locationInput, date, serverUrl]);
+
     
     
    // Gets the season based on the current date, 2023-2024, 2024-2025, etc.
     const getSeasonByDate = () => {
+        let finalYear;
         const currentDate = new Date();
         const month = currentDate.getMonth() + 1;
         const day = currentDate.getDate();
         const year = currentDate.getFullYear();
-        let newYear;
-        let finalYear;
 
-        if (month < 8) {
-            newYear = year - 1;
-        }
-    
         const year1 = year.toString();
         const year2 = ((month < 8 || (month === 8 && day < 2)) ? year - 1 : year + 1).toString();
         
@@ -136,7 +143,6 @@ const Game = () => {
     };
     
     const handleShotOutcome = (outcome) => {
-        console.log('Shot outcome:', outcome); 
         setShotOutcome(outcome);
     };
 
@@ -153,23 +159,17 @@ const Game = () => {
         setSelectedClockTime(timeMapping);
         setShowPlayerSelection(true);
     };
-
-    const handleInputSubmission = () => {
-        setOpponentTeamInput(opponentTeamInputValue);
-        setLocationInput(tempLocationInput);
-        setIsSubmitClicked(true);
-    };
+    
+    const handlePlayerSelection = (selectedPlayerId) => {
+        setSelectedPlayer(selectedPlayerId);
+        setShowPlayerSelection(false);
+    }; 
 
     const cancelTempo = () => {
         setIsTiming(false);
         setTempoType(null);
         setResetTimer(true);
     };
-    
-    const handlePlayerSelection = (selectedPlayerId) => {
-        setSelectedPlayer(selectedPlayerId);
-        setShowPlayerSelection(false);
-    }; 
     
     const stopTempo = () => {
         setIsTiming(false);
@@ -179,6 +179,17 @@ const Game = () => {
         setTempoFlag(true);
     };
     
+    const handleInputSubmission = () => {
+        setOpponentTeamInput(opponentTeamInputValue);
+        setLocationInput(tempLocationInput);
+
+        if (opponentTeamInputValue !== '' && tempLocationInput !== '') {
+            setIsSubmitClicked(true);
+            
+        } else {
+            alert('Please enter both opponent name and location.');
+        }
+    };
     
     /* 
         Some reason the timestamp in shot and tempo has an incorrect date, no matter
@@ -202,14 +213,16 @@ const Game = () => {
             },
             body: JSON.stringify(shotData)
         })
+
         .then(response => response.json())
+
         .then(data => {
             if (data !== null) {
                 setShotEvents(prevShotEvents => [...prevShotEvents, data._id]);
             }
-            console.log('Shot submitted:', data);
         })
-        .catch(error => console.error('Error submitting shot:', error));
+
+        .catch(error => console.error('Error submitting shot line 218:', error));
 
     };
     
@@ -229,12 +242,14 @@ const Game = () => {
             },
             body: JSON.stringify(tempoData)
         })
+
         .then(response => response.json())
+
         .then(data => {
             setTempoEventIds(prevIds => [...prevIds, data._id]);
-            console.log('Tempo submitted:', data);
         })
-        .catch(error => console.error('Error submitting tempo:', error));
+
+        .catch(error => console.error('Error submitting tempo line 243:', error));
     };
     
     const submitGame = () => {
@@ -256,19 +271,16 @@ const Game = () => {
             },
             body: JSON.stringify(gameDataUpdated)
         })
+
         .then(response => {
             if (!response.ok) {
-                throw new Error('Network response was not ok');
+                throw new Error('Network response was not ok line 267');
             }
             return response.json();
         })
 
-        .then(data => {
-            console.log('Game updated successfully:', data);
-        })
-
         .catch(error => {
-            console.error('Error updating game:', error);
+            console.error('Error updating game line 277:', error);
         });
     };
     
