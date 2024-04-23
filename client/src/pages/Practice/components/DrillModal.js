@@ -22,7 +22,7 @@ const DrillModal = ({ isOpen, onClose, onAddDrill }) => {
                 <label htmlFor="drillName">Name:</label>
                 <input type="text" id="drillName" value={drillName} onChange={e => setDrillName(e.target.value)} />
 
-                <button onClick={handleAddDrill}>Add Drill</button>
+                <button className='drill-modal-adddrill-button' onClick={handleAddDrill}>Add Drill</button>
                 <button onClick={onClose}>Cancel</button>
             </div>
         </div>

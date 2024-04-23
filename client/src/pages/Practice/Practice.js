@@ -192,34 +192,21 @@ const Practice = () => {
         <>
             <div className="create-sessions-container">
                 <div className="drills-column">
-                    <View style={{ flexDirection: 'row' }}>
-                        <TabButton text={"Drills"} onPress={() => handleTabClick('Drills')} active={activeTab === 'Drills'} />
-                        <TabButton text={"Session Information"} onPress={() => handleTabClick('Session Information')} active={activeTab === "Session Information"} />
-                    </View>
-
                     <div className="drill-buttons">
-                        {activeTab === 'Drills' && (
                             <>
                                 <h2>Drills</h2>
                                 <DrillButtons drills={drills} setDrills={setDrills} onAddDrill={addDrill} practiceID={SessionData._id} />
                             </>
-                        )}
                     </div>
 
                     <div className="session-information">
-                        {activeTab === 'Session Information' && (
                             <>
-                                <h2>Session Information</h2>
+                                <h2>Practice Information</h2>
                                 <SessionButtons
                                     setOpponentTeam={setOpponentTeam}
                                     setDate={setDate}
                                 />
-
-                                <div className='session-inputs'>
-                                    <h3> Date: {date}</h3>
-                                </div>
                             </>
-                        )}
                     </div>
                 </div>
 
