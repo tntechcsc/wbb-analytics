@@ -39,7 +39,7 @@ const SessionButtons = ({ setOpponentTeam, setDate }) => {
             </div>
 
             <button className='add-button' onClick={handleAddSessionInfo}>
-                Add Session Info
+                Add Practice Info
             </button>
         </>
     );

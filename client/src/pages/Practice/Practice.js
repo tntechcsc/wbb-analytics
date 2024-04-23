@@ -201,7 +201,7 @@ const Practice = () => {
 
                     <div className="session-information">
                             <>
-                                <h2>Session Information</h2>
+                                <h2>Practice Information</h2>
                                 <SessionButtons
                                     setOpponentTeam={setOpponentTeam}
                                     setDate={setDate}
