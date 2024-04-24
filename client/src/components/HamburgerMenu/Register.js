@@ -35,8 +35,8 @@ const Register = ({ isOpen, onClose }) => {
     if(!isOpen) return null;
  
     return (
-        <div className="modal-overlay">
-          <div className="modal-content">
+        <div className="register-overlay">
+          <div className="register-content">
             <button className="close-button" onClick={onClose}>X</button>
             <h2>Register</h2>
             {!giveRole ? (
@@ -50,7 +50,7 @@ const Register = ({ isOpen, onClose }) => {
                     <option value="Moderator">Moderator</option>
                     <option value="User">User</option>
                 </select>
-                <button className="submit-button" onClick={() => GiveKey()}>Submit</button>
+                <button className="submitReg-button" onClick={() => GiveKey()}>Submit</button>
               
             </div>
             ) : (

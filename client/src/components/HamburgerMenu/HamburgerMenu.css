@@ -120,7 +120,7 @@
 /* Register css*/
 
 
-.modal-overlay {
+.register-overlay {
     position: fixed;
     top: 0;
     left: 0;
@@ -132,7 +132,7 @@
     align-items: center;
   }
   
-  .modal-content {
+  .register-content {
   background: #4f2984!important;
   padding: 20px;
   border-radius: 8px;
@@ -164,11 +164,11 @@
     color: grey !important;
   }
   
-  .submit-button  {
+  .submitReg-button  {
     margin-top: 10px;
     background-color: #FFDD00 !important;
   }
-  .submit-button:hover {
+  .submitReg-button:hover {
     background-color: #EECF08 !important;
   
   }

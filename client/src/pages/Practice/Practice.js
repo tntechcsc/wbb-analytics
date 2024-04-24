@@ -235,7 +235,7 @@ const Practice = () => {
 
             </div>
             <button className="create-session-button" onClick={updatePractice}>
-                Save Session
+                Create Practice
             </button>
         </>
     );
