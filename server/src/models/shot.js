@@ -13,7 +13,7 @@ const shotSchema = new Schema({
     onModel: { type: String, required: true, enum: ['Game', 'Drill'] },
     player_id: { type: Schema.Types.ObjectId, ref: 'Player', required: true },
     made: { type: Boolean, required: true },
-    zone: { type: String },
+    zone: { type: String, required: true },
     shot_clock_time: { type: String, required: true, enum: ['first_third', 'second_third', 'final_third'] },
     timestamp: { type: Date, required: true }
 });

@@ -14,7 +14,7 @@ const isAuthenticated = (req, res, next) => {
 const tempoSchema = Joi.object({
     gameOrDrill_id: Joi.string().regex(/^[0-9a-fA-F]{24}$/).allow(null, ''),
     onModel: Joi.string().required().valid('Game', 'Drill'),
-    player_ids: Joi.array().items(Joi.string().regex(/^[0-9a-fA-F]{24}$/)),
+    player_ids: Joi.array().items(Joi.string().regex(/^[0-9a-fA-F]{24}$/)).required(),
     tempo_type: Joi.string().required().valid('offensive', 'defensive'),
     transition_time: Joi.number().required(),
     timestamp: Joi.date().required()
