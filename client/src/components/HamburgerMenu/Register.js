@@ -42,7 +42,7 @@ const Register = ({ isOpen, onClose }) => {
             {!giveRole ? (
             <div>
                 <br/>
-                <h4 style={{textAlign: 'left'}}>What Role will the user have?</h4>
+                <h4>What Role will the user have?</h4>
                 
                 <select value={role} onChange={(e) => setRole(e.target.value)}>
                     <option value="Select">Select</option>

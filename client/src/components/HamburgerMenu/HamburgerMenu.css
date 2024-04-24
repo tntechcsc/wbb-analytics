@@ -204,11 +204,12 @@
     color: grey !important;
   }
   
-  .submitReg-button  {
+.submitReg-button  {
     margin-top: 10px;
     background-color: #FFDD00 !important;
+    
   }
-  .submitReg-button:hover {
+.submitReg-button:hover {
     background-color: #EECF08 !important;
 
 }
