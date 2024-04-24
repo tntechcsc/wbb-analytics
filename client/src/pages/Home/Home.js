@@ -1,32 +1,27 @@
-// HomePage.js
 import React, { useState } from 'react';
-import { useNavigate } from "react-router-dom";
-import SessionOption from './SessionOption.js';
-import MainLayout from '../../layouts/MainLayout.js' // Import the MainLayout component
+import { useNavigate } from 'react-router-dom';
+import SessionOption from './SessionOption';
+import MainLayout from '../../layouts/MainLayout'; // Ensure MainLayout is used if needed
 import './Home.css';
 
 const HomePage = () => {
-  let navigate = useNavigate();
-  const [isModalOpen, setModalOpen] = useState(false);
-  const [isModalOpenReg, setModalOpenReg] = useState(false);
-  
-  const gotoStats = () => {
-    navigate('/teamstats');
-  };
-  
+  const navigate = useNavigate();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   return (
-      <div className="home-page-container">
-          <button onClick={() => setModalOpen(true)} className="Linkish-Button1">
-            New Session
-          </button>
-          <button onClick={() => gotoStats()} className="Linkish-Button2">
-            Stats
-          </button>
-          
-        <section className="about">
-        </section>
-        <SessionOption isOpen={isModalOpen} onClose={() => setModalOpen(false)}/>
-      </div>
+    <div className="home-page-container">
+      <button onClick={() => setIsModalOpen(true)} className="link-button">
+        New Session
+      </button>
+      <button onClick={() => navigate('/playerstats')} className="link-button">
+        Player Stats
+      </button>
+      <button onClick={() => navigate('/teamstats')} className="link-button">
+        Team Stats
+      </button>
+
+      <SessionOption isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+    </div>
   );
 };
 

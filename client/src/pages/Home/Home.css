@@ -1,14 +1,8 @@
-/* HomePage.css */
-
-
 .home-page-container {
-  background-color: #4f2984;
-  background-image: url('../../images/nESTlogo.png') !important;
+  background: #4f2984 url('../../images/nESTlogo.png') center no-repeat;
   background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center; 
-  width: 100vw; /* 100% of viewport width */
-  height: 100vh; /* 100% of viewport height */
+  width: 100vw; 
+  height: 100vh;
   margin: 0 auto;
   padding: 20px;
   display: grid;
@@ -16,130 +10,31 @@
   text-align: center;
 }
 
-
-.logo {
-  max-width: 200px;
-  max-height: 200px;
-  background-image: '../../../public/nESTlogo.png';
-}
-header {
-  
-  margin-bottom: 30px;
-}
-
-header h1 {
+.header h1 {
   font-size: 3em;
+  color: #000;
+}
+
+.header p {
+  color: #000;
+}
+
+.link-button {
+  background-color: #EECF08;
   color: #000000;
-  margin-bottom: 10px;
-}
-
-header p {
-  color: #000000;
-}
-
-.explore-link {
-  display: block;
-  margin-top: 15px;
-  padding: 10px 20px;
-  background-color: #FFDD00;
-  color: #000000;
-  text-decoration: none;
-  border-radius: 5px;
-  font-weight: bold;
-}
-
-.explore-link:hover {
-  background-color: #2675ad;
-}
-
-.about {
-  margin-bottom: 30px;
-}
-
-.about h2 {
-  font-size: 2em;
-}
-
-footer {
-  text-align: center;
-  color: #888;
-}
-/*makes button look similar to home page .explore-link*/
-.Linkish-Button {
-  background-color: #FFDD00; /* example color */
-  color: #000000;
-  text-decoration: none;
-  font-weight: bold;
   border: none;
-  padding: 15px 30px; /* Adjust padding to change the size of the button */
-  text-align: center;
-  border-radius: 10px;
-  margin: 10px 20px; /* Increased margin for more space between buttons */
-  display: inline-block; /* This makes sure margins work correctly */
-  transition: background-color 0.3s, transform 0.3s; /* Smooth transitions for hover effects */
-}
-
-.Linkish-Button:hover {
-  background-color: #EECF08; /* Lighter yellow on hover */
-  transform: scale(1.1); /* Slight increase in size on hover */
-}
-.Linkish-Button1 {
-  background-color: #FFDD00 !important;
-  color: #000000 !important;
-  text-decoration: none;
-  font-weight: bold;
-  border: none;
-  margin-top: 10%;
-  width: 100vw;
-  padding: 30px;
-  text-align: center;
-  opacity: 0.9;
+  margin: 5% 0;
+  padding: 30px 0;
   width: 50%;
-  background-color: #A955C2;
-  border-radius: 10px;
-  transition: background-color 0.3s ease-in-out;
-  transition: transform 0.3s ease-in-out; /* Transition added here */
-}
-
-.Linkish-Button1:hover {
-  background-color: #EECF08 !important;
-  transform: scale(1.1); /* Transform effect on hover */
-}
-
-
-
-.Linkish-Button2 {
-  background-color: #FFDD00 !important;
-  color: #000000 !important;
-  text-decoration: none;
-  font-weight: bold;
-  border: none;
-  margin-bottom: 10%;
-  width: 100vw;
-  padding: 30px;
   text-align: center;
-  opacity: 0.9;
-  width: 50%;
-  background-color: #A955C2;
   border-radius: 10px;
-  transition: background-color 0.3s ease-in-out;
-  transition: transform 0.3s ease-in-out; /* Transition added here */
+  transition: background-color 0.3s, transform 0.3s;
 }
 
-.Linkish-Button2:hover {
-  background-color: #EECF08 !important;
-  transform: scale(1.1); /* Transform effect on hover */
+.link-button:hover {
+  background-color: #c1a90c;
+  transform: scale(1.1);
 }
-.log-out {
-  background-color: #FFDD00 !important;
-  color: #000000 !important;
-  text-decoration: none;
-  width: 5vw;
-  height: 5vh;
-  margin-bottom: 20vh;
-  margin-left: 90vw;
-}
-/*OpenSession.js*/
 
 .modal-overlay {
   position: fixed;
@@ -154,42 +49,39 @@ footer {
 }
 
 .modal-content {
-background: #4f2984!important;
-padding: 20px;
-border-radius: 8px;
-box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-max-width: 400px;
-width: 100%;
-position: relative;
-position: fixed;
-top: 50%;
-left: 50%;
-transform: translate(-50%, -50%);
-background-color: white;
-border: 1px solid #ccc;
-padding: 20px;
-transition: opacity .5s ease !important; /* Smooth transition for opacity */
+  background: #FFF;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  max-width: 400px;
+  width: 90%; /* Responsive width */
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 20px;
+  transition: opacity .5s;
 }
 
 .close-button {
   position: absolute;
-  top: 0px;
-  right: 0px;
-  background: none !important;
-  border: none !important;
-  color: black !important;
+  top: 0;
+  right: 0;
+  background: none;
+  border: none;
+  color: #000;
   font-size: 20px;
   cursor: pointer;
 }
+
 .close-button:hover {
-  color: grey !important;
+  color: #888;
 }
 
-.submit-button  {
+.submit-button {
+  background-color: #FFDD00;
   margin-top: 10px;
-  background-color: #FFDD00 !important;
 }
-.submit-button:hover {
-  background-color: #EECF08 !important;
 
+.submit-button:hover {
+  background-color: #EECF08;
 }
