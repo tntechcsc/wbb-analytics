@@ -16,7 +16,7 @@ const shotSchema = Joi.object({
     onModel: Joi.string().required().valid('Game', 'Drill'),
     player_id: Joi.string().regex(/^[0-9a-fA-F]{24}$/).required(),
     made: Joi.boolean().required(),
-    zone: Joi.string().required(),
+    zone: Joi.string(),
     shot_clock_time: Joi.string().required().valid('first_third', 'second_third', 'final_third'),
     timestamp: Joi.date().required()
 });

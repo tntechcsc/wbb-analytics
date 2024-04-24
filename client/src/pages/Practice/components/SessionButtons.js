@@ -1,41 +1,30 @@
-import './SessionButtons.css';
 import React, { useState } from 'react';
+import { FaCalendarAlt } from 'react-icons/fa';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
-const SessionButtons = ({ setOpponentTeam, setDate }) => {
-    const [opponentTeamInput, setOpponentTeamInput] = useState('');
-    const [dateInput, setDateInput] = useState('');
+const SessionButtons = ({ setDate }) => {
+    const [startDate, setStartDate] = useState(new Date());
 
     const handleAddSessionInfo = () => {
-        if (opponentTeamInput.trim() !== '') {
-            setOpponentTeam(opponentTeamInput);
-        }
-
-        if (dateInput.trim() !== '') {
-            setDate(dateInput);
-        }
-    
-        // Reset input fields
-        setOpponentTeamInput('');
-        setDateInput('');
+        setDate(startDate.toISOString().substring(0, 10)); // Format as YYYY-MM-DD
     };
-    
-    
 
     return (
         <>
-            {/*<div className='opp-team'>
-                <h3 style={{ color: 'white' }}> Opponent Team </h3>
-                <input type="text" value={opponentTeamInput} onChange={(e) => setOpponentTeamInput(e.target.value)} />
-            </div>*/}
-
-            <div className='date'>
-                <h3> Date </h3>
-                <input type="date" value={dateInput} onChange={(e) => setDateInput(e.target.value)} />
+            <div className='input-field'>
+                <FaCalendarAlt className="input-icon" />
+                <DatePicker
+                    selected={startDate}
+                    onChange={(date) => setStartDate(date)}
+                    dateFormat="MMMM d, yyyy"
+                    className="datepicker"
+                />
             </div>
 
-            <div>
-                <button className='add-button' onClick={handleAddSessionInfo}>Add Session Info</button>
-            </div>
+            <button className='add-button' onClick={handleAddSessionInfo}>
+                Set Date
+            </button>
         </>
     );
 };

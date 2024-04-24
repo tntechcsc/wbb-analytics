@@ -1,21 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import './Practice.css';
-import { View } from "react-native";
-import { useNavigate } from 'react-router-dom';
-import TabButton from '../../components/TabButton';
 import DrillButtons from './components/DrillButtons';
 import Players from './components/Players';
 import SessionButtons from './components/SessionButtons';
-import { get, set } from 'js-cookie';
 
 const Practice = () => {
 
-    const navigate = useNavigate();
-    const [activeTab, setActiveTab] = useState('Drills');
     const [SeasonData, setSeasonData] = useState([]);
     const [SessionData, setSessionData] = useState([]);
     const [drills, setDrills] = useState([]);
-    const [opponentTeam, setOpponentTeam] = useState('');
     const [date, setDate] = useState('');
     const [listA, setListA] = useState([]);
     const [listB, setListB] = useState([]);
@@ -55,7 +48,6 @@ const Practice = () => {
                 };
 
                 const createPracticeSession = async () => {
-                    console.log(serverUrl);
                     try {
                         const response = await fetch(serverUrl + '/api/practices', {
                             method: 'POST',
@@ -98,8 +90,7 @@ const Practice = () => {
                 body: JSON.stringify(practiceData),
             });
             if (!response.ok) throw new Error('Network response was not ok');
-            const updatedPractice = await response.json();
-            console.log('Practice updated successfully:', updatedPractice);
+
         } catch (error) {
             console.error('Failed to update practice:', error);
         }
@@ -107,16 +98,28 @@ const Practice = () => {
 
     }
 
-    const getSeasonByDate = (date) => {
-        const splitDate = date.split("-");
-        const year = splitDate[0];
-        const seasonByDate = SeasonData.find(season => season.year === year)
+   // Gets the season based on the current date, 2023-2024, 2024-2025, etc.
+    const getSeasonByDate = () => {
+        let finalYear;
+        const currentDate = new Date();
+        const month = currentDate.getMonth() + 1;
+        const day = currentDate.getDate();
+        const year = currentDate.getFullYear();
 
-        return seasonByDate;
-    };
+        const year1 = year.toString();
+        const year2 = ((month < 8 || (month === 8 && day < 2)) ? year - 1 : year + 1).toString();
+        
+        if (month >= 8) {
+            finalYear = SeasonData.find(season => season.year === year1 + '-' + year2);
+
+        } else {
+            finalYear = SeasonData.find(season => season.year === year2 + '-' + year1);
+        }
+    
+    return finalYear;
+};
 
     const addDrill = async (drill) => {
-
         const drillData = {
             name: drill.name,
             practice_id: SessionData._id,
@@ -131,9 +134,9 @@ const Practice = () => {
                 body: JSON.stringify(drillData),
             });
             if (!response.ok) throw new Error('Network response was not ok');
+
             const newDrill = await response.json();
             setDrills(currentDrills => [...currentDrills, newDrill]);
-            console.log('Drill added successfully:', newDrill);
 
             const players = listA.concat(listB);
             players.forEach(async player => {
@@ -157,8 +160,7 @@ const Practice = () => {
                         body: JSON.stringify(statsData),
                     });
                     if (!response.ok) throw new Error('Network response was not ok');
-                    const newStats = await response.json();
-                    console.log('Stats added successfully:', newStats);
+                    
                 } catch (error) {
                     console.error('Failed to add stats:', error);
                 }
@@ -170,44 +172,53 @@ const Practice = () => {
 
     };
 
+    const updateDrill = async (drill) => {
+        try {
+            const response = await fetch(`${serverUrl}/api/drills/${drill._id}`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    name: drill.name,
+                    practice_id: SessionData._id,
+                }),
+            });
+    
+            if (!response.ok) throw new Error('Network response was not ok');
 
-    const handleTabClick = (tab) => {
-        setActiveTab(tab);
-        console.log(`Switched to ${tab} tab`);
+            const updatedDrill = await response.json();
+            setDrills(currentDrills => currentDrills.map(d => d._id === drill._id ? updatedDrill : d));
+    
+        } catch (error) {
+            console.error('Failed to update drill:', error);
+        }
     };
 
     return (
         <>
             <div className="create-sessions-container">
                 <div className="drills-column">
-                    <View style={{ flexDirection: 'row' }}>
-                        <TabButton text={"Drills"} onPress={() => handleTabClick('Drills')} active={activeTab === 'Drills'} />
-                        <TabButton text={"Session Information"} onPress={() => handleTabClick('Session Information')} active={activeTab === "Session Information"} />
-                    </View>
-
                     <div className="drill-buttons">
-                        {activeTab === 'Drills' && (
                             <>
                                 <h2>Drills</h2>
-                                <DrillButtons drills={drills} setDrills={setDrills} onAddDrill={addDrill} practiceID={SessionData._id} />
+                                <DrillButtons 
+                                    drills={drills} 
+                                    setDrills={setDrills} 
+                                    onAddDrill={addDrill} 
+                                    onUpdateDrill={updateDrill} 
+                                    practiceID={SessionData._id} 
+                                />
                             </>
-                        )}
                     </div>
 
                     <div className="session-information">
-                        {activeTab === 'Session Information' && (
                             <>
-                                <h2>Session Information</h2>
+                                <h2>Date</h2>
                                 <SessionButtons
-                                    setOpponentTeam={setOpponentTeam}
                                     setDate={setDate}
                                 />
-
-                                <div className='session-inputs'>
-                                    <h3> Date: {date}</h3>
-                                </div>
                             </>
-                        )}
                     </div>
                 </div>
 

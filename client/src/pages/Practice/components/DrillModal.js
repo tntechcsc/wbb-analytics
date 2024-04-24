@@ -1,16 +1,18 @@
-// DrillModal component
-import React, { useState } from 'react';
-import './DrillModal.css';
+import React, { useState, useEffect } from 'react';
 
-const DrillModal = ({ isOpen, onClose, onAddDrill }) => {
+const DrillModal = ({ isOpen, onClose, onAddDrill, drill }) => {
     const [drillName, setDrillName] = useState('');
-    const [drillType, setDrillType] = useState(''); // Assuming you want to add drill type as well
+
+    useEffect(() => {
+        if (drill) {
+            setDrillName(drill.name);
+        }
+    }, [drill]);
 
     const handleAddDrill = () => {
         if (drillName.trim() !== '') {
-            onAddDrill({ name: drillName.trim(), type: drillType });
+            onAddDrill({ ...drill, name: drillName.trim()});
             setDrillName('');
-            setDrillType('');
             onClose();
         }
     };
@@ -18,11 +20,13 @@ const DrillModal = ({ isOpen, onClose, onAddDrill }) => {
     return isOpen && (
         <div className="drill-modal-overlay">
             <div className="drill-modal-content">
-                <h2>Create New Drill</h2>
+                <h2>{drill ? 'Edit Drill' : 'Create New Drill'}</h2>
                 <label htmlFor="drillName">Name:</label>
                 <input type="text" id="drillName" value={drillName} onChange={e => setDrillName(e.target.value)} />
 
-                <button onClick={handleAddDrill}>Add Drill</button>
+                <button className='drill-modal-adddrill-button' onClick={handleAddDrill}>
+                    {drill ? 'Update Drill' : 'Add Drill'}
+                </button>
                 <button onClick={onClose}>Cancel</button>
             </div>
         </div>
