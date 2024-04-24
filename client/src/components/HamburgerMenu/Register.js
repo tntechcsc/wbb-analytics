@@ -37,10 +37,11 @@ const Register = ({ isOpen, onClose }) => {
     return (
         <div className="register-overlay">
           <div className="register-content">
-            <button className="close-button" onClick={onClose}>X</button>
-            <h2>Register</h2>
+            <button className="closeReg-button" onClick={onClose}>X</button>
             {!giveRole ? (
             <div>
+            <h2>Register</h2>
+              <div>
                 <br/>
                 <h4>What Role will the user have?</h4>
                 
@@ -50,14 +51,17 @@ const Register = ({ isOpen, onClose }) => {
                     <option value="Moderator">Moderator</option>
                     <option value="User">User</option>
                 </select>
+                <br/>
                 <button className="submitReg-button" onClick={() => GiveKey()}>Submit</button>
-              
+              </div>
             </div>
             ) : (
               <div>
                 {/*show the key the user will recieve*/}
-                <label>Your Key:</label>
-                <input type="text" value={key} readOnly/>
+                <label>User Key Created!</label>
+                <p className="KeyContainer">User Key:  
+                <input className="InvisibleInput" type="text" value={key} readOnly/>
+                </p>
               </div>  
             )}
           </div>

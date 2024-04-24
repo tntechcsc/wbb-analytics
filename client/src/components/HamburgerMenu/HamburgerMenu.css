@@ -189,10 +189,10 @@
   transition: opacity .5s ease !important; /* Smooth transition for opacity */
   }
   
-  .close-button {
+.closeReg-button {
     position: absolute;
-    top: 0px;
-    right: 0px;
+    top: 3px;
+    right: 5px;
     background: none !important;
     border: none !important;
     color: black !important;
@@ -200,16 +200,53 @@
     cursor: pointer;
 }
 
-.close-button:hover {
+.closeReg-button:hover {
     color: grey !important;
   }
   
 .submitReg-button  {
-    margin-top: 10px;
-    background-color: #FFDD00 !important;
-    
+    background-color: #FFDD00; /* example color */
+    color: #000000;
+    text-decoration: none;
+    font-weight: bold;
+    border: none;
+    padding: 8px 16px; /* Adjust padding to change the size of the button */
+    text-align: center;
+    border-radius: 10px;
+    margin: 10px 20px; /* Increased margin for more space between buttons */
+    display: inline-block; /* This makes sure margins work correctly */
+    transition: background-color 0.3s, transform 0.3s; 
+
   }
 .submitReg-button:hover {
     background-color: #EECF08 !important;
+    transform: scale(1.01);
+}
 
+.InvisibleInput{
+    
+    background-color: var(--card-color);;
+    color: #000000;
+    width: 30%;
+    text-decoration: none;
+    margin: 5px;
+    font-size: 15px;
+    font-weight: bold;
+    border: none;
+
+
+}
+.InvisibleInput:focus {
+    outline: none;
+}
+.KeyContainer {
+    border-radius: 50px;
+    /* Adjust the position of the card */
+    transform: translate(0%,5%);
+    /* Add card styles */
+    background-color: var(--card-color);
+    color: #FFFFFF;
+    font-size: 19px;
+    padding: 10px 10px;
+    width: 100%;
 }
