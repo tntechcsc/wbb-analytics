@@ -1,3 +1,7 @@
+/* 
+Register.js:
+    This is the page where you can create a userkey linked to a specific role.
+*/
 import React, { useState } from 'react';
 import './HamburgerMenu';
 const Register = ({ isOpen, onClose }) => {

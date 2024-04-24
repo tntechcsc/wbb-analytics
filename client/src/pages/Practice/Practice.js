@@ -78,7 +78,7 @@ const Practice = () => {
 
 
     const updatePractice = async () => {
-
+        if(drills.length === 0) {
         const seasonByDate = getSeasonByDate(date);
 
         const practiceData = {
@@ -100,10 +100,14 @@ const Practice = () => {
             if (!response.ok) throw new Error('Network response was not ok');
             const updatedPractice = await response.json();
             console.log('Practice updated successfully:', updatedPractice);
+            navigate(`/drill?PracticeID=${updatedPractice._id}&DrillID=${drills[0]._id}`);
         } catch (error) {
             console.error('Failed to update practice:', error);
         }
-
+    }
+    else{
+        console.log('Please add drills to the practice');
+    }
 
     }
 
