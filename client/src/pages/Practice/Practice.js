@@ -1,21 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import './Practice.css';
-import { View } from "react-native";
-import { useNavigate } from 'react-router-dom';
-import TabButton from '../../components/TabButton';
 import DrillButtons from './components/DrillButtons';
 import Players from './components/Players';
 import SessionButtons from './components/SessionButtons';
-import { get, set } from 'js-cookie';
 
 const Practice = () => {
 
-    const navigate = useNavigate();
-    const [activeTab, setActiveTab] = useState('Drills');
     const [SeasonData, setSeasonData] = useState([]);
     const [SessionData, setSessionData] = useState([]);
     const [drills, setDrills] = useState([]);
-    const [opponentTeam, setOpponentTeam] = useState('');
     const [date, setDate] = useState('');
     const [listA, setListA] = useState([]);
     const [listB, setListB] = useState([]);
@@ -55,7 +48,6 @@ const Practice = () => {
                 };
 
                 const createPracticeSession = async () => {
-                    console.log(serverUrl);
                     try {
                         const response = await fetch(serverUrl + '/api/practices', {
                             method: 'POST',
@@ -98,8 +90,7 @@ const Practice = () => {
                 body: JSON.stringify(practiceData),
             });
             if (!response.ok) throw new Error('Network response was not ok');
-            const updatedPractice = await response.json();
-            console.log('Practice updated successfully:', updatedPractice);
+
         } catch (error) {
             console.error('Failed to update practice:', error);
         }
@@ -143,9 +134,9 @@ const Practice = () => {
                 body: JSON.stringify(drillData),
             });
             if (!response.ok) throw new Error('Network response was not ok');
+
             const newDrill = await response.json();
             setDrills(currentDrills => [...currentDrills, newDrill]);
-            console.log('Drill added successfully:', newDrill);
 
             const players = listA.concat(listB);
             players.forEach(async player => {
@@ -169,8 +160,7 @@ const Practice = () => {
                         body: JSON.stringify(statsData),
                     });
                     if (!response.ok) throw new Error('Network response was not ok');
-                    const newStats = await response.json();
-                    console.log('Stats added successfully:', newStats);
+                    
                 } catch (error) {
                     console.error('Failed to add stats:', error);
                 }
@@ -182,10 +172,27 @@ const Practice = () => {
 
     };
 
+    const updateDrill = async (drill) => {
+        try {
+            const response = await fetch(`${serverUrl}/api/drills/${drill._id}`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    name: drill.name,
+                    practice_id: SessionData._id,
+                }),
+            });
+    
+            if (!response.ok) throw new Error('Network response was not ok');
 
-    const handleTabClick = (tab) => {
-        setActiveTab(tab);
-        console.log(`Switched to ${tab} tab`);
+            const updatedDrill = await response.json();
+            setDrills(currentDrills => currentDrills.map(d => d._id === drill._id ? updatedDrill : d));
+    
+        } catch (error) {
+            console.error('Failed to update drill:', error);
+        }
     };
 
     return (
@@ -195,15 +202,20 @@ const Practice = () => {
                     <div className="drill-buttons">
                             <>
                                 <h2>Drills</h2>
-                                <DrillButtons drills={drills} setDrills={setDrills} onAddDrill={addDrill} practiceID={SessionData._id} />
+                                <DrillButtons 
+                                    drills={drills} 
+                                    setDrills={setDrills} 
+                                    onAddDrill={addDrill} 
+                                    onUpdateDrill={updateDrill} 
+                                    practiceID={SessionData._id} 
+                                />
                             </>
                     </div>
 
                     <div className="session-information">
                             <>
-                                <h2>Practice Information</h2>
+                                <h2>Date</h2>
                                 <SessionButtons
-                                    setOpponentTeam={setOpponentTeam}
                                     setDate={setDate}
                                 />
                             </>
