@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect} from 'react';
 import './Practice.css';
 import DrillButtons from './components/DrillButtons';
+import { useNavigate } from 'react-router-dom';
 import Players from './components/Players';
 import SessionButtons from './components/SessionButtons';
 
@@ -14,6 +15,7 @@ const Practice = () => {
     const [listB, setListB] = useState([]);
     const [playerData, setPlayerData] = useState([]);
     const serverUrl = process.env.REACT_APP_SERVER_URL;
+    const navigate = useNavigate();
 
 
     useEffect(() => {
@@ -70,7 +72,8 @@ const Practice = () => {
 
 
     const updatePractice = async () => {
-        if(drills.length === 0) {
+        console.log(drills);
+        if(drills.length  > 0) {
         const seasonByDate = getSeasonByDate(date);
 
         const practiceData = {
@@ -92,6 +95,7 @@ const Practice = () => {
             if (!response.ok) throw new Error('Network response was not ok');
             const updatedPractice = await response.json();
             console.log('Practice updated successfully:', updatedPractice);
+            navigate(`/drill?PracticeID=${updatedPractice._id}&DrillID=${drills[0]._id}`);
         } catch (error) {
             console.error('Failed to update practice:', error);
         }
@@ -128,7 +132,6 @@ const Practice = () => {
             name: drill.name,
             practice_id: SessionData._id,
         };
-
         try {
             const response = await fetch(serverUrl + '/api/drills', {
                 method: 'POST',

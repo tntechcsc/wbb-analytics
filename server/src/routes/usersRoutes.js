@@ -23,7 +23,9 @@ const schema = Joi.object({
 */
 // Generate a random string function
 
-
+/*
+  Fetch all Users
+*/
 router.get('/', async (req, res) => {
   try {
     const users = await User.find();
@@ -32,7 +34,12 @@ router.get('/', async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 });
+/*
+Post a user, must send a username, password, and key to the post
 
+This post will add a request with username, password, and role.
+This will also delete the key in the database
+*/
 router.post('/', async (req, res) => {
   const saltRounds = 10;
   const {username,password,key} = req.body;
