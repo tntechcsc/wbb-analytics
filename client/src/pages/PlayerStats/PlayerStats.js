@@ -1,12 +1,42 @@
 import React, { useState, useEffect } from 'react';
+import { Bar } from 'react-chartjs-2'; // For displaying bar charts
 import Selector from '../TeamStats/components/Selector';
 import Heatmap from '../TeamStats/components/Heatmap';
 import TempoCard from '../TeamStats/components/TempoCard';
 import StatCard from '../TeamStats/components/StatsDisplay';
-import StatsTable from '../TeamStats/components/StatsTable';
 
 import ShotsByClock from './components/ShotsByClock';
 import './PlayerStats.css';
+
+const chartOptions = {
+  maintainAspectRatio: false,
+  scales: {
+    y: {
+      beginAtZero: true,
+      ticks: {
+        color: '#ffffff', // White y-axis labels
+      }
+    },
+    x: {
+      ticks: {
+        color: '#ffffff', // White x-axis labels
+      }
+    }
+  },
+  plugins: {
+    legend: {
+      labels: {
+        color: '#ffffff', // White legend text
+      }
+    },
+    tooltip: {
+      enabled: false, // Disable tooltips
+    }
+  },
+  hover: {
+    mode: null // Disable hover effects
+  },
+};
 
 function PlayerStats() {
   /* 
@@ -32,6 +62,18 @@ function PlayerStats() {
   const [statsData, setStatsData] = useState([]); //This is the data for the player's stats
   const [selectedSession, setSelectedSession] = useState('');
   const [selectedDrill, setSelectedDrill] = useState(''); //This is a numerical ID, not an object
+
+  const [barChartData, setBarChartData] = useState({
+    labels: ['Zone 1', 'Zone 2', 'Zone 3', 'Zone 4', 'Zone 5', 'Zone 6', 'Zone 7', 'Zone 8'],
+    datasets: [
+      {
+        label: '% of Shots Made',
+        backgroundColor: 'rgba(255, 215, 0, 0.6)',
+        borderColor: 'rgba(0,0,0,1)',
+        borderWidth: 1,
+      },
+    ],
+  });
 
   const sessionIdParam  = urlParams.get('seasonId');
   const session = urlParams.get('session');
@@ -240,7 +282,12 @@ useEffect(() => {
     // 6 7 and 8 are 3-point
     var shotClockDat = [[0, 0], [0, 0], [0, 0]]; //This is a two-dimensional array that has the third in the first index, and the number of made shots and number of total shots in the second index. So, shotDat[0][0] is the shots *made* in the first third, and shotDat[0][1] is the shots attempted.
     var shotPointDat = [[0,0],[0,0]]; //This is a two-dimensional array that has the number of made # point shots in the first column and the total number of # point shots attempted in the second. The first row is 2-point shots and the second row is 3-point shots
+    var shotCountsByZone = {};
     var shotPoints = 0;
+
+    for(var i = 1; i < 9; i++)
+      shotCountsByZone[i] = {made: 0, total: 0}; //This is gross and allows the bar graph to display all zones, even when no shots are made in a zone.  
+
     for(var i = 0; i < shotsForDrill.length; i++){
       if(shotsForDrill[i].zone < 6){
         shotPointDat[0][1]++;
@@ -255,6 +302,13 @@ useEffect(() => {
           shotPointDat[1][0]++;
           shotPoints += 3;
         }
+      }
+      if (!shotCountsByZone[shotsForDrill[i].zone]) {
+        shotCountsByZone[shotsForDrill[i].zone] = { made: 0, total: 0 };
+      }
+      shotCountsByZone[shotsForDrill[i].zone].total += 1;
+      if (shotsForDrill[i].made) {
+        shotCountsByZone[shotsForDrill[i].zone].made += 1;
       }
       switch(shotsForDrill[i].shot_clock_time){ //The options are "first_third", "second_third", and "final_third" for some reason
         case "first_third":
@@ -280,6 +334,31 @@ useEffect(() => {
     setShotPointData(shotPointDat);
     setShotPoints(shotPoints);
 
+    console.log(shotCountsByZone)
+
+    const labels = [];
+    const data = [];
+
+    Object.keys(shotCountsByZone).sort().forEach(zone => {
+      labels.push(`Zone ${zone}`);
+      const { made, total } = shotCountsByZone[zone];
+      const percentage = total > 0 ? (made / total) * 100 : 0;
+      data.push(percentage.toFixed(2)); // Keep only two decimal places
+    });
+
+    setBarChartData({
+      labels,
+      datasets: [
+        {
+          label: '% of Shots Made by Zone',
+          backgroundColor: 'rgba(255, 215, 0, 0.6)',
+          borderColor: 'rgba(0,0,0,1)',
+          borderWidth: 1,
+          data,
+        },
+      ],
+    });
+
     //var end = performance.now()
     //console.log("Time to update shot data: " + (end - time))
   };
@@ -290,7 +369,12 @@ useEffect(() => {
       const drillData = await drillResponse.json();
       //console.log("These are the drills Maddie is in: ")
       //console.log(drillData);
-      setAllDrills(drillData);
+      if(drillData.length)
+        setAllDrills(drillData);
+      else{
+        var temp = {  }
+        setAllDrills(temp)
+      }
       if (drillIdParam) {
         setSelectedDrill(drillIdParam);
       } else if (drillData.length > 0) {
@@ -359,8 +443,13 @@ useEffect(() => {
           <TempoCard title="Avg Offensive Tempo" tempo={avgOffensiveTempo} />
           <TempoCard title="Avg Defensive Tempo" tempo={avgDefensiveTempo} />
         </div>
-        <div className="heatmap">
-          <Heatmap />
+        <div className="charts-container">
+          <div classname='bar-container'>
+            <Bar
+                data={barChartData}
+                options={chartOptions}
+            />
+          </div>
           <div className="shots-table-container">
             {shotClockData.map((section, index) => (
               <ShotsByClock key={index} section={sectionLabels[index]} made={section[0]} total={section[1]} />
@@ -382,12 +471,6 @@ useEffect(() => {
         <StatCard title="Blocks" value={statsData.blocks || 0} />
         <StatCard title="Turnovers" value={statsData.turnovers || 0} />
         <StatCard title="Personal Fouls" value={statsData.personal_fouls || 0} />
-      </div>
-      <div className='stats-table-container'>
-      <h2>Player Stats</h2>
-        <div className="stats-table">
-        <StatsTable stats={teamStatsData} />
-        </div>
       </div>
         
     </div>
