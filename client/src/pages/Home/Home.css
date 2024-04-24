@@ -66,24 +66,22 @@ footer {
 }
 /*makes button look similar to home page .explore-link*/
 .Linkish-Button {
-  background-color: #FFDD00 !important;
-  color: #000000 !important;
+  background-color: #FFDD00; /* example color */
+  color: #000000;
   text-decoration: none;
   font-weight: bold;
   border: none;
-  margin-bottom: 10%;
-  padding: 30px;
+  padding: 15px 30px; /* Adjust padding to change the size of the button */
   text-align: center;
-  opacity: 0.9;
-  width: 50%;
-  background-color: #A955C2;
   border-radius: 10px;
-  transition: background-color 0.3s ease-in-out;
-  transition: transform 0.3s ease-in-out; /* Transition added here */
+  margin: 10px 20px; /* Increased margin for more space between buttons */
+  display: inline-block; /* This makes sure margins work correctly */
+  transition: background-color 0.3s, transform 0.3s; /* Smooth transitions for hover effects */
 }
+
 .Linkish-Button:hover {
-  background-color: #EECF08 !important;
-  transform: scale(1.1); /* Transform effect on hover */
+  background-color: #EECF08; /* Lighter yellow on hover */
+  transform: scale(1.1); /* Slight increase in size on hover */
 }
 .Linkish-Button1 {
   background-color: #FFDD00 !important;
