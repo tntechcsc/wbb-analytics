@@ -1,4 +1,4 @@
-import React, { useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import './Practice.css';
 import DrillButtons from './components/DrillButtons';
 import { useNavigate } from 'react-router-dom';

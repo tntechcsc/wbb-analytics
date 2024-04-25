@@ -1,95 +1,59 @@
 import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useLocation } from 'react-router-dom';
-
 
 const Players = ({ listA, setListA, listB, setListB, playerData, setPlayerData }) => {
-
     const serverUrl = process.env.REACT_APP_SERVER_URL;
 
-    const handleAddDropdownA = () => {
-        const newPlayer = playerData.length > listA.length ? playerData[listA.length].name : `New Player ${listA.length + 1}`;
-        setListA([...listA, { playerName: newPlayer }]);
-    };
-
-    const handleAddDropdownB = () => {
-        const newPlayer = playerData.length > listB.length ? playerData[listB.length].name : `New Player ${listB.length + 1}`;
-        setListB([...listB, { playerName: newPlayer }]);
-    };
-
-
-    const handlePlayerChange = (team, index, event) => {
-        const { value } = event.target;
-
-        if (team === 'A') {
-            const updatedListA = listA.map((player, i) => {
-                if (i === index) {
-                    return { ...player, playerName: value, _id: playerData.find(p => p.name === value)._id };
-                }
-                return player;
-            });
-            setListA(updatedListA);
-        } else if (team === 'B') {
-            const updatedListB = listB.map((player, i) => {
-                if (i === index) {
-                    return { ...player, playerName: value, _id: playerData.find(p => p.name === value)._id };
-                }
-                return player;
-            });
-            setListB(updatedListB);
-        }
-    };
-
-    const handleRemovePlayer = (team, index) => {
-        if (team === 'A') {
-            const updatedListA = [...listA];
-            updatedListA.splice(index, 1);
-            setListA(updatedListA);
-            console.log(`Removed player from Team A at index ${index}`);
-
-        }
-
-        else if (team === 'B') {
-            const updatedListB = [...listB];
-            updatedListB.splice(index, 1);
-            setListB(updatedListB);
-            console.log(`Removed player from Team B at index ${index}`);
-        }
-    };
-
-    const navigate = useNavigate();
-    let id1 = -1; //Defualt value so CreateSession can run normally if not directed from OpenSession
-    const location = useLocation();
-
-    if (location.pathname === '/CreateSession') {
-        id1 = location.state.ID;
-    } // send the session ID to make paramenters for sessionData
-
     useEffect(() => {
-
         const fetchData = async () => {
             try {
                 const response = await fetch(serverUrl + '/api/players');
+                if (!response.ok) throw new Error('Failed to fetch players.');
                 const data = await response.json();
-
-                // Auto-populate the first 5 players for Team A and Team B
-                const defaultListA = data.slice(0, 5).map(player => ({ _id: player._id, playerName: player.name }));
-                const defaultListB = data.slice(5, 10).map(player => ({ _id: player._id, playerName: player.name }));
-
-                setListA(defaultListA);
-                setListB(defaultListB);
-                setPlayerData(data); // Move this line after setting lists to ensure that playerData is set after lists
-
+                setPlayerData(data); // Assuming you use this to store player data elsewhere as well
+                // Initialize teams with unique players
+                if (data.length >= 10) {
+                    setListA(data.slice(0, 5));
+                    setListB(data.slice(5, 10));
+                }
             } catch (error) {
                 console.error('Failed to fetch players:', error);
             }
         };
-
         fetchData();
-    }, []);
+    }, [serverUrl, setPlayerData]);
 
+    // This function will filter available players for a given team excluding players already assigned to any team
+    const getAvailablePlayers = (currentTeam, otherTeam, currentPlayerId) => {
+        return playerData.filter(p => 
+            (p._id === currentPlayerId) || (!currentTeam.concat(otherTeam).find(player => player._id === p._id))
+        );
+    };
 
+    const handlePlayerChange = (team, setTeam, index, event) => {
+        const playerId = event.target.value;
+        const player = playerData.find(p => p._id === playerId);
 
+        const updatedTeam = team.map((item, i) => 
+            i === index ? { ...item, playerName: player.name, _id: playerId } : item
+        );
+        setTeam(updatedTeam);
+    };
+
+    const handleAddPlayer = (setTeam, excludeTeam) => {
+        const usedIds = new Set([...listA, ...listB].map(p => p._id));
+        const availablePlayers = playerData.filter(p => !usedIds.has(p._id));
+        if (availablePlayers.length > 0) {
+            const newPlayer = availablePlayers[0];
+            setTeam(team => [...team, { _id: newPlayer._id, playerName: newPlayer.name }]);
+        } else {
+            alert("No more available players to add.");
+        }
+    };
+
+    const handleRemovePlayer = (team, setTeam, index) => {
+        const updatedTeam = team.filter((_, i) => i !== index);
+        setTeam(updatedTeam);
+    };
 
     return (
         <>
@@ -100,28 +64,25 @@ const Players = ({ listA, setListA, listB, setListB, playerData, setPlayerData }
                         <li key={index} className="player-selection">
                             <select
                                 className='dropdown'
-                                value={player.playerName}
-                                onChange={(e) => handlePlayerChange('A', index, e)}
+                                value={player._id}
+                                onChange={(e) => handlePlayerChange(listA, setListA, index, e)}
                             >
-                                {playerData.map((p, playerIndex) => (
-                                    <option key={playerIndex} value={p.name}>
-                                        {p.name}
-                                    </option>
+                                {getAvailablePlayers(listA, listB, player._id).map(p => (
+                                    <option key={p._id} value={p._id}>{p.name}</option>
                                 ))}
                             </select>
-                            <button className="remove-player-button" onClick={() => handleRemovePlayer('A', index)}>
-                                <i className="fas fa-trash"></i> {/* Adds the trash icon */}
+                            <button className="remove-player-button" onClick={() => handleRemovePlayer(listA, setListA, index)}>
+                                Remove
                             </button>
                         </li>
                     ))}
                     <li>
-                        <button className="add-dropdown-button" onClick={handleAddDropdownA}>
+                        <button className="add-dropdown-button" onClick={() => handleAddPlayer(setListA, listB)}>
                             Add Player
                         </button>
                     </li>
                 </ul>
             </div>
-
             <div className="list">
                 <h2>Team Gray</h2>
                 <ul>
@@ -129,22 +90,20 @@ const Players = ({ listA, setListA, listB, setListB, playerData, setPlayerData }
                         <li key={index} className="player-selection">
                             <select
                                 className='dropdown'
-                                value={player.playerName}
-                                onChange={(e) => handlePlayerChange('B', index, e)}
+                                value={player._id}
+                                onChange={(e) => handlePlayerChange(listB, setListB, index, e)}
                             >
-                                {playerData.map((p, playerIndex) => (
-                                    <option key={playerIndex} value={p.name}>
-                                        {p.name}
-                                    </option>
+                                {getAvailablePlayers(listB, listA, player._id).map(p => (
+                                    <option key={p._id} value={p._id}>{p.name}</option>
                                 ))}
                             </select>
-                            <button className="remove-player-button" onClick={() => handleRemovePlayer('B', index)}>
-                                <i className="fas fa-trash"></i> {/* Adds the trash icon */}
+                            <button className="remove-player-button" onClick={() => handleRemovePlayer(listB, setListB, index)}>
+                                Remove
                             </button>
                         </li>
                     ))}
                     <li>
-                        <button className="add-dropdown-button" onClick={handleAddDropdownB}>
+                        <button className="add-dropdown-button" onClick={() => handleAddPlayer(setListB, listA)}>
                             Add Player
                         </button>
                     </li>
