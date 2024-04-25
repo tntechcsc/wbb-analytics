@@ -221,6 +221,9 @@ function TeamStats() {
   const processShotsForChart = (filteredShots) => {
     const shotCountsByZone = {}; // Object to hold counts of made and total shots by zone
 
+    for(var i = 1; i < 9; i++)
+      shotCountsByZone[i] = {made: 0, total: 0}; //This is gross and allows the bar graph to display all zones, even when no shots are made in a zone.  
+
     filteredShots.forEach(shot => {
       if (!shotCountsByZone[shot.zone]) {
         shotCountsByZone[shot.zone] = { made: 0, total: 0 };
