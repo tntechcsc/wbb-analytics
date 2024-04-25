@@ -55,6 +55,19 @@ router.get('/withDrills/:id', isAuthenticated, async (req, res) => {
     }
 });
 
+// GET practice by ID with drills populated
+router.get('/withDrill/:id', isAuthenticated, async (req, res) => {
+    try {
+        const practice = await Practice.findById(req.params.id).populate('drills');
+        if (!practice) {
+            return res.status(404).json({ message: 'Practice not found' });
+        }
+        res.json(practice);
+    } catch (err) {
+        res.status(500).json({ message: 'Internal server error', error: err.message });
+    }
+});
+
 // GET practices by date
 router.get('/byDate/:date', isAuthenticated, async (req, res) => {
     try {
