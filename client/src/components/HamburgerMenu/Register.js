@@ -1,3 +1,7 @@
+/* 
+Register.js:
+    This is the page where you can create a userkey linked to a specific role.
+*/
 import React, { useState } from 'react';
 import './HamburgerMenu';
 const Register = ({ isOpen, onClose }) => {
@@ -31,14 +35,15 @@ const Register = ({ isOpen, onClose }) => {
     if(!isOpen) return null;
  
     return (
-        <div className="modal-overlay">
-          <div className="modal-content">
-            <button className="close-button" onClick={onClose}>X</button>
-            <h2>Register</h2>
+        <div className="register-overlay">
+          <div className="register-content">
+            <button className="closeReg-button" onClick={onClose}>X</button>
             {!giveRole ? (
             <div>
+            <h2>Register</h2>
+              <div>
                 <br/>
-                <h4 style={{textAlign: 'left'}}>What Role will the user have?</h4>
+                <h4>What Role will the user have?</h4>
                 
                 <select value={role} onChange={(e) => setRole(e.target.value)}>
                     <option value="Select">Select</option>
@@ -46,14 +51,17 @@ const Register = ({ isOpen, onClose }) => {
                     <option value="Moderator">Moderator</option>
                     <option value="User">User</option>
                 </select>
-                <button className="submit-button" onClick={() => GiveKey()}>Submit</button>
-              
+                <br/>
+                <button className="submitReg-button" onClick={() => GiveKey()}>Submit</button>
+              </div>
             </div>
             ) : (
               <div>
                 {/*show the key the user will recieve*/}
-                <label>Your Key:</label>
-                <input type="text" value={key} readOnly/>
+                <label>User Key Created!</label>
+                <p className="KeyContainer">User Key:  
+                <input className="InvisibleInput" type="text" value={key} readOnly/>
+                </p>
               </div>  
             )}
           </div>
