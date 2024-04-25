@@ -1,3 +1,9 @@
+/*
+AutherProvider:
+    This is a custom hook to provide acces to users that have successfully log in, 
+    and handle logout functionality.
+
+*/
 import {useState,useContext, useEffect, createContext } from "react";
 import { useNavigate } from "react-router-dom";
 const AuthContext = createContext();
@@ -7,6 +13,10 @@ const AuthProvider = ({ children }) => {
     const [result, setRes] = useState([]);
     const [token,setToken] = useState(sessionStorage.getItem("site") || "");
     const navigate = useNavigate();
+    /*
+    loginAction:
+        This adds the user and token to the state and session storage.
+    */
     const loginAction = async (data) => {
         try {
             
@@ -27,7 +37,11 @@ const AuthProvider = ({ children }) => {
             console.log(err);
         }
     };
-
+    /*
+    logOut:
+        This removes the user and token from the state and session storage.
+        Returns user to login page.
+    */
     const logOut = () => {
         setUser(null);
         setToken("");
@@ -43,7 +57,12 @@ const AuthProvider = ({ children }) => {
 };
 
 export default AuthProvider;
+/*
+useAuth:
+    This is a custom hook to provide acces to the AuthContext.
 
+    This allows this function to be used in other pages.
+*/
 export const useAuth = () => {
   return useContext(AuthContext);
 };
