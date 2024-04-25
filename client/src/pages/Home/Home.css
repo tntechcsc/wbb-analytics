@@ -74,6 +74,20 @@ padding: 20px;
 transition: opacity .5s ease !important; /* Smooth transition for opacity */
 }
 
+.Linkish-Button {
+  background-color: #FFDD00; /* example color */
+  color: #000000;
+  text-decoration: none;
+  font-weight: bold;
+  border: none;
+  padding: 15px 30px; /* Adjust padding to change the size of the button */
+  text-align: center;
+  border-radius: 10px;
+  margin: 10px 20px; /* Increased margin for more space between buttons */
+  display: inline-block; /* This makes sure margins work correctly */
+  transition: background-color 0.3s, transform 0.3s; /* Smooth transitions for hover effects */
+}
+
 .close-button {
   position: absolute;
   top: 0;
