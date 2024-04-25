@@ -10,16 +10,17 @@ const HomePage = () => {
 
   return (
     <div className="home-page-container">
-      <button onClick={() => setIsModalOpen(true)} className="link-button">
+      <button onClick={() => setIsModalOpen(true)} className="link-button new-session-button">
         New Session
       </button>
-      <button onClick={() => navigate('/playerstats')} className="link-button">
-        Player Stats
-      </button>
-      <button onClick={() => navigate('/teamstats')} className="link-button">
-        Team Stats
-      </button>
-
+      <div className="stats-buttons-container">
+        <button onClick={() => navigate('/playerstats')} className="link-button">
+          Player Stats
+        </button>
+        <button onClick={() => navigate('/teamstats')} className="link-button">
+          Team Stats
+        </button>
+      </div>
       <SessionOption isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
     </div>
   );

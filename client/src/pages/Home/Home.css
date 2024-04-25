@@ -1,34 +1,42 @@
 .home-page-container {
   background: #4f2984 url('../../images/nESTlogo.png') center no-repeat;
   background-size: contain;
-  width: 100vw; 
   height: 100vh;
   margin: 0 auto;
   padding: 20px;
   display: grid;
   place-items: center;
   text-align: center;
+  grid-template-rows: auto auto; /* Adjusted for better spacing */
+  overflow-x: hidden;
+  overflow-y: hidden;
 }
 
-.header h1 {
-  font-size: 3em;
-  color: #000;
+.stats-buttons-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  width: 60%; /* This could be adjusted based on your design needs */
 }
 
-.header p {
-  color: #000;
+.new-session-button {
+  width: 100%; /* Less than 100% to make it narrower */
+  margin: 0 auto; /* Auto margins for horizontal centering */
+  padding: 40px 0; /* Keeping the vertical size as previously adjusted */
 }
+
 
 .link-button {
   background-color: #EECF08;
   color: #000000;
   border: none;
-  margin: 5% 0;
-  padding: 30px 0;
-  width: 50%;
+  margin: 1% 0; /* Adjusted margin for better spacing */
+  padding: 40px 0; /* Increased padding for taller buttons */
+  width: 100%; /* Adjust width as needed within grid */
   text-align: center;
   border-radius: 10px;
   transition: background-color 0.3s, transform 0.3s;
+  font-size: 1.5em; /* Larger font size for better visibility */
 }
 
 .link-button:hover {
