@@ -1,38 +1,28 @@
-/*
-Home:
-  The Homepage where you can check the stats and or session, the central hub.
-*/
 import React, { useState } from 'react';
-import { useNavigate } from "react-router-dom";
-import SessionOption from './SessionOption.js';
-import MainLayout from '../../layouts/MainLayout.js' // Import the MainLayout component
+import { useNavigate } from 'react-router-dom';
+import SessionOption from './SessionOption';
+import MainLayout from '../../layouts/MainLayout'; // Ensure MainLayout is used if needed
 import './Home.css';
 
 const HomePage = () => {
-  let navigate = useNavigate();
-  const [isModalOpen, setModalOpen] = useState(false);
-  const [isModalOpenReg, setModalOpenReg] = useState(false);
-  // Sending to the TeamStats page
-  const gotoStats = () => {
-    navigate('/teamstats');
-  };
-  
+  const navigate = useNavigate();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   return (
-      <div className="home-page-container">
-        {/* The Displaying Button and functionally for the new session */}
-          <button onClick={() => setModalOpen(true)} className="Linkish-Button1">
-            New Session
-          </button>
-        {/* The Displaying Button and functionally for the Stats */}
-          <button onClick={() => gotoStats()} className="Linkish-Button2">
-            Stats
-          </button>
-          
-        <section className="about">
-        </section>
-        {/* Trigger Pop up Designed in SessionOption */}
-        <SessionOption isOpen={isModalOpen} onClose={() => setModalOpen(false)}/>
+    <div className="home-page-container">
+      <button onClick={() => setIsModalOpen(true)} className="link-button new-session-button">
+        New Session
+      </button>
+      <div className="stats-buttons-container">
+        <button onClick={() => navigate('/playerstats')} className="link-button">
+          Player Stats
+        </button>
+        <button onClick={() => navigate('/teamstats')} className="link-button">
+          Team Stats
+        </button>
       </div>
+      <SessionOption isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+    </div>
   );
 };
 
