@@ -4,7 +4,7 @@ import './Home.css';
 
 const SessionOption = ({ isOpen, onClose }) => {
     let navigate = useNavigate();
-    
+    // Function to navigate to the session type
     const gotoSession = (sessionType) => {
         onClose(); // Close the modal first
         if (sessionType ==='practice') {
