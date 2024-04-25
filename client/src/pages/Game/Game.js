@@ -391,13 +391,11 @@ const Game = () => {
                     </div>
                 </div>
 
-
                 <div className="ShotPopup">
                     <ShotPopup
                         isOpen={newGameOverlay}
                         onClose={() => setNewGameOverlay(true)}
                     />
-
 
                     <div className="ShotOutcomeSelection">
                         {!shotOutcome ? (
@@ -407,9 +405,9 @@ const Game = () => {
                             </>
                         ) : (
                             <div className="ClockTimeSelection">
-                                <div className="ClockButton1" onClick={() => handleClockTimeSelection('first_third')}>1-10</div>
-                                <div className="ClockButton2" onClick={() => handleClockTimeSelection('second_third')}>11-20</div>
-                                <div className="ClockButton3" onClick={() => handleClockTimeSelection('final_third')}>21-30</div>
+                                <div className="ClockButton1" onClick={() => handleClockTimeSelection('first_third')}>30-21</div>
+                                <div className="ClockButton2" onClick={() => handleClockTimeSelection('second_third')}>20-11</div>
+                                <div className="ClockButton3" onClick={() => handleClockTimeSelection('final_third')}>10-1</div>
                             </div>
                         )}
                     </div>
