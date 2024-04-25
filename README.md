@@ -75,6 +75,16 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
 
+# Dockerizing website
+
+### Make sure to change the server name to your IP/Domain name.
+
+    before you containerize the code, go to the nginx-config folder and go to the file [defualt.conf].
+    Find the line that has Server name on the defualt file, replace the currrent one with your computers public ip or the domain name.
+    Save the file.
+
+    Make sure that you have port 80 open on your router, all service providers have different ways to open your ports.
+
 ### build and run the Docker stack Docker-compose.yaml
     
     docker-compose up --build
