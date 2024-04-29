@@ -275,7 +275,7 @@
     background-color: var(--card-bg-color); /* Light purple */
     border-radius: 8px;
     box-shadow: var(--box-shadow);
-    z-index: 10%;
+    z-index: 99;
     max-width: 80%; /* Adjusted to max-width for responsiveness */
     padding: 2%;
     display: flex;
