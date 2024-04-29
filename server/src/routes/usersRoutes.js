@@ -1,5 +1,8 @@
 /*
+    UserRoutes.js
 
+    This file contains the routes for the user model.
+    The routes are used to interact with the user model in the database.
 */
 const express = require('express');
 const router = express.Router();
