@@ -4,10 +4,11 @@
     left: 50%;
     transform: translate(-50%, -50%);
     padding: 20px;
-    max-width: 300px;
     z-index: 1000;
     background-color: #4f2984;
     border: 3px solid #ffdd00;
+    width: 20%;
+    font-size: 1.5em;
 }
 
 .player-selection-popup h3 {
@@ -29,18 +30,5 @@
 }
 
 .player-selection-popup li:hover {
-    background-color: white;
-}
-
-.overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
-    z-index: 999; /* Ensure the overlay is behind the popup */
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    background-color: #3d2671;
 }

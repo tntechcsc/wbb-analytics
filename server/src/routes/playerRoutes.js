@@ -26,6 +26,19 @@ router.get('/', isAuthenticated, async (req, res) => {
     }
 });
 
+// Get a player by SeasonID
+router.get('/bySeason/:seasonID', isAuthenticated, async (req, res) => {
+    try {
+        const players = await Player.find({ seasons: req.params.seasonID });
+        if (!players.length) {
+            return res.status(404).json({ message: 'No players found for that season' });
+        }
+        res.json(players);
+    } catch (err) {
+        res.status(500).json({ message: 'Internal server error', error: err.message });
+    }
+});
+
 // GET a player by ID
 router.get('/:id', isAuthenticated, async (req, res) => {
     try {
