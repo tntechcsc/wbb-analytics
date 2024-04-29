@@ -8,7 +8,7 @@ const Joi = require('joi');
 // Define Joi schema for season validation
 const seasonSchema = Joi.object({
     year: Joi.string().required(),
-    players: Joi.array().items(Joi.string().regex(/^[0-9a-fA-F]{24}$/)).required(),
+    players: Joi.array().items(Joi.string().regex(/^[0-9a-fA-F]{24}$/)),
     games: Joi.array().items(Joi.string().regex(/^[0-9a-fA-F]{24}$/)),
     practices: Joi.array().items(Joi.string().regex(/^[0-9a-fA-F]{24}$/))
 });

@@ -267,43 +267,68 @@ const Game = () => {
         .catch(error => console.error('Error submitting tempo:', error));
     };
     
+    // Submits the game to the games database and also stores the gameID in the 
+    // seasons table, only posts to the season table if the gameID does not exist there.
     const submitGame = () => {
-        const seasonDateId = getSeasonByDate();
-
+        const seasonData = getSeasonByDate();
+    
         const gameDataUpdated = {
-            season_id: seasonDateId._id,
+            season_id: seasonData._id,
             date: date,
             opponent: opponentTeam,
             location: location,
             tempo_events: tempoEventIds,
             shot_events: shotEvents,
         };
-
+    
         fetch(`${serverUrl}/api/games/${gameData}`, {
-            method: 'PATCH', 
+            method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(gameDataUpdated)
         })
-
         .then(response => {
             if (!response.ok) {
-                throw new Error('Network response was not ok line 267');
+                throw new Error('Network response was not ok.');
             }
             return response.json();
         })
-
         .then(data => {
-            alert("Game Submission Successful.");
+            // Check if the current game ID is already in the games array
+            if (!seasonData.games.includes(gameData)) {
+                // If not included, add it
+                const updatedGames = [...seasonData.games, gameData];
+    
+                return fetch(`${serverUrl}/api/seasons/${seasonData._id}`, {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        year: seasonData.year,
+                        games: updatedGames
+                    })
+                });
+            } else {
+                return Promise.resolve();
+            }
+        })
+        .then(response => {
+            if (response && !response.ok) {
+                throw new Error('Failed to update season with new game ID.');
+            }
+            if (response) return response.json();
+        })
+        .then(() => {
+            alert("Game submission successful.");
             navigate('/homepage');
         })
-
         .catch(error => {
-            console.error('Error updating game line 277:', error);
+            console.error('Error during game or season update:', error);
         });
-    };
-
+    }; 
+    
     // Undos the last recorded tempo, removes it from database and removes it from the list
     const undoTempo = () => {
         if (tempoEvents.length > 0) {
@@ -317,9 +342,7 @@ const Game = () => {
                     }
                 })
                 .then(response => {
-                    if (response.ok) {
-                        console.log("Tempo successfully deleted from backend.");
-                    } else {
+                    if (!response.ok) {
                         throw new Error('Failed to delete the tempo from the backend.');
                     }
                 })
