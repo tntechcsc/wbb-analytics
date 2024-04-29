@@ -1,38 +1,42 @@
 import './Game.css';
+import { useNavigate } from 'react-router-dom';
+import UndoButton from './components/UndoButton';
 import React, { useState, useEffect } from "react";
+import ShotPopup from '../Drill/components/ShotPopup';
+import GameSelection from './components/GameSelection';
 import TempoTimer from '../Drill/components/TempoTimer';
 import TempoButton from '../Drill/components/TempoButton';
-import LastTempoDisplay from '../Drill/components/LastTempoDisplay';
 import CancelButton from '../Drill/components/CancelButton';
-import ShotPopup from '../Drill/components/ShotPopup';
+import LastTempoDisplay from '../Drill/components/LastTempoDisplay';
 import PlayerSelectionPopup from './components/PlayerSelectionPopup';
-import GameSelection from './components/GameSelection';
 
 const Game = () => {
-    const [opponentTeam, setOpponentTeam] = useState('');
-    const [opponentTeamValue, setOpponentTeamValue] = useState('');
+    const [gameData, setGameData] = useState('');
+    const [gameMode, setGameMode] = useState('');
     const [location, setLocation] = useState('');
-    const [tempLocation, setTempLocation] = useState('');
     const [isTiming, setIsTiming] = useState(false);
-    const [resetTimer, setResetTimer] = useState(false);
-    const [currentTempo, setCurrentTempo] = useState(0);
     const [lastTempo, setLastTempo] = useState(null);
     const [tempoType, setTempoType] = useState(null);
-    const [newGameOverlay, setNewGameOverlay] = useState(false);
-    const [isGameModeOverlayVisible, setIsGameModeOverlayVisible] = useState(true);
-    const [loadGameOverlayVisible, setLoadGameOverlayVisible] = useState(false);
-    const [isSubmitClicked, setIsSubmitClicked] = useState(false);
-    const [tempoEvents, setTempoEvents] = useState([]);
     const [shotEvents, setShotEvents] = useState([]);
+    const [SeasonData, setSeasonData] = useState([]);
+    const [tempoFlag, setTempoFlag] = useState(false);
+    const [tempoEvents, setTempoEvents] = useState([]);
+    const [resetTimer, setResetTimer] = useState(false);
+    const [currentTempo, setCurrentTempo] = useState(0);
+    const [opponentTeam, setOpponentTeam] = useState('');
+    const [tempLocation, setTempLocation] = useState('');
     const [shotOutcome, setShotOutcome] = useState(null);
+    const [tempoEventIds, setTempoEventIds] = useState([]);
+    const [submitClicked, setSubmitClicked] = useState(false);
     const [selectedPlayer, setSelectedPlayer] = useState(null);
+    const [newGameOverlay, setNewGameOverlay] = useState(false);
+    const [opponentTeamValue, setOpponentTeamValue] = useState('');
     const [selectedClockTime, setSelectedClockTime] = useState(null);
     const [showPlayerSelection, setShowPlayerSelection] = useState(false);
-    const [SeasonData, setSeasonData] = useState([]);
-    const [gameData, setGameData] = useState('');
-    const [tempoEventIds, setTempoEventIds] = useState([]);
-    const [tempoFlag, setTempoFlag] = useState(false);
-    const [gameMode, setGameMode] = useState('');
+    const [gameModeOverlayVisible, setGameModeOverlayVisible] = useState(true);
+    const [loadGameOverlayVisible, setLoadGameOverlayVisible] = useState(false);
+
+    const navigate = useNavigate();
     const serverUrl = process.env.REACT_APP_SERVER_URL;
 
     const currentDate = new Date();
@@ -40,11 +44,11 @@ const Game = () => {
     
     // Sets an overlay for the input, can't interact outside until submission
     useEffect(() => {
-        if (gameMode === 'new' && location !== '' && opponentTeam !== '' && isSubmitClicked === false) {
+        if (gameMode === 'new' && location !== '' && opponentTeam !== '' && submitClicked === false) {
             createGame();
             setNewGameOverlay(false); // Close the overlay here after creating the game
         }
-    }, [opponentTeam, location, gameMode, isSubmitClicked]);
+    }, [opponentTeam, location, gameMode, submitClicked]);
     
 
     // Tempo requires an array, so set the player to an array and reset
@@ -113,9 +117,10 @@ const Game = () => {
             if (!response.ok) {
                 throw new Error('Failed to create game. Please try again.');
             }
-    
+
             const data = await response.json();
             setGameData(data._id);
+            
         } catch (error) {
             console.error('Error with game data:', error.message);
         }
@@ -137,7 +142,7 @@ const Game = () => {
 
         } else {
             finalYear = SeasonData.find(season => season.year === year2 + '-' + year1);
-        }   
+        }
         
         return finalYear;
     };
@@ -154,7 +159,7 @@ const Game = () => {
         setIsTiming(true);
         setTempoType(tempoType);
     };
-
+    
     const handleClockTimeSelection = (timeMapping) => {
         setSelectedClockTime(timeMapping);
         setShowPlayerSelection(true);
@@ -165,12 +170,6 @@ const Game = () => {
         setShowPlayerSelection(false);
     }; 
 
-    const cancelTempo = () => {
-        setIsTiming(false);
-        setTempoType(null);
-        setResetTimer(true);
-    };
-    
     const stopTempo = () => {
         setIsTiming(false);
         setLastTempo(parseFloat(currentTempo.toFixed(2)));
@@ -184,7 +183,7 @@ const Game = () => {
         if (opponentTeamValue !== '' && tempLocation !== '') {
             setOpponentTeam(opponentTeamValue);
             setLocation(tempLocation);
-            setIsSubmitClicked(true);
+            setSubmitClicked(true);
             setNewGameOverlay(false);
             
         } else {
@@ -297,22 +296,53 @@ const Game = () => {
 
         .then(data => {
             alert("Game Submission Successful.");
+            navigate('/homepage');
         })
 
         .catch(error => {
             console.error('Error updating game line 277:', error);
         });
     };
+
+    // Undos the last recorded tempo, removes it from database and removes it from the list
+    const undoTempo = () => {
+        if (tempoEvents.length > 0) {
+            const lastTempoEvent = tempoEvents[tempoEvents.length - 1];
+            
+            if (lastTempoEvent.id) {
+                fetch(`${serverUrl}/api/tempos/${lastTempoEvent.id}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(response => {
+                    if (response.ok) {
+                        console.log("Tempo successfully deleted from backend.");
+                    } else {
+                        throw new Error('Failed to delete the tempo from the backend.');
+                    }
+                })
+                .catch(error => console.error('Error deleting tempo:', error));
+            }
+    
+            setTempoEvents(prevTempoEvents => prevTempoEvents.slice(0, -1));
+            setTempoEventIds(prevIds => prevIds.slice(0, -1));
+            
+            const newLastTempo = tempoEvents[tempoEvents.length - 2];
+            setLastTempo(newLastTempo);
+        }
+    };
     
     return (
         <>
-            {isGameModeOverlayVisible && (
+            {gameModeOverlayVisible && (
                 <div className="game-mode-overlay">
                     <div className="game-mode-content">
                         <div className='game-selection'>
                             <h2>Select Game Mode</h2>
-                            <button onClick={() => { setGameMode('new'); setIsGameModeOverlayVisible(false); setNewGameOverlay(true); }}>Create New Game</button>
-                            <button onClick={() => { setGameMode('load'); setIsGameModeOverlayVisible(false); setLoadGameOverlayVisible(true); }}>Load Existing Game</button>
+                            <button onClick={() => { setGameMode('new'); setGameModeOverlayVisible(false); setNewGameOverlay(true); }}>Create New Game</button>
+                            <button onClick={() => { setGameMode('load'); setGameModeOverlayVisible(false); setLoadGameOverlayVisible(true); }}>Load Existing Game</button>
                         </div>
                     </div>
                 </div>
@@ -386,8 +416,8 @@ const Game = () => {
                     <div className="last-tempo">
                         <LastTempoDisplay lastTempo={lastTempo}/>
                     </div>
-                    <div className="cancel-button">
-                        <CancelButton onCancel={cancelTempo} />
+                    <div className="undo-button">
+                        <UndoButton onUndo={undoTempo} />
                     </div>
                 </div>
 
@@ -416,6 +446,7 @@ const Game = () => {
                 {showPlayerSelection && (
                     <PlayerSelectionPopup
                         onPlayerSelect={handlePlayerSelection}
+                        seasonId={getSeasonByDate()._id}
                     />
                 )}
 
