@@ -51,9 +51,9 @@ const Practice = () => {
         if (SeasonData.length > 0 && date) {
             const seasonByDate = getSeasonByDate(date);
             // Only attempt to create a practice session if a season is found.
-            if (seasonByDate) {
+            if (seasonID) {
                 const practiceData = {
-                    season_id: seasonByDate._id,
+                    season_id: seasonID,
                     date: date,
                 };
 
@@ -85,7 +85,7 @@ const Practice = () => {
         const seasonByDate = getSeasonByDate(date);
 
         const practiceData = {
-            season_id: seasonByDate._id,
+            season_id: seasonID,
             date: date,
             drills: drills.map(drill => drill._id),
             team_purple: listA.map(player => player._id),

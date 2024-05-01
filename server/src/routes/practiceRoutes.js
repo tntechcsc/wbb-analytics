@@ -96,7 +96,7 @@ router.get('/byTeamGray/:playerId', isAuthenticated, async (req, res) => {
 });
 
 // GET seasonID by practice ID
-router.get('/season/:id', isAuthenticated, async (req, res) => {
+router.get('/seasons/:id', isAuthenticated, async (req, res) => {
     try {
         const practice = await Practice.findById(req.params.id);
         if (!practice) {

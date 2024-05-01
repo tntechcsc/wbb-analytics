@@ -72,6 +72,9 @@ export default props => {
       <a className="menu-item" href="/homepage">
         Home
       </a>
+      <Link className="menu-item" to="/season">
+        Create Season
+      </Link>
       <Link className="menu-item" to="/practice">
         Create Practice
       </Link>
