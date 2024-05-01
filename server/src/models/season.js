@@ -11,7 +11,7 @@ const Schema = mongoose.Schema;
 
 const seasonSchema = new Schema({
     year: { type: String, required: true },
-    players: [{ type: Schema.Types.ObjectId, ref: 'Player', required: true }],
+    players: [{ type: Schema.Types.ObjectId, ref: 'Player'}],
     games: [{ type: Schema.Types.ObjectId, ref: 'Game', default: [] }],
     practices: [{ type: Schema.Types.ObjectId, ref: 'Practice', default: [] }]
 });
