@@ -76,18 +76,24 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
 
 # Dockerizing website
+### Installing Docker
+
+For installing with mac.
+    https://docs.docker.com/desktop/install/mac-install/
+For installing with Windows.
+    https://docs.docker.com/desktop/install/windows-install/
 
 ### Make sure to change the server name to your IP/Domain name.
 
-    before you containerize the code, go to the nginx-config folder and go to the file [defualt.conf].
-    Find the line that has Server name on the defualt file, replace the currrent one with your computers public ip or the domain name.
-    Save the file.
+before you containerize the code, go to the nginx-config folder and go to the file [defualt.conf].
+Find the line that has Server name on the defualt file, replace the currrent one with your computers public ip or the domain name.
+Save the file.
 
-    Make sure that you have port 80 open on your router, all service providers have different ways to open your ports.
+Make sure that you have port 80 open on your router, all service providers have different ways to open your ports.
 
 ### build and run the Docker stack Docker-compose.yaml
     
-    docker-compose up --build
+docker-compose up --build
 
-    This builds and installs all the needed information to runs all files and creates a docker container stack with a frontend, backend, mongo database, and nginx to redirect to server.
+This builds and installs all the needed information to runs all files and creates a docker container stack with a frontend, backend, mongo database, and nginx to redirect to server.
     
