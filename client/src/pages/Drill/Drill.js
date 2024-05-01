@@ -36,6 +36,7 @@ function DrillPage() {
     const [selectedZone, setSelectedZone] = useState(null);
     const [isESOpen, setIsESOpen] = useState(false);
     const [statName, setStatName] = useState("");
+    const [seasonID, setSeasonID] = useState('');
 
     // Server URL from environment variables for API requests
     const serverUrl = process.env.REACT_APP_SERVER_URL;
@@ -45,11 +46,44 @@ function DrillPage() {
     const drillID = urlParams.get('DrillID');
     const practiceID = urlParams.get('PracticeID');
 
+    // Fetch seasonID by practiceID then fetch players based on seasonID
+    useEffect(() => {
+        fetch(serverUrl + `/api/practices/seasons/${practiceID}`)
+            .then(response => response.json())
+            .then(seasonData => {
+                setSeasonID(seasonData.season_id);
+                console.log('Season ID:', seasonData);
+                fetch(serverUrl + `/api/seasons/${seasonData.season_id}/players`)
+                    .then(response => response.json())
+                    .then(data => {
+                        const playersData = data.map(player => ({
+                            id: player._id,
+                            name: player.name,
+                            number: player.jersey_number
+                        }));
+                        setAllPlayers(playersData);
+                        setPlayersOnCourt(playersData.slice(0, 5)); // Example: Set the first five players as on court
+                    })
+                    .catch(error => console.error('Failed to fetch players:', error));
+            })
+            .catch(error => console.error('Failed to fetch season ID:', error));
+    }, [serverUrl]);
 
+    /*
     // Fetch players from the server on component mount
     useEffect(() => {
 
-        fetch(serverUrl + '/api/players')
+        // fetch seasonID by practice id
+        fetch(serverUrl + `/api/practices/seasons/${practiceID}`)
+            .then(response => response.json())
+            .then(seasonData => {
+                setSeasonID(seasonData.season_id);
+                console.log('Season ID:', seasonData);
+            })
+            .catch(error => console.error('Failed to fetch season ID:', error));
+
+        // fetch players based on seasonID
+        fetch(serverUrl + `/api/seasons/${seasonData}/players`)
             .then(response => response.json())
             .then(data => {
                 const playersData = data.map(player => ({
@@ -62,6 +96,7 @@ function DrillPage() {
             })
             .catch(error => console.error('Failed to fetch players:', error));
     }, [serverUrl]);
+    */
 
     // Function to submit tempo
     const submitTempo = async (isOffensive, playersOnCourtIds, timeValue) => {

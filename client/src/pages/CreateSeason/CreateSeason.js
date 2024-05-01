@@ -119,14 +119,12 @@ function CreateSeason() {
   };
 
   const handleSubmit = (event) => {
-    const seasonId = '';
     event.preventDefault();
     console.log('Submitting:', year, players);
-    // check for player in players that doesn't have an _id
-    // if found, create the player
-    // then create the season with the player ids
+
     const newPlayers = players.filter(p => !p._id);
     const existingPlayers = players.filter(p => p._id);
+    const allPlayers = [...existingPlayers];
     const playerPromises = newPlayers.map(player => {
         return fetch(`${serverUrl}/api/players`, {
             method: 'POST',
@@ -134,9 +132,48 @@ function CreateSeason() {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(player)
-        })
-            .then(response => response.json());
+        }).then(response => response.json());
     });
+    console.log('playerPromises:', playerPromises);
+
+    Promise.all(playerPromises)
+        .then(newPlayers => {
+            allPlayers.push(...newPlayers);
+            console.log('allPlayers after adding new:', allPlayers);
+
+            const seasonData = {
+                year,
+                players: allPlayers.map(p => p._id)
+            };
+            console.log('seasonData:', seasonData);
+
+            return fetch(`${serverUrl}/api/seasons`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(seasonData)
+            });
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Season created:', data);
+            console.log('season id:', data._id);
+
+            setYear('');
+            setPlayers([]);
+            setActivePlayer({ name: '', jersey_number: '' });
+            setEditIndex(-1);
+        })
+        .catch(error => {
+            console.error('Error in process:', error);
+        });
+};
+
+
+
+
+    /*
     // update players so newPlayers have _id
     Promise.all(playerPromises)
         .then(newPlayers => {
@@ -156,13 +193,13 @@ function CreateSeason() {
             console.log('season id:', data._id);
             // Update players with the new season ID
             const seasonId = data._id;
-            const playerUpdatePromises = players.map(player => {
+            const playerUpdatePromises = updatedPlayers.map(player => {
                 return fetch(`${serverUrl}/api/players/${player._id}`, {
                     method: 'PATCH',
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ seasons: [...player.seasons, ObjectId(seasonId)] })
+                    body: JSON.stringify({ $push: { seasons: seasonId } })
                 })
                     .then(response => response.json());
             });
@@ -179,7 +216,7 @@ function CreateSeason() {
             console.error('Error creating season:', error);
         });
 };
-
+*/
 
   return (
     <div className="create-season">
