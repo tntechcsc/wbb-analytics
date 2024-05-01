@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 
 
-const Players = ({ listA, setListA, listB, setListB, playerData, setPlayerData }) => {
+const Players = ({ seasonID, listA, setListA, listB, setListB, playerData, setPlayerData }) => {
 
     const serverUrl = process.env.REACT_APP_SERVER_URL;
 
@@ -69,7 +69,7 @@ const Players = ({ listA, setListA, listB, setListB, playerData, setPlayerData }
 
         const fetchData = async () => {
             try {
-                const response = await fetch(serverUrl + '/api/players');
+                const response = await fetch(serverUrl + `/api/seasons/${seasonID}/players`);
                 const data = await response.json();
 
                 // Auto-populate the first 5 players for Team A and Team B
@@ -86,10 +86,7 @@ const Players = ({ listA, setListA, listB, setListB, playerData, setPlayerData }
         };
 
         fetchData();
-    }, []);
-
-
-
+    }, [seasonID]);
 
     return (
         <>

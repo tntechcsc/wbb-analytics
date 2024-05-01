@@ -10,6 +10,8 @@ import ShotPopup from './components/ShotPopup';
 import ImageMapper from "react-img-mapper";
 import basketballCourtVector from './components/basketball-court-vector.jpg';
 import ExtraStats from './components/ExtraStats';
+import ExtraStatPopup from './components/ExtraStatPopup';
+import { set } from 'mongoose';
 
 function DrillPage() {
     // State hooks for timing and tempo tracking
@@ -32,6 +34,9 @@ function DrillPage() {
     const [selectedPlayerForSub, setSelectedPlayerForSub] = useState(null);
     const [isShotPopupOpen, setIsShotPopupOpen] = useState(false);
     const [selectedZone, setSelectedZone] = useState(null);
+    const [isESOpen, setIsESOpen] = useState(false);
+    const [statName, setStatName] = useState("");
+    const [seasonID, setSeasonID] = useState('');
 
     // Server URL from environment variables for API requests
     const serverUrl = process.env.REACT_APP_SERVER_URL;
@@ -45,7 +50,16 @@ function DrillPage() {
     // Fetch players from the server on component mount
     useEffect(() => {
 
-        fetch(serverUrl + '/api/players')
+        // fetch seasonID by practice id
+        fetch(serverUrl + `/api/practices/season/${practiceID}`)
+            .then(response => response.json())
+            .then(data => {
+                setSeasonID(data.season_id);
+            })
+            .catch(error => console.error('Failed to fetch season ID:', error));
+
+        // fetch players based on seasonID
+        fetch(serverUrl + `/api/seasons/${seasonID}/players`)
             .then(response => response.json())
             .then(data => {
                 const playersData = data.map(player => ({
@@ -229,8 +243,14 @@ function DrillPage() {
         setIsPopupOpen(true); // Open the substitution popup
     };
 
+    const handleESClose = () => {
+        setIsESOpen(false);
+    }
+
     const recordStats = async (player, route) => {
         if (isPlayerSelectedforShot) {
+
+            setIsESOpen(true);
 
             // Fetch the player's stats from the server
             const statResponse = await fetch(`${serverUrl}/api/stats/byPlayer/${player.id}`);
@@ -321,29 +341,42 @@ function DrillPage() {
             </div>
             <div className="extra-stats-container">
                 <ExtraStats
+                    setStatName={"Offensive Rebound"}
                     className="Offensive Rebound"
                     onClick={() => recordStats(player, 'offensiveRebound')}
                 />
                 <ExtraStats
+                    setStatName={"Assist"}
                     className="Assist"
                     onClick={() => recordStats(player, 'assist')}
                 />
                 <ExtraStats
+                    setStatName={"Steal"}
                     className="Steal"
                     onClick={() => recordStats(player, 'steal')}
                 />
                 <ExtraStats
+                    setStatName={"Defensive Rebound"}
                     className="Defensive Rebound"
                     onClick={() => recordStats(player, 'defensiveRebound')}
                 />
                 <ExtraStats
+                    setStatName={"Block"}
                     className="Block"
                     onClick={() => recordStats(player, 'block')}
                 />
                 <ExtraStats
+                    setStatName={"Turnover"}
                     className="Turnover"
                     onClick={() => recordStats(player, 'turnover')}
                 />
+                {isESOpen && (
+                <ExtraStatPopup
+                    isOpen={isESOpen}
+                    className={statName}
+                    onClose={handleESClose}
+                />
+                )}
             </div>
             <div className="tempo-container">
                 <TempoButton

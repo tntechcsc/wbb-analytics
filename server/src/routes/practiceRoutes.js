@@ -95,6 +95,19 @@ router.get('/byTeamGray/:playerId', isAuthenticated, async (req, res) => {
     }
 });
 
+// GET seasonID by practice ID
+router.get('/season/:id', isAuthenticated, async (req, res) => {
+    try {
+        const practice = await Practice.findById(req.params.id);
+        if (!practice) {
+            return res.status(404).json({ message: 'Practice not found' });
+        }
+        res.json({ season_id: practice.season_id });
+    } catch (err) {
+        res.status(500).json({ message: 'Internal server error', error: err.message });
+    }
+});
+
 // POST a new practice with validation
 router.post('/', isAuthenticated, async (req, res) => {
     const { error, value } = practiceSchema.validate(req.body);

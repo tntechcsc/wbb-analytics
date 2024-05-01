@@ -7,6 +7,7 @@ import SessionButtons from './components/SessionButtons';
 
 const Practice = () => {
 
+    const [seasonID, setSeasonID] = useState(''); // This is the season ID that will be used to create the practice session
     const [SeasonData, setSeasonData] = useState([]);
     const [SessionData, setSessionData] = useState([]);
     const [drills, setDrills] = useState([]);
@@ -24,6 +25,9 @@ const Practice = () => {
                 const response = await fetch(serverUrl + '/api/seasons');
                 const data = await response.json();
                 setSeasonData(data);
+                if (data.length > 0) {
+                    setSeasonID(data[0]._id);
+                }
             } catch (error) {
                 console.error('Error fetching season data:', error);
             }
@@ -37,6 +41,10 @@ const Practice = () => {
 
         handleCreatePractice();
     }, []);
+
+    const handleSeasonChange = (seasonID) => {
+        setSeasonID(seasonID);
+    };
 
     useEffect(() => {
         // This effect depends on SeasonData and date, so it runs after they are set.
@@ -221,16 +229,25 @@ const Practice = () => {
 
                     <div className="session-information">
                             <>
-                                <h2>Date</h2>
+                                <h2>Date and Season</h2>
                                 <SessionButtons
                                     setDate={setDate}
+                                    SeasonData={SeasonData}
+                                    onSeasonChange={handleSeasonChange}
                                 />
                             </>
                     </div>
                 </div>
 
                 <div className="lists-column">
-                    <Players listA={listA} setListA={setListA} listB={listB} setListB={setListB} playerData={playerData} setPlayerData={setPlayerData} />
+                    <Players 
+                        seasonID={seasonID}
+                        listA={listA}
+                        setListA={setListA}
+                        listB={listB}
+                        setListB={setListB}
+                        playerData={playerData}
+                        setPlayerData={setPlayerData} />
                 </div>
 
             </div>
