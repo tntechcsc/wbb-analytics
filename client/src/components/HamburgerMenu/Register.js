@@ -47,9 +47,8 @@ const Register = ({ isOpen, onClose }) => {
                 
                 <select value={role} onChange={(e) => setRole(e.target.value)}>
                     <option value="Select">Select</option>
-                    <option value="Admin">Admin</option>
-                    <option value="Moderator">Moderator</option>
-                    <option value="User">User</option>
+                    <option value="Admin">Full Access</option>
+                    <option value="User">User Access</option>
                 </select>
                 <br/>
                 <button className="submitReg-button" onClick={() => GiveKey()}>Submit</button>
