@@ -1,0 +1,43 @@
+.selector-label {
+  display: block; /* Display label above the dropdown */
+  margin-bottom: 5px;
+  color: var(--header-color); /* Use the header color for consistency */
+  font-weight: bold;
+  font-size: 1rem; /* Adjusted font size for better readability */
+}
+
+.selector-select {
+  padding: 10px 15px;
+  font-size: 1rem; /* Uniform font size with other elements */
+  width: 100%; /* Make width responsive */
+  max-width: 250px; /* Maximum width */
+  border: none; /* Remove the border for a cleaner look */
+  border-radius: 8px; /* Consistent border radius with cards */
+  background-color: var(--card-bg-color);
+  color: var(--text-color-dark);
+  box-shadow: var(--box-shadow); /* Add shadow for depth */
+  appearance: none; /* Removes default styling across browsers */
+  cursor: pointer; /* Indicates the dropdown is clickable */
+  position: relative; /* Position relative for custom arrow */
+}
+
+.selector-select:focus {
+  outline: 2px solid var(--accent-color); /* Accent color for focus state */
+}
+
+/* Custom dropdown arrow using CSS only */
+.selector-select::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  border: 6px solid transparent;
+  border-top-color: var(--text-color-dark); /* Arrow color */
+  pointer-events: none; /* Ensure clicks pass through to the select element */
+}
+
+/* Remove margin from the last selector - now handled in the main container */
+.selector-select:last-child {
+  margin-right: 0;
+}

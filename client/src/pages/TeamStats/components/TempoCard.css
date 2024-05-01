@@ -1,0 +1,49 @@
+.tempo-card {
+  border: none; /* Updated to none for a cleaner look */
+  border-radius: 8px; /* Uniform border-radius with other elements */
+  padding: 20px;
+  margin: 10px; /* Consistent margin on all sides for symmetry */
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--card-bg-color);
+  box-shadow: var(--box-shadow); /* Using the same shadow variable for consistency */
+  color: var(--text-color-dark);
+  flex: 1; /* Allows the card to grow and fill the available space */
+  transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transition for shadow as well */
+  cursor: default; /* Default cursor on hover */
+}
+
+.tempo-title {
+  font-size: 1.25rem;
+  margin-bottom: 0.5rem;
+  color: var(--header-color); /* Using the header color variable for consistency */
+}
+
+.tempo-value {
+  font-size: 2rem; /* Larger font size for emphasis */
+  font-weight: bold;
+  color: var(--header-color); /* Uniform color for the title and value */
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 5px; /* Spacing between the number and 'seconds' */
+}
+
+.tempo-value time {
+  font-size: 2.5rem; /* Even larger font size for the actual value for emphasis */
+}
+
+.tempo-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Slightly larger shadow on hover for a 'lifted' effect */
+}
+
+@media (max-width: 768px) {
+  .tempo-card {
+    width: 100%; /* Full width on small screens */
+    margin: 10px 0; /* Only vertical margins */
+  }
+}
